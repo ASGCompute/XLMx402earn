@@ -4,13 +4,16 @@ export default function Footer() {
     return (
         <footer className="footer">
             <div className="footer-container">
-                <p>&copy; {new Date().getFullYear()} Stellar Agent Earn. All rights reserved.</p>
-                <nav className="footer-links" aria-label="Legal">
-                    <Link to="/terms">Terms of Service</Link>
-                    <Link to="/privacy">Privacy Policy</Link>
+                <p>&copy; {new Date().getFullYear()} XLMx402earn — Stellar Hacks: Agents Hackathon</p>
+                <nav className="footer-links" aria-label="Legal and ecosystem">
+                    <Link to="/tasks">Tasks</Link>
+                    <Link to="/for-agents">For Agents</Link>
+                    <a href="https://asgcard.dev" target="_blank" rel="noopener noreferrer">ASG Card</a>
+                    <a href="https://xlm402.com" target="_blank" rel="noopener noreferrer">xlm402.com</a>
+                    <a href="https://github.com/ASGCompute/XLMx402earn" target="_blank" rel="noopener noreferrer">GitHub</a>
                 </nav>
                 <p className="footer-disclaimer">
-                    Stellar Agent Earn is an independent community project and is not an official product of the Stellar Development Foundation.
+                    Built on Stellar testnet using x402 micropayments. Powered by ASG Card ecosystem.
                 </p>
             </div>
         </footer>

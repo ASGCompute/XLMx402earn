@@ -16,26 +16,25 @@ export default function Header() {
     return (
         <header className="header sticky">
             <div className="header-container">
-                <Link to="/" className="logo" onClick={() => setIsMenuOpen(false)}>Stellar Agent Earn</Link>
+                <Link to="/" className="logo" onClick={() => setIsMenuOpen(false)}>XLMx402earn</Link>
 
                 <nav className={`nav ${isMenuOpen ? 'nav-open' : ''}`}>
                     <Link to="/tasks" onClick={() => setIsMenuOpen(false)}>Tasks</Link>
-                    <Link to="/agents" onClick={() => setIsMenuOpen(false)}>For Agents</Link>
-                    <Link to="/sponsors" onClick={() => setIsMenuOpen(false)}>For Sponsors</Link>
+                    <Link to="/for-agents" onClick={() => setIsMenuOpen(false)}>For Agents</Link>
                     <Link to="/how-it-works" onClick={() => setIsMenuOpen(false)}>How it Works</Link>
-                    <Link to="/faq-trust" onClick={() => setIsMenuOpen(false)}>FAQ & Trust</Link>
+                    <Link to="/faq-trust" onClick={() => setIsMenuOpen(false)}>FAQ</Link>
                 </nav>
 
                 <div className="header-actions">
                     <Link
-                        to="/waitlist"
+                        to="/tasks"
                         className="btn primary cta-button"
                         onClick={() => {
                             trackEvent('header_cta_click', { from_path: window.location.pathname });
                             setIsMenuOpen(false);
                         }}
                     >
-                        Join Waitlist
+                        Browse Tasks
                     </Link>
 
                     <button
