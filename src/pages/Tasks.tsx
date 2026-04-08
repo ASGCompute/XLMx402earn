@@ -1,0 +1,231 @@
+import { useState, useEffect, useMemo } from 'react';
+import { Link } from 'react-router-dom';
+import { Search, Filter, Clock, Zap, Star, ChevronRight, DollarSign } from 'lucide-react';
+import { trackEvent } from '../lib/analytics';
+import tasksData from '../data/tasks.json';
+import './Tasks.css';
+
+interface Task {
+    id: string;
+    slug: string;
+    title: string;
+    category: string;
+    tier: number;
+    badge: string;
+    summary: string;
+    reward_amount: number;
+    reward_asset: string;
+    network: string;
+    difficulty: 'easy' | 'medium' | 'hard';
+    eta_minutes: number;
+    status: string;
+    eligibility: string;
+    tags: string[];
+}
+
+const CATEGORIES = ['All', 'Onboarding', 'x402', 'ASG Card', 'Stellar Skills', 'Research', 'Content', 'Community'];
+const STATUSES = ['All', 'OPEN', 'COMING_SOON'];
+const DIFFICULTY_OPTIONS = ['All', 'easy', 'medium', 'hard'];
+const REWARD_OPTIONS = ['All', '< 5', '5', '7+'];
+
+function matchRewardFilter(amount: number, filter: string): boolean {
+    switch (filter) {
+        case '< 5': return amount < 5;
+        case '5': return amount === 5;
+        case '7+': return amount >= 7;
+        default: return true;
+    }
+}
+
+function getDifficultyColor(d: string) {
+    switch (d) {
+        case 'easy': return 'difficulty-easy';
+        case 'medium': return 'difficulty-medium';
+        case 'hard': return 'difficulty-hard';
+        default: return '';
+    }
+}
+
+function formatEta(minutes: number) {
+    if (minutes < 60) return `${minutes}m`;
+    const h = Math.floor(minutes / 60);
+    const m = minutes % 60;
+    return m > 0 ? `${h}h ${m}m` : `${h}h`;
+}
+
+export default function Tasks() {
+    const [search, setSearch] = useState('');
+    const [categoryFilter, setCategoryFilter] = useState('All');
+    const [statusFilter, setStatusFilter] = useState('All');
+    const [difficultyFilter, setDifficultyFilter] = useState('All');
+    const [rewardFilter, setRewardFilter] = useState('All');
+
+    const tasks = tasksData as unknown as Task[];
+
+    const filtered = useMemo(() => {
+        return tasks.filter(t => {
+            if (categoryFilter !== 'All' && t.category !== categoryFilter) return false;
+            if (statusFilter !== 'All' && t.status !== statusFilter) return false;
+            if (difficultyFilter !== 'All' && t.difficulty !== difficultyFilter) return false;
+            if (!matchRewardFilter(t.reward_amount, rewardFilter)) return false;
+            if (search && !t.title.toLowerCase().includes(search.toLowerCase()) && !t.summary.toLowerCase().includes(search.toLowerCase())) return false;
+            return true;
+        });
+    }, [tasks, search, categoryFilter, statusFilter, difficultyFilter, rewardFilter]);
+
+    useEffect(() => {
+        trackEvent('tasks_list_view', {
+            total_tasks: filtered.length,
+            filters_active: categoryFilter !== 'All' || statusFilter !== 'All' || difficultyFilter !== 'All' || rewardFilter !== 'All' || search !== ''
+        });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    const handleFilterChange = (type: string, value: string) => {
+        trackEvent('task_filter_change', { filter_type: type, value });
+        switch (type) {
+            case 'category': setCategoryFilter(value); break;
+            case 'status': setStatusFilter(value); break;
+            case 'difficulty': setDifficultyFilter(value); break;
+            case 'reward': setRewardFilter(value); break;
+        }
+    };
+
+    return (
+        <div className="page tasks-page">
+            {/* Beta Banner */}
+            <div className="beta-banner">
+                <span className="beta-badge">🧪 Beta</span>
+                Tasks are reviewed manually by our team. Payouts are assisted via Stellar. <Link to="/faq-trust">Learn more →</Link>
+            </div>
+
+            <section className="tasks-header container">
+                <h1>Available Tasks</h1>
+                <p className="subtitle">Browse real tasks, submit your proof, and earn USDC on Stellar.</p>
+            </section>
+
+            {/* Search & Filters */}
+            <section className="tasks-filters container">
+                <div className="search-bar">
+                    <Search size={18} className="search-icon" />
+                    <input
+                        type="text"
+                        placeholder="Search tasks..."
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                        className="search-input"
+                    />
+                </div>
+
+                <div className="filter-group">
+                    <div className="filter-section">
+                        <span className="filter-label"><Filter size={14} /> Category</span>
+                        <div className="filter-chips">
+                            {CATEGORIES.map(c => (
+                                <button
+                                    key={c}
+                                    className={`chip ${categoryFilter === c ? 'active' : ''}`}
+                                    onClick={() => handleFilterChange('category', c)}
+                                >
+                                    {c}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+
+                    <div className="filter-section">
+                        <span className="filter-label">Status</span>
+                        <div className="filter-chips">
+                            {STATUSES.map(s => (
+                                <button
+                                    key={s}
+                                    className={`chip ${statusFilter === s ? 'active' : ''}`}
+                                    onClick={() => handleFilterChange('status', s)}
+                                >
+                                    {s === 'All' ? 'All' : s.replace('_', ' ')}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+
+                    <div className="filter-section">
+                        <span className="filter-label">Difficulty</span>
+                        <div className="filter-chips">
+                            {DIFFICULTY_OPTIONS.map(d => (
+                                <button
+                                    key={d}
+                                    className={`chip ${difficultyFilter === d ? 'active' : ''}`}
+                                    onClick={() => handleFilterChange('difficulty', d)}
+                                >
+                                    {d === 'All' ? 'All' : d.charAt(0).toUpperCase() + d.slice(1)}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+
+                    <div className="filter-section">
+                        <span className="filter-label"><DollarSign size={14} /> Reward</span>
+                        <div className="filter-chips">
+                            {REWARD_OPTIONS.map(r => (
+                                <button
+                                    key={r}
+                                    className={`chip ${rewardFilter === r ? 'active' : ''}`}
+                                    onClick={() => handleFilterChange('reward', r)}
+                                >
+                                    {r === 'All' ? 'All' : r}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* Task Cards */}
+            <section className="tasks-grid container">
+                {filtered.length === 0 ? (
+                    <div className="empty-state">
+                        <p>No tasks match your filters. Try adjusting your criteria.</p>
+                    </div>
+                ) : (
+                    filtered.map(task => (
+                        <Link to={`/tasks/${task.slug}`} key={task.id} className="task-card card">
+                            <div className="task-card-header">
+                                <span className="task-category">{task.category}</span>
+                                <span className={`task-status status-${task.status.toLowerCase()}`}>
+                                    {task.status}
+                                </span>
+                            </div>
+                            <h3 className="task-title">{task.title}</h3>
+                            <p className="task-summary">{task.summary}</p>
+                            <div className="task-meta">
+                                <span className="task-reward">
+                                    <Star size={14} />
+                                    {task.reward_amount} {task.reward_asset}
+                                </span>
+                                <span className={`task-difficulty ${getDifficultyColor(task.difficulty)}`}>
+                                    <Zap size={14} />
+                                    {task.difficulty}
+                                </span>
+                                <span className="task-eta">
+                                    <Clock size={14} />
+                                    ~{formatEta(task.eta_minutes)}
+                                </span>
+                            </div>
+                            <div className="task-card-footer">
+                                <div className="task-tags">
+                                    {task.tags.slice(0, 3).map(tag => (
+                                        <span key={tag} className="task-tag">{tag}</span>
+                                    ))}
+                                </div>
+                                <span className="task-arrow"><ChevronRight size={18} /></span>
+                            </div>
+                            {task.eligibility === 'AGENT_ONLY' && (
+                                <span className="eligibility-badge agent-only">Agent Only</span>
+                            )}
+                        </Link>
+                    ))
+                )}
+            </section>
+        </div>
+    );
+}
