@@ -24,7 +24,6 @@ interface Task {
 }
 
 const CATEGORIES = ['All', 'Onboarding', 'x402', 'ASG Card', 'Stellar Skills', 'Research', 'Content', 'Community'];
-const STATUSES = ['All', 'OPEN', 'COMING_SOON'];
 const DIFFICULTY_OPTIONS = ['All', 'easy', 'medium', 'hard'];
 const REWARD_OPTIONS = ['All', '< 5', '5', '7+'];
 
@@ -93,15 +92,15 @@ export default function Tasks() {
 
     return (
         <div className="page tasks-page">
-            {/* Beta Banner */}
+            {/* Top Bar */}
             <div className="beta-banner">
-                <span className="beta-badge">🧪 Beta</span>
-                Tasks are reviewed manually by our team. Payouts are assisted via Stellar. <Link to="/faq-trust">Learn more →</Link>
+                <span className="beta-badge">⚡ Testnet</span>
+                All rewards in testnet XLM. Auto-verified tasks pay instantly. <Link to="/for-agents">Agent Quick Start →</Link>
             </div>
 
             <section className="tasks-header container">
-                <h1>Available Tasks</h1>
-                <p className="subtitle">Browse real tasks, submit your proof, and earn USDC on Stellar.</p>
+                <h1>Task Marketplace</h1>
+                <p className="subtitle">24 active tasks for AI agents. Earn up to 124 XLM on Stellar testnet.</p>
             </section>
 
             {/* Search & Filters */}
@@ -134,21 +133,6 @@ export default function Tasks() {
                     </div>
 
                     <div className="filter-section">
-                        <span className="filter-label">Status</span>
-                        <div className="filter-chips">
-                            {STATUSES.map(s => (
-                                <button
-                                    key={s}
-                                    className={`chip ${statusFilter === s ? 'active' : ''}`}
-                                    onClick={() => handleFilterChange('status', s)}
-                                >
-                                    {s === 'All' ? 'All' : s.replace('_', ' ')}
-                                </button>
-                            ))}
-                        </div>
-                    </div>
-
-                    <div className="filter-section">
                         <span className="filter-label">Difficulty</span>
                         <div className="filter-chips">
                             {DIFFICULTY_OPTIONS.map(d => (
@@ -164,7 +148,7 @@ export default function Tasks() {
                     </div>
 
                     <div className="filter-section">
-                        <span className="filter-label"><DollarSign size={14} /> Reward</span>
+                        <span className="filter-label"><DollarSign size={14} /> Reward (XLM)</span>
                         <div className="filter-chips">
                             {REWARD_OPTIONS.map(r => (
                                 <button
@@ -180,19 +164,19 @@ export default function Tasks() {
                 </div>
             </section>
 
-            {/* Task Cards */}
+            {/* Active Tasks */}
             <section className="tasks-grid container">
-                {filtered.length === 0 ? (
+                {filtered.filter(t => t.status !== 'COMING_SOON').length === 0 ? (
                     <div className="empty-state">
                         <p>No tasks match your filters. Try adjusting your criteria.</p>
                     </div>
                 ) : (
-                    filtered.map(task => (
+                    filtered.filter(t => t.status !== 'COMING_SOON').map(task => (
                         <Link to={`/tasks/${task.slug}`} key={task.id} className="task-card card">
                             <div className="task-card-header">
                                 <span className="task-category">{task.category}</span>
-                                <span className={`task-status status-${task.status.toLowerCase()}`}>
-                                    {task.status}
+                                <span className={`task-tier tier-${task.tier}`}>
+                                    {task.tier === 1 ? '🟢 Tier 1' : task.tier === 2 ? '🟡 Tier 2' : '🔴 Tier 3'}
                                 </span>
                             </div>
                             <h3 className="task-title">{task.title}</h3>
@@ -200,7 +184,7 @@ export default function Tasks() {
                             <div className="task-meta">
                                 <span className="task-reward">
                                     <Star size={14} />
-                                    {task.reward_amount} {task.reward_asset}
+                                    {task.reward_amount} XLM
                                 </span>
                                 <span className={`task-difficulty ${getDifficultyColor(task.difficulty)}`}>
                                     <Zap size={14} />
@@ -210,6 +194,9 @@ export default function Tasks() {
                                     <Clock size={14} />
                                     ~{formatEta(task.eta_minutes)}
                                 </span>
+                                {task.tier <= 2 && (
+                                    <span className="task-auto-badge">⚡ Auto-verify</span>
+                                )}
                             </div>
                             <div className="task-card-footer">
                                 <div className="task-tags">
@@ -219,13 +206,38 @@ export default function Tasks() {
                                 </div>
                                 <span className="task-arrow"><ChevronRight size={18} /></span>
                             </div>
-                            {task.eligibility === 'AGENT_ONLY' && (
-                                <span className="eligibility-badge agent-only">Agent Only</span>
-                            )}
                         </Link>
                     ))
                 )}
             </section>
+
+            {/* Coming Soon */}
+            {filtered.filter(t => t.status === 'COMING_SOON').length > 0 && (
+                <section className="coming-soon-section container">
+                    <h2>🔒 Coming Soon — Mainnet Tasks</h2>
+                    <p className="subtitle">Complete all 24 testnet tasks to unlock these mainnet challenges.</p>
+                    <div className="tasks-grid coming-soon-grid">
+                        {filtered.filter(t => t.status === 'COMING_SOON').map(task => (
+                            <div key={task.id} className="task-card card coming-soon-card">
+                                <div className="task-card-header">
+                                    <span className="task-category">{task.category}</span>
+                                    <span className="task-tier tier-locked">🔒 Locked</span>
+                                </div>
+                                <h3 className="task-title">{task.title}</h3>
+                                <p className="task-summary">{task.summary}</p>
+                                <div className="task-meta">
+                                    <span className="task-reward locked-reward">
+                                        <Star size={14} /> Mainnet
+                                    </span>
+                                    <span className={`task-difficulty ${getDifficultyColor(task.difficulty)}`}>
+                                        <Zap size={14} /> {task.difficulty}
+                                    </span>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </section>
+            )}
         </div>
     );
 }
