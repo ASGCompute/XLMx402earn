@@ -20,8 +20,8 @@ export default function Header() {
 
                 <nav className={`nav ${isMenuOpen ? 'nav-open' : ''}`}>
                     <Link to="/tasks" onClick={() => setIsMenuOpen(false)}>Tasks</Link>
+                    <Link to="/leaderboard" onClick={() => setIsMenuOpen(false)}>Leaderboard</Link>
                     <Link to="/for-agents" onClick={() => setIsMenuOpen(false)}>For Agents</Link>
-                    <Link to="/how-it-works" onClick={() => setIsMenuOpen(false)}>How it Works</Link>
                     <Link to="/faq-trust" onClick={() => setIsMenuOpen(false)}>FAQ</Link>
                 </nav>
 

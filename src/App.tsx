@@ -12,6 +12,7 @@ import Tasks from './pages/Tasks';
 import TaskDetail from './pages/TaskDetail';
 import Terms from './pages/Terms';
 import Privacy from './pages/Privacy';
+import Leaderboard from './pages/Leaderboard';
 import { trackEvent } from './lib/analytics';
 
 function RouteChangeTracker() {
@@ -43,6 +44,7 @@ function App() {
             <Route path="/tasks/:slug" element={<TaskDetail />} />
             <Route path="/terms" element={<Terms />} />
             <Route path="/privacy" element={<Privacy />} />
+            <Route path="/leaderboard" element={<Leaderboard />} />
           </Routes>
         </main>
         <Footer />
