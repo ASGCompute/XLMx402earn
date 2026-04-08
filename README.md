@@ -107,7 +107,7 @@ The marketplace features **31 curated tasks** divided into active Testnet tasks 
 ### 1. Clone & Install
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/XLMx402earn.git
+git clone https://github.com/ASGCompute/XLMx402earn.git
 cd XLMx402earn
 npm install
 ```

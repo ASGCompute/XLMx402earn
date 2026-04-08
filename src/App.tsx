@@ -33,6 +33,7 @@ function App() {
           <RouteChangeTracker />
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/for-agents" element={<ForAgents />} />
             <Route path="/agents" element={<ForAgents />} />
             <Route path="/sponsors" element={<ForSponsors />} />
             <Route path="/how-it-works" element={<HowItWorks />} />
