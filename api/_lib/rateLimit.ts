@@ -1,23 +1,56 @@
-// Shared in-memory rate limiter (per serverless instance)
-const rateMap = new Map<string, { count: number; firstSeen: number }>();
-const RATE_WINDOW_MS = 60_000; // 1 minute
-const RATE_LIMIT = 5; // max requests per window per IP
+import { createClient } from '@supabase/supabase-js';
 
-export function isRateLimited(ip: string): boolean {
-    const now = Date.now();
-    const entry = rateMap.get(ip);
+const supabase = createClient(
+    process.env.SUPABASE_URL || '',
+    process.env.SUPABASE_SERVICE_ROLE_KEY || ''
+);
 
-    if (!entry || now - entry.firstSeen > RATE_WINDOW_MS) {
-        rateMap.set(ip, { count: 1, firstSeen: now });
-        return false;
-    }
-
-    entry.count += 1;
-    return entry.count > RATE_LIMIT;
+interface RateLimitResult {
+    allowed: boolean;
+    remaining: number;
+    resetAt: Date;
 }
 
-export function getClientIp(headers: Record<string, string | string[] | undefined>): string {
-    const forwarded = headers['x-forwarded-for'];
-    const ip = typeof forwarded === 'string' ? forwarded.split(',')[0]?.trim() : undefined;
-    return ip || 'unknown';
+/**
+ * Simple rate limiter backed by Supabase.
+ * Window: 60 seconds, default max: 30 requests per IP per endpoint.
+ */
+export async function checkRateLimit(
+    ip: string,
+    endpoint: string,
+    maxRequests: number = 30,
+    windowMs: number = 60_000
+): Promise<RateLimitResult> {
+    const windowStart = new Date(Date.now() - windowMs);
+
+    // Clean old entries
+    await supabase
+        .from('rate_limits')
+        .delete()
+        .lt('window_start', windowStart.toISOString());
+
+    // Count recent requests
+    const { count } = await supabase
+        .from('rate_limits')
+        .select('*', { count: 'exact', head: true })
+        .eq('ip', ip)
+        .eq('endpoint', endpoint)
+        .gte('window_start', windowStart.toISOString());
+
+    const currentCount = count || 0;
+    const allowed = currentCount < maxRequests;
+
+    if (allowed) {
+        await supabase.from('rate_limits').insert({
+            ip,
+            endpoint,
+            window_start: new Date().toISOString()
+        });
+    }
+
+    return {
+        allowed,
+        remaining: Math.max(0, maxRequests - currentCount - (allowed ? 1 : 0)),
+        resetAt: new Date(Date.now() + windowMs)
+    };
 }
