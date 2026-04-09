@@ -3,7 +3,9 @@ import { createClient } from '@supabase/supabase-js';
 import { isRateLimited, getClientIp } from './_lib/rateLimit';
 import { autoVerify } from './_lib/autoVerify';
 import { sendPayout } from './_lib/stellar';
-import tasksData from '../src/data/tasks.json';
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
+const tasksData = require('../src/data/tasks.json');
 
 const supabase = createClient(
   process.env.SUPABASE_URL || '',
