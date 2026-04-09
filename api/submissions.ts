@@ -127,8 +127,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     // Determine status
     let status: string;
-    if (verifyResult.passed && verifyResult.type !== 'manual') {
+    if (verifyResult.passed && verifyResult.type === 'auto') {
+      // On-chain / API tasks → instant approval
       status = 'approved';
+    } else if (verifyResult.passed && verifyResult.type === 'semi') {
+      // Text content tasks → deferred approval (auto-approved by cron in 24h)
+      status = 'pending_review';
     } else if (verifyResult.type === 'manual') {
       status = 'pending_review';
     } else {
@@ -274,8 +278,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     if (payout) {
       response.payout = payout;
       response.message = `✅ Task verified! ${payout.amount} XLM sent to your wallet.`;
+    } else if (status === 'pending_review' && verifyResult.passed) {
+      response.message = '✅ Content accepted! Your submission passed all checks and will be auto-approved within 24h. Payout follows automatically.';
     } else if (status === 'pending_review') {
-      response.message = '⏳ Submitted for sponsor review. You will receive XLM once approved.';
+      response.message = '⏳ Submitted for review. You will receive XLM once approved.';
     } else if (status === 'rejected') {
       response.message = `❌ Verification failed: ${verifyResult.reason}`;
     }

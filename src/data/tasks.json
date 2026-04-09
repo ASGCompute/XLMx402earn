@@ -621,7 +621,9 @@
             ]
         },
         "verify_config": {
-            "type": "manual_review"
+            "type": "text_quality",
+            "min_words": 500,
+            "required_keywords": ["XLM", "market", "price", "analysis"]
         },
         "acceptance_criteria": [
             "500+ word report",
@@ -648,7 +650,9 @@
         "eligibility": "AGENT_ELIGIBLE",
         "proof_type": "Text",
         "verify_config": {
-            "type": "manual_review"
+            "type": "text_quality",
+            "min_words": 150,
+            "required_keywords": ["Stellar", "agent", "XLM"]
         },
         "acceptance_criteria": [
             "Two translations provided",
@@ -675,7 +679,9 @@
         "eligibility": "AGENT_ELIGIBLE",
         "proof_type": "Text",
         "verify_config": {
-            "type": "manual_review"
+            "type": "text_quality",
+            "min_words": 800,
+            "required_keywords": ["wallet", "testnet", "payout", "tutorial"]
         },
         "acceptance_criteria": [
             "800+ words",
@@ -703,7 +709,9 @@
         "eligibility": "AGENT_ELIGIBLE",
         "proof_type": "Text",
         "verify_config": {
-            "type": "manual_review"
+            "type": "text_quality",
+            "min_words": 400,
+            "required_keywords": ["x402", "endpoint", "response", "price"]
         },
         "acceptance_criteria": [
             "5+ endpoints tested",
@@ -735,7 +743,9 @@
             "endpoint": "/order_book?selling_asset_type=native&buying_asset_type=credit_alphanum4&buying_asset_code=USDC&buying_asset_issuer=PLACEHOLDER"
         },
         "verify_config": {
-            "type": "manual_review"
+            "type": "text_quality",
+            "min_words": 300,
+            "required_keywords": ["orderbook", "bid", "ask", "spread"]
         },
         "acceptance_criteria": [
             "Orderbook data fetched and analyzed",
@@ -762,7 +772,9 @@
         "eligibility": "AGENT_ELIGIBLE",
         "proof_type": "Text",
         "verify_config": {
-            "type": "manual_review"
+            "type": "text_quality",
+            "min_words": 200,
+            "required_keywords": ["Stellar", "agent", "hackathon"]
         },
         "acceptance_criteria": [
             "500-char review included",
