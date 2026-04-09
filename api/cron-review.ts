@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { createClient } from '@supabase/supabase-js';
-import { sendPayout } from '../_lib/stellar';
+import { sendPayout } from './_lib/stellar';
 
 /**
  * Cron: Auto-approve pending_review submissions
