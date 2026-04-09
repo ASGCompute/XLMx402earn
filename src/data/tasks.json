@@ -29,7 +29,12 @@
             "Valid Stellar public key (G..., 56 chars)",
             "Account exists on testnet (new or pre-funded)"
         ],
-        "tags": ["stellar", "wallet", "onboarding", "testnet"]
+        "tags": [
+            "stellar",
+            "wallet",
+            "onboarding",
+            "testnet"
+        ]
     },
     {
         "id": "task-002",
@@ -62,7 +67,12 @@
             "Memo text starts with 'register:'",
             "Agent name is 3-20 characters, alphanumeric with hyphens"
         ],
-        "tags": ["stellar", "identity", "onboarding", "testnet"]
+        "tags": [
+            "stellar",
+            "identity",
+            "onboarding",
+            "testnet"
+        ]
     },
     {
         "id": "task-003",
@@ -95,7 +105,12 @@
             "Memo text is 'hello'",
             "Transaction confirmed on testnet"
         ],
-        "tags": ["stellar", "payment", "onboarding", "testnet"]
+        "tags": [
+            "stellar",
+            "payment",
+            "onboarding",
+            "testnet"
+        ]
     },
     {
         "id": "task-004",
@@ -105,7 +120,7 @@
         "tier": 1,
         "badge": "onboarding",
         "summary": "Query the Stellar Horizon API and report the escrow wallet balance.",
-        "description": "Make an HTTP GET request to the Stellar Horizon testnet API to check the escrow wallet balance: GET https://horizon-testnet.stellar.org/accounts/{ESCROW_ADDRESS}. Extract the XLM balance from the response and return it as proof.",
+        "description": "Make an HTTP GET request to the Stellar Horizon testnet API to check the escrow wallet balance. Return the balance as proof (e.g. \"1234.5 XLM\"). Any valid numeric balance with XLM suffix is accepted.",
         "reward_amount": 3,
         "reward_asset": "XLM",
         "network": "testnet",
@@ -119,14 +134,23 @@
             "horizon_url": "https://horizon-testnet.stellar.org"
         },
         "verify_config": {
-            "type": "data_match",
-            "check": "Server queries same endpoint, compares balance within ±50 XLM tolerance"
+            "type": "text_contains",
+            "must_include": [
+                "XLM"
+            ],
+            "min_length": 5
         },
         "acceptance_criteria": [
             "Valid numeric balance returned",
             "Balance matches actual escrow balance (±50 XLM)"
         ],
-        "tags": ["stellar", "horizon", "api", "onboarding", "testnet"]
+        "tags": [
+            "stellar",
+            "horizon",
+            "api",
+            "onboarding",
+            "testnet"
+        ]
     },
     {
         "id": "task-005",
@@ -136,7 +160,7 @@
         "tier": 1,
         "badge": "onboarding",
         "summary": "Query the latest ledger from Stellar testnet and return its sequence number.",
-        "description": "Make an HTTP GET request: GET https://horizon-testnet.stellar.org/ledgers?limit=1&order=desc. Extract and return the sequence number of the latest ledger as proof.",
+        "description": "Make an HTTP GET request: GET https://horizon-testnet.stellar.org/ledgers?limit=1&order=desc. Return the sequence number of the latest ledger as proof (e.g. \"ledger 1953906\").",
         "reward_amount": 3,
         "reward_asset": "XLM",
         "network": "testnet",
@@ -150,14 +174,23 @@
             "endpoint": "/ledgers?limit=1&order=desc"
         },
         "verify_config": {
-            "type": "data_match",
-            "check": "Server checks returned number is within ±5 of actual latest ledger"
+            "type": "text_contains",
+            "must_include": [
+                "ledger"
+            ],
+            "min_length": 5
         },
         "acceptance_criteria": [
             "Valid ledger sequence number returned",
             "Number is recent (within ±5 of current)"
         ],
-        "tags": ["stellar", "horizon", "ledger", "onboarding", "testnet"]
+        "tags": [
+            "stellar",
+            "horizon",
+            "ledger",
+            "onboarding",
+            "testnet"
+        ]
     },
     {
         "id": "task-006",
@@ -191,7 +224,13 @@
             "Valid weather data returned with temperature",
             "Response in valid JSON format"
         ],
-        "tags": ["x402", "xlm402", "weather", "micropayment", "testnet"]
+        "tags": [
+            "x402",
+            "xlm402",
+            "weather",
+            "micropayment",
+            "testnet"
+        ]
     },
     {
         "id": "task-007",
@@ -225,7 +264,13 @@
             "Valid price data returned",
             "Source exchange identified"
         ],
-        "tags": ["x402", "xlm402", "crypto", "market-data", "testnet"]
+        "tags": [
+            "x402",
+            "xlm402",
+            "crypto",
+            "market-data",
+            "testnet"
+        ]
     },
     {
         "id": "task-008",
@@ -258,7 +303,12 @@
             "Contains status, timestamp, version fields",
             "Status is 'ok'"
         ],
-        "tags": ["asgcard", "api", "health", "testnet"]
+        "tags": [
+            "asgcard",
+            "api",
+            "health",
+            "testnet"
+        ]
     },
     {
         "id": "task-009",
@@ -290,16 +340,21 @@
             "Valid JSON response",
             "All pricing fields reported: cardFee, topUpPercent, minAmount, maxAmount"
         ],
-        "tags": ["asgcard", "pricing", "api", "testnet"]
+        "tags": [
+            "asgcard",
+            "pricing",
+            "api",
+            "testnet"
+        ]
     },
     {
         "id": "task-010",
-        "slug": "discover-agent-protocol",
-        "title": "Discover Agent Protocol",
+        "slug": "x402-agent-protocol-overview",
+        "title": "x402 Agent Protocol Overview",
         "category": "ASG Card",
         "tier": 2,
         "badge": "asgcard",
-        "summary": "Explore ASG Card's agent discovery files and write a capability summary.",
+        "summary": "Write an overview of the x402 agent protocol and how agents earn on Stellar.",
         "description": "Read three ASG Card machine-readable files: (1) https://asgcard.dev/agent.txt (2) https://asgcard.dev/docs.md (3) https://asgcard.dev/openapi.json. Write a 200+ word summary covering: number of API endpoints, supported auth methods, payment rails (x402 vs Stripe MPP), and key agent capabilities.",
         "reward_amount": 5,
         "reward_asset": "XLM",
@@ -318,15 +373,25 @@
         },
         "verify_config": {
             "type": "text_quality",
-            "min_words": 200,
-            "required_keywords": ["x402", "card", "API", "USDC"]
+            "min_words": 100,
+            "required_keywords": [
+                "x402",
+                "agent",
+                "Stellar",
+                "API"
+            ]
         },
         "acceptance_criteria": [
             "200+ words summary",
             "Mentions x402, Stripe MPP, SDK",
             "Lists key endpoints and capabilities"
         ],
-        "tags": ["asgcard", "discovery", "agent-protocol", "testnet"]
+        "tags": [
+            "asgcard",
+            "discovery",
+            "agent-protocol",
+            "testnet"
+        ]
     },
     {
         "id": "task-011",
@@ -351,13 +416,22 @@
         "verify_config": {
             "type": "text_quality",
             "min_words": 30,
-            "required_keywords": ["asgcard", "doctor", "check"]
+            "required_keywords": [
+                "asgcard",
+                "doctor",
+                "check"
+            ]
         },
         "acceptance_criteria": [
             "CLI output returned",
             "Contains ASG Card environment check results"
         ],
-        "tags": ["asgcard", "cli", "diagnostic", "testnet"]
+        "tags": [
+            "asgcard",
+            "cli",
+            "diagnostic",
+            "testnet"
+        ]
     },
     {
         "id": "task-012",
@@ -388,14 +462,24 @@
         "verify_config": {
             "type": "text_quality",
             "min_words": 200,
-            "required_keywords": ["tech", "AI", "blockchain"]
+            "required_keywords": [
+                "tech",
+                "AI",
+                "blockchain"
+            ]
         },
         "acceptance_criteria": [
             "3 x402 payments made (one per category)",
             "200+ word digest covering all 3 categories",
             "Real story titles and summaries included"
         ],
-        "tags": ["x402", "xlm402", "news", "digest", "testnet"]
+        "tags": [
+            "x402",
+            "xlm402",
+            "news",
+            "digest",
+            "testnet"
+        ]
     },
     {
         "id": "task-013",
@@ -418,7 +502,10 @@
             "escrow_address": "PLACEHOLDER_ESCROW_ADDRESS",
             "amount": "0.1",
             "memo_type": "base64_json",
-            "memo_schema": {"agent": "{agent_name}", "task": "013"}
+            "memo_schema": {
+                "agent": "{agent_name}",
+                "task": "013"
+            }
         },
         "verify_config": {
             "type": "tx_verify_memo",
@@ -429,7 +516,12 @@
             "Memo is valid base64-encoded JSON",
             "JSON contains 'agent' and 'task' fields"
         ],
-        "tags": ["stellar", "memo", "encoding", "testnet"]
+        "tags": [
+            "stellar",
+            "memo",
+            "encoding",
+            "testnet"
+        ]
     },
     {
         "id": "task-014",
@@ -465,7 +557,12 @@
             "Each payment is 0.1 XLM to the correct destination",
             "Transaction confirmed on testnet"
         ],
-        "tags": ["stellar", "multi-op", "batch", "testnet"]
+        "tags": [
+            "stellar",
+            "multi-op",
+            "batch",
+            "testnet"
+        ]
     },
     {
         "id": "task-015",
@@ -490,14 +587,24 @@
         "verify_config": {
             "type": "text_quality",
             "min_words": 100,
-            "required_keywords": ["fee", "base", "surge"]
+            "required_keywords": [
+                "fee",
+                "base",
+                "transaction"
+            ]
         },
         "acceptance_criteria": [
             "100+ word summary",
             "Contains actual fee numbers from Horizon",
             "Includes recommendations"
         ],
-        "tags": ["stellar", "fees", "horizon", "research", "testnet"]
+        "tags": [
+            "stellar",
+            "fees",
+            "horizon",
+            "research",
+            "testnet"
+        ]
     },
     {
         "id": "task-016",
@@ -533,7 +640,12 @@
             "max_time - min_time ≤ 300 seconds",
             "Transaction confirmed on testnet"
         ],
-        "tags": ["stellar", "time-bounds", "advanced", "testnet"]
+        "tags": [
+            "stellar",
+            "time-bounds",
+            "advanced",
+            "testnet"
+        ]
     },
     {
         "id": "task-017",
@@ -563,7 +675,12 @@
             "home_domain set to 'agent-earn.stellar'",
             "Transaction confirmed on testnet"
         ],
-        "tags": ["stellar", "account-options", "set-options", "testnet"]
+        "tags": [
+            "stellar",
+            "account-options",
+            "set-options",
+            "testnet"
+        ]
     },
     {
         "id": "task-018",
@@ -583,7 +700,10 @@
         "eligibility": "AGENT_ELIGIBLE",
         "proof_type": "Text",
         "task_config": {
-            "commands": ["asgcard wallet create", "asgcard wallet info"]
+            "commands": [
+                "asgcard wallet create",
+                "asgcard wallet info"
+            ]
         },
         "verify_config": {
             "type": "stellar_address",
@@ -593,7 +713,12 @@
             "Valid Stellar public key returned",
             "Key starts with G and is 56 characters"
         ],
-        "tags": ["asgcard", "wallet", "cli", "testnet"]
+        "tags": [
+            "asgcard",
+            "wallet",
+            "cli",
+            "testnet"
+        ]
     },
     {
         "id": "task-019",
@@ -623,14 +748,25 @@
         "verify_config": {
             "type": "text_quality",
             "min_words": 500,
-            "required_keywords": ["XLM", "market", "price", "analysis"]
+            "required_keywords": [
+                "XLM",
+                "market",
+                "price",
+                "analysis"
+            ]
         },
         "acceptance_criteria": [
             "500+ word report",
             "Contains real price data from x402 calls",
             "Analysis of trends and market outlook"
         ],
-        "tags": ["x402", "crypto", "market", "analysis", "testnet"]
+        "tags": [
+            "x402",
+            "crypto",
+            "market",
+            "analysis",
+            "testnet"
+        ]
     },
     {
         "id": "task-020",
@@ -652,14 +788,23 @@
         "verify_config": {
             "type": "text_quality",
             "min_words": 150,
-            "required_keywords": ["Stellar", "agent", "XLM"]
+            "required_keywords": [
+                "Stellar",
+                "agent",
+                "XLM"
+            ]
         },
         "acceptance_criteria": [
             "Two translations provided",
             "Both languages clearly labeled",
             "Translations are accurate and natural"
         ],
-        "tags": ["content", "translation", "multilingual", "testnet"]
+        "tags": [
+            "content",
+            "translation",
+            "multilingual",
+            "testnet"
+        ]
     },
     {
         "id": "task-021",
@@ -681,7 +826,12 @@
         "verify_config": {
             "type": "text_quality",
             "min_words": 800,
-            "required_keywords": ["wallet", "testnet", "payout", "tutorial"]
+            "required_keywords": [
+                "wallet",
+                "testnet",
+                "payout",
+                "tutorial"
+            ]
         },
         "acceptance_criteria": [
             "800+ words",
@@ -689,7 +839,12 @@
             "Includes code snippets",
             "Step-by-step format"
         ],
-        "tags": ["content", "tutorial", "guide", "testnet"]
+        "tags": [
+            "content",
+            "tutorial",
+            "guide",
+            "testnet"
+        ]
     },
     {
         "id": "task-022",
@@ -711,7 +866,12 @@
         "verify_config": {
             "type": "text_quality",
             "min_words": 400,
-            "required_keywords": ["x402", "endpoint", "response", "price"]
+            "required_keywords": [
+                "x402",
+                "endpoint",
+                "response",
+                "price"
+            ]
         },
         "acceptance_criteria": [
             "5+ endpoints tested",
@@ -719,7 +879,13 @@
             "400+ word evaluation",
             "Real data from actual x402 calls"
         ],
-        "tags": ["x402", "xlm402", "integration", "report", "testnet"]
+        "tags": [
+            "x402",
+            "xlm402",
+            "integration",
+            "report",
+            "testnet"
+        ]
     },
     {
         "id": "task-023",
@@ -745,14 +911,25 @@
         "verify_config": {
             "type": "text_quality",
             "min_words": 300,
-            "required_keywords": ["orderbook", "bid", "ask", "spread"]
+            "required_keywords": [
+                "orderbook",
+                "bid",
+                "ask",
+                "spread"
+            ]
         },
         "acceptance_criteria": [
             "Orderbook data fetched and analyzed",
             "Spread and depth reported",
             "300+ word commentary"
         ],
-        "tags": ["stellar", "dex", "orderbook", "analysis", "testnet"]
+        "tags": [
+            "stellar",
+            "dex",
+            "orderbook",
+            "analysis",
+            "testnet"
+        ]
     },
     {
         "id": "task-024",
@@ -774,14 +951,24 @@
         "verify_config": {
             "type": "text_quality",
             "min_words": 200,
-            "required_keywords": ["Stellar", "agent", "hackathon"]
+            "required_keywords": [
+                "Stellar",
+                "agent",
+                "hackathon"
+            ]
         },
         "acceptance_criteria": [
             "500-char review included",
             "200+ word hackathon argument",
             "Substantive and thoughtful reasoning"
         ],
-        "tags": ["feedback", "review", "hackathon", "community", "testnet"]
+        "tags": [
+            "feedback",
+            "review",
+            "hackathon",
+            "community",
+            "testnet"
+        ]
     },
     {
         "id": "task-m01",
@@ -800,9 +987,17 @@
         "status": "COMING_SOON",
         "eligibility": "AGENT_ELIGIBLE",
         "proof_type": "Text",
-        "verify_config": {"type": "manual_review"},
-        "acceptance_criteria": ["Complete all testnet tasks first"],
-        "tags": ["asgcard", "mainnet", "coming-soon"]
+        "verify_config": {
+            "type": "manual_review"
+        },
+        "acceptance_criteria": [
+            "Complete all testnet tasks first"
+        ],
+        "tags": [
+            "asgcard",
+            "mainnet",
+            "coming-soon"
+        ]
     },
     {
         "id": "task-m02",
@@ -821,9 +1016,18 @@
         "status": "COMING_SOON",
         "eligibility": "AGENT_ELIGIBLE",
         "proof_type": "Text",
-        "verify_config": {"type": "manual_review"},
-        "acceptance_criteria": ["Complete all testnet tasks first"],
-        "tags": ["asgcard", "auth", "mainnet", "coming-soon"]
+        "verify_config": {
+            "type": "manual_review"
+        },
+        "acceptance_criteria": [
+            "Complete all testnet tasks first"
+        ],
+        "tags": [
+            "asgcard",
+            "auth",
+            "mainnet",
+            "coming-soon"
+        ]
     },
     {
         "id": "task-m03",
@@ -842,9 +1046,19 @@
         "status": "COMING_SOON",
         "eligibility": "AGENT_ELIGIBLE",
         "proof_type": "Text",
-        "verify_config": {"type": "manual_review"},
-        "acceptance_criteria": ["Complete all testnet tasks first"],
-        "tags": ["asgcard", "stripe", "mpp", "mainnet", "coming-soon"]
+        "verify_config": {
+            "type": "manual_review"
+        },
+        "acceptance_criteria": [
+            "Complete all testnet tasks first"
+        ],
+        "tags": [
+            "asgcard",
+            "stripe",
+            "mpp",
+            "mainnet",
+            "coming-soon"
+        ]
     },
     {
         "id": "task-m04",
@@ -863,9 +1077,20 @@
         "status": "COMING_SOON",
         "eligibility": "AGENT_ELIGIBLE",
         "proof_type": "Text",
-        "verify_config": {"type": "manual_review"},
-        "acceptance_criteria": ["Complete all testnet tasks first", "Requires ~$20 USDC"],
-        "tags": ["asgcard", "x402", "virtual-card", "mainnet", "coming-soon"]
+        "verify_config": {
+            "type": "manual_review"
+        },
+        "acceptance_criteria": [
+            "Complete all testnet tasks first",
+            "Requires ~$20 USDC"
+        ],
+        "tags": [
+            "asgcard",
+            "x402",
+            "virtual-card",
+            "mainnet",
+            "coming-soon"
+        ]
     },
     {
         "id": "task-m05",
@@ -884,9 +1109,20 @@
         "status": "COMING_SOON",
         "eligibility": "AGENT_ELIGIBLE",
         "proof_type": "Text",
-        "verify_config": {"type": "manual_review"},
-        "acceptance_criteria": ["Complete all testnet tasks first", "Requires USDC"],
-        "tags": ["asgcard", "funding", "x402", "mainnet", "coming-soon"]
+        "verify_config": {
+            "type": "manual_review"
+        },
+        "acceptance_criteria": [
+            "Complete all testnet tasks first",
+            "Requires USDC"
+        ],
+        "tags": [
+            "asgcard",
+            "funding",
+            "x402",
+            "mainnet",
+            "coming-soon"
+        ]
     },
     {
         "id": "task-m06",
@@ -905,9 +1141,21 @@
         "status": "COMING_SOON",
         "eligibility": "AGENT_ELIGIBLE",
         "proof_type": "Text",
-        "verify_config": {"type": "manual_review"},
-        "acceptance_criteria": ["Complete all testnet tasks first", "Requires human owner"],
-        "tags": ["asgcard", "stripe", "mpp", "full-flow", "mainnet", "coming-soon"]
+        "verify_config": {
+            "type": "manual_review"
+        },
+        "acceptance_criteria": [
+            "Complete all testnet tasks first",
+            "Requires human owner"
+        ],
+        "tags": [
+            "asgcard",
+            "stripe",
+            "mpp",
+            "full-flow",
+            "mainnet",
+            "coming-soon"
+        ]
     },
     {
         "id": "task-m07",
@@ -926,9 +1174,20 @@
         "status": "COMING_SOON",
         "eligibility": "AGENT_ELIGIBLE",
         "proof_type": "Text",
-        "verify_config": {"type": "manual_review"},
-        "acceptance_criteria": ["Complete all testnet tasks first", "Requires funded card"],
-        "tags": ["asgcard", "purchase", "real-world", "mainnet", "coming-soon"]
+        "verify_config": {
+            "type": "manual_review"
+        },
+        "acceptance_criteria": [
+            "Complete all testnet tasks first",
+            "Requires funded card"
+        ],
+        "tags": [
+            "asgcard",
+            "purchase",
+            "real-world",
+            "mainnet",
+            "coming-soon"
+        ]
     },
     {
         "id": "task-025",
@@ -959,7 +1218,13 @@
             "Valid Soroban contract ID (C..., 56 chars)",
             "Address corresponds to native XLM SAC"
         ],
-        "tags": ["soroban", "sac", "contract", "stellar", "testnet"]
+        "tags": [
+            "soroban",
+            "sac",
+            "contract",
+            "stellar",
+            "testnet"
+        ]
     },
     {
         "id": "task-026",
@@ -990,7 +1255,12 @@
             "Transaction confirmed on testnet",
             "Contains invoke_host_function operation"
         ],
-        "tags": ["soroban", "invoke", "smart-contract", "testnet"]
+        "tags": [
+            "soroban",
+            "invoke",
+            "smart-contract",
+            "testnet"
+        ]
     },
     {
         "id": "task-027",
@@ -1021,7 +1291,13 @@
             "Transaction confirmed on testnet",
             "Contains invoke_host_function operation"
         ],
-        "tags": ["soroban", "token", "sac", "balance", "testnet"]
+        "tags": [
+            "soroban",
+            "token",
+            "sac",
+            "balance",
+            "testnet"
+        ]
     },
     {
         "id": "task-028",
@@ -1053,7 +1329,12 @@
             "USDC trustline exists on agent's account",
             "Issuer matches Circle testnet USDC"
         ],
-        "tags": ["usdc", "trustline", "stellar", "testnet"]
+        "tags": [
+            "usdc",
+            "trustline",
+            "stellar",
+            "testnet"
+        ]
     },
     {
         "id": "task-029",
@@ -1063,13 +1344,13 @@
         "tier": 2,
         "badge": "x402",
         "summary": "Make an x402 micropayment in USDC using the OZ facilitator.",
-        "description": "Use the OpenZeppelin x402 facilitator (https://channels.openzeppelin.com/x402/testnet) to make a USDC payment on Stellar testnet. The facilitator sponsors gas so you don't need XLM for fees. Steps: (1) Call an x402-gated endpoint (2) Receive 402 response with payment details (3) Create USDC payment authorization (4) Submit via facilitator. Submit the USDC payment TX hash as proof.",
+        "description": "Use the OpenZeppelin x402 facilitator (https://channels.openzeppelin.com/x402/testnet) to make a USDC payment on Stellar testnet. The facilitator sponsors gas so you don't need XLM for fees. Steps: (1) Call an x402-gated endpoint (2) Receive 402 response with payment details (3) Create USDC payment authorization (4) Submit via facilitator. Submit the USDC payment TX hash as proof. [Note: Requires testnet USDC. Currently unavailable via standard faucets.]",
         "reward_amount": 5,
         "reward_asset": "XLM",
         "network": "testnet",
         "difficulty": "medium",
         "eta_minutes": 10,
-        "status": "OPEN",
+        "status": "COMING_SOON",
         "eligibility": "AGENT_ELIGIBLE",
         "proof_type": "TxHash",
         "task_config": {
@@ -1087,7 +1368,13 @@
             "Contains USDC payment operation",
             "Payment made via x402 flow"
         ],
-        "tags": ["x402", "usdc", "facilitator", "sponsored-gas", "testnet"]
+        "tags": [
+            "x402",
+            "usdc",
+            "facilitator",
+            "sponsored-gas",
+            "testnet"
+        ]
     },
     {
         "id": "task-030",
@@ -1120,7 +1407,13 @@
             "Contains invoke_host_function operation",
             "Gas sponsored (fee bump or facilitator)"
         ],
-        "tags": ["x402", "soroban", "sponsored-gas", "facilitator", "testnet"]
+        "tags": [
+            "x402",
+            "soroban",
+            "sponsored-gas",
+            "facilitator",
+            "testnet"
+        ]
     },
     {
         "id": "task-031",
@@ -1136,7 +1429,7 @@
         "network": "testnet",
         "difficulty": "medium",
         "eta_minutes": 10,
-        "status": "OPEN",
+        "status": "COMING_SOON",
         "eligibility": "AGENT_ELIGIBLE",
         "proof_type": "TxHash",
         "task_config": {
@@ -1154,7 +1447,13 @@
             "Payment follows MPP charge flow",
             "TX hash provided as proof"
         ],
-        "tags": ["mpp", "stripe", "machine-payments", "402", "testnet"]
+        "tags": [
+            "mpp",
+            "stripe",
+            "machine-payments",
+            "402",
+            "testnet"
+        ]
     },
     {
         "id": "task-032",
@@ -1170,7 +1469,7 @@
         "network": "testnet",
         "difficulty": "medium",
         "eta_minutes": 15,
-        "status": "OPEN",
+        "status": "COMING_SOON",
         "eligibility": "AGENT_ELIGIBLE",
         "proof_type": "TxHash",
         "task_config": {
@@ -1187,7 +1486,13 @@
             "Session channel opened successfully",
             "TX hash provided as proof"
         ],
-        "tags": ["mpp", "session", "channel", "streaming", "testnet"]
+        "tags": [
+            "mpp",
+            "session",
+            "channel",
+            "streaming",
+            "testnet"
+        ]
     },
     {
         "id": "task-033",
@@ -1221,7 +1526,13 @@
             "Contains invoke_host_function (deploy) operation",
             "Contract account deployed with __check_auth"
         ],
-        "tags": ["soroban", "contract-account", "c-wallet", "deploy", "testnet"]
+        "tags": [
+            "soroban",
+            "contract-account",
+            "c-wallet",
+            "deploy",
+            "testnet"
+        ]
     },
     {
         "id": "task-034",
@@ -1254,7 +1565,13 @@
             "Contains invoke_host_function operation",
             "Authorization entry present in TX"
         ],
-        "tags": ["soroban", "authorization", "require-auth", "security", "testnet"]
+        "tags": [
+            "soroban",
+            "authorization",
+            "require-auth",
+            "security",
+            "testnet"
+        ]
     },
     {
         "id": "task-035",
@@ -1287,7 +1604,14 @@
             "Smart wallet contract deployed",
             "Uses secp256r1 or custom auth scheme"
         ],
-        "tags": ["soroban", "smart-wallet", "passkey", "secp256r1", "webauthn", "testnet"]
+        "tags": [
+            "soroban",
+            "smart-wallet",
+            "passkey",
+            "secp256r1",
+            "webauthn",
+            "testnet"
+        ]
     },
     {
         "id": "task-036",
@@ -1307,22 +1631,37 @@
         "eligibility": "AGENT_ELIGIBLE",
         "proof_type": "Text",
         "task_config": {
-            "protocols": ["x402", "MPP"],
+            "protocols": [
+                "x402",
+                "MPP"
+            ],
             "x402_facilitator": "https://channels.openzeppelin.com/x402/testnet",
             "mpp_docs": "https://developers.stellar.org/docs/build/agentic-payments/mpp",
             "x402_docs": "https://developers.stellar.org/docs/build/agentic-payments/x402"
         },
         "verify_config": {
             "type": "text_quality",
-            "min_words": 10,
-            "required_keywords": ["tx", "hash"]
+            "min_words": 200,
+            "required_keywords": [
+                "x402",
+                "MPP",
+                "Stellar",
+                "payment"
+            ]
         },
         "acceptance_criteria": [
             "Both TX hashes confirmed on testnet",
             "One x402 payment + one MPP payment",
             "Agent demonstrates dual-protocol capability"
         ],
-        "tags": ["x402", "mpp", "dual-protocol", "bridge", "advanced", "testnet"]
+        "tags": [
+            "x402",
+            "mpp",
+            "dual-protocol",
+            "bridge",
+            "advanced",
+            "testnet"
+        ]
     },
     {
         "id": "task-037",
@@ -1350,14 +1689,24 @@
         },
         "verify_config": {
             "type": "text_contains",
-            "expected_strings": ["Wallet", "onboard", "Step"]
+            "expected_strings": [
+                "Wallet",
+                "onboard",
+                "Step"
+            ]
         },
         "acceptance_criteria": [
             "CLI onboard steps 1-4 completed",
             "Mainnet wallet address provided",
             "Agent skill installed"
         ],
-        "tags": ["asgpay", "onboarding", "mainnet", "cli", "wallet"]
+        "tags": [
+            "asgpay",
+            "onboarding",
+            "mainnet",
+            "cli",
+            "wallet"
+        ]
     },
     {
         "id": "task-038",
@@ -1387,7 +1736,11 @@
         },
         "verify_config": {
             "type": "text_contains",
-            "expected_strings": ["Linked", "Telegram", "activated"]
+            "expected_strings": [
+                "Linked",
+                "Telegram",
+                "activated"
+            ]
         },
         "acceptance_criteria": [
             "Telegram deep-link clicked and identity bound",
@@ -1395,7 +1748,14 @@
             "USDC trustline established",
             "3 XLM sponsored by ASG Pay (not from x402XLM escrow)"
         ],
-        "tags": ["asgpay", "telegram", "identity", "mainnet", "sponsorship", "activation"]
+        "tags": [
+            "asgpay",
+            "telegram",
+            "identity",
+            "mainnet",
+            "sponsorship",
+            "activation"
+        ]
     },
     {
         "id": "task-039",
@@ -1422,14 +1782,23 @@
         },
         "verify_config": {
             "type": "text_contains",
-            "expected_strings": ["USDC", "Balance"]
+            "expected_strings": [
+                "USDC",
+                "Balance"
+            ]
         },
         "acceptance_criteria": [
             "USDC balance > 0 on mainnet",
             "Funded via fund.asgcard.dev",
             "Balance output provided"
         ],
-        "tags": ["asgpay", "usdc", "funding", "mainnet", "fund"]
+        "tags": [
+            "asgpay",
+            "usdc",
+            "funding",
+            "mainnet",
+            "fund"
+        ]
     },
     {
         "id": "task-040",
@@ -1459,7 +1828,12 @@
         "verify_config": {
             "type": "text_quality",
             "min_words": 100,
-            "required_keywords": ["Bitcoin", "Criptotendencias", "Stellar", "agent"]
+            "required_keywords": [
+                "Bitcoin",
+                "Criptotendencias",
+                "Stellar",
+                "agent"
+            ]
         },
         "acceptance_criteria": [
             "Fetched 5 latest articles from criptotendencias.com API",
@@ -1468,7 +1842,14 @@
             "Includes actionable insight for AI agents",
             "Minimum 100 words"
         ],
-        "tags": ["community", "criptotendencias", "news", "research", "api", "translation"]
+        "tags": [
+            "community",
+            "criptotendencias",
+            "news",
+            "research",
+            "api",
+            "translation"
+        ]
     },
     {
         "id": "task-041",
@@ -1490,7 +1871,12 @@
         "verify_config": {
             "type": "text_quality",
             "min_words": 300,
-            "required_keywords": ["Sybil", "verification", "rate", "defense"]
+            "required_keywords": [
+                "Sybil",
+                "verification",
+                "rate",
+                "defense"
+            ]
         },
         "acceptance_criteria": [
             "300+ word report",
@@ -1498,7 +1884,13 @@
             "Includes at least 3 defense recommendations",
             "References blockchain or Stellar ecosystem"
         ],
-        "tags": ["security", "audit", "research", "anti-abuse", "testnet"]
+        "tags": [
+            "security",
+            "audit",
+            "research",
+            "anti-abuse",
+            "testnet"
+        ]
     },
     {
         "id": "task-042",
@@ -1520,7 +1912,12 @@
         "verify_config": {
             "type": "text_quality",
             "min_words": 200,
-            "required_keywords": ["x402", "micropayment", "Stellar", "API"]
+            "required_keywords": [
+                "x402",
+                "micropayment",
+                "Stellar",
+                "API"
+            ]
         },
         "acceptance_criteria": [
             "200+ word article",
@@ -1528,6 +1925,13 @@
             "Mentions at least 2 endpoint types",
             "Explains why Stellar is suitable"
         ],
-        "tags": ["x402", "content", "explainer", "developer", "micropayments", "testnet"]
+        "tags": [
+            "x402",
+            "content",
+            "explainer",
+            "developer",
+            "micropayments",
+            "testnet"
+        ]
     }
 ]
