@@ -1,7 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { createRequire } from 'module';
-const require = createRequire(import.meta.url);
-const tasksData = require('../src/data/tasks.json');
+import tasksData from '../src/data/tasks.json';
 
 type Task = (typeof tasksData)[number];
 
