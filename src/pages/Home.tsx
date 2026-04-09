@@ -255,6 +255,11 @@ export default function Home() {
                         <h4>Stripe MPP</h4>
                         <p>Machine Payments Protocol — open standard for agent-to-agent payments via Stripe PaymentIntents.</p>
                     </a>
+                    <a href="https://pay.asgcard.dev" target="_blank" rel="noopener noreferrer" className="ecosystem-card card">
+                        <img src="/logos/asgpay.svg" alt="ASG Pay" className="ecosystem-logo ecosystem-logo-wide" />
+                        <h4>ASG Pay</h4>
+                        <p>The Agent Bank — mainnet wallet sponsorship, virtual cards, and USDC funding for AI agents.</p>
+                    </a>
                 </div>
             </section>
         </div>

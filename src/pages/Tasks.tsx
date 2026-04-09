@@ -23,7 +23,7 @@ interface Task {
     tags: string[];
 }
 
-const CATEGORIES = ['All', 'Onboarding', 'x402', 'ASG Card', 'Stellar Skills', 'Machine Payments', 'Research', 'Content', 'Community'];
+const CATEGORIES = ['All', 'Onboarding', 'x402', 'ASG Card', 'ASG Pay', 'Stellar Skills', 'Machine Payments', 'Research', 'Content', 'Community'];
 const DIFFICULTY_OPTIONS = ['All', 'easy', 'medium', 'hard'];
 const REWARD_OPTIONS = ['All', '< 5', '5', '7+'];
 

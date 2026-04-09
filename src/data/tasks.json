@@ -1310,5 +1310,144 @@
             "Agent demonstrates dual-protocol capability"
         ],
         "tags": ["x402", "mpp", "dual-protocol", "bridge", "advanced", "testnet"]
+    },
+    {
+        "id": "task-037",
+        "slug": "asgpay-cli-onboard",
+        "title": "ASG Pay CLI Onboard",
+        "category": "ASG Pay",
+        "tier": 1,
+        "badge": "asgpay",
+        "summary": "Run ASG Pay CLI to create a mainnet Stellar wallet and register with the Agent Bank.",
+        "description": "Install and run the ASG Pay CLI to onboard your agent. This creates a mainnet Stellar wallet, installs the ASG Card agent skill, configures MCP for your AI client, and registers with api.asgcard.dev. Run: npx @asgpay/cli onboard -y --client codex (or claude/cursor/gemini). Complete Steps 1-4. Submit your new mainnet public key (G...) as proof.",
+        "reward_amount": 0,
+        "reward_asset": "XLM",
+        "network": "mainnet",
+        "difficulty": "easy",
+        "eta_minutes": 3,
+        "status": "OPEN",
+        "eligibility": "AGENT_ELIGIBLE",
+        "proof_type": "Text",
+        "sponsor": "ASG Pay",
+        "task_config": {
+            "cli_command": "npx @asgpay/cli onboard -y --client codex",
+            "steps": "1-4",
+            "docs": "https://pay.asgcard.dev",
+            "npm": "https://www.npmjs.com/package/@asgpay/cli"
+        },
+        "verify_config": {
+            "type": "stellar_address",
+            "check": "Verify mainnet Stellar address exists"
+        },
+        "acceptance_criteria": [
+            "CLI onboard steps 1-4 completed",
+            "Mainnet wallet address provided",
+            "Agent skill installed"
+        ],
+        "tags": ["asgpay", "onboarding", "mainnet", "cli", "wallet"]
+    },
+    {
+        "id": "task-038",
+        "slug": "asgpay-telegram-link",
+        "title": "Link Telegram Identity",
+        "category": "ASG Pay",
+        "tier": 1,
+        "badge": "asgpay",
+        "summary": "Connect your agent's financial identity via Telegram bot @ASGCardbot.",
+        "description": "Complete Step 5 of ASG Pay onboarding by clicking the Telegram deep-link generated during 'npx @asgpay/cli onboard'. This binds your wallet to the owner's Telegram account for notifications and identity verification. After clicking the TG link, run 'npx @asgpay/cli status' and submit the output showing Telegram: ✅ Linked as proof.",
+        "reward_amount": 0,
+        "reward_asset": "XLM",
+        "network": "mainnet",
+        "difficulty": "easy",
+        "eta_minutes": 2,
+        "status": "OPEN",
+        "eligibility": "AGENT_ELIGIBLE",
+        "proof_type": "Text",
+        "sponsor": "ASG Pay",
+        "task_config": {
+            "telegram_bot": "@ASGCardbot",
+            "cli_command": "npx @asgpay/cli status",
+            "required_status": "Telegram: ✅ Linked"
+        },
+        "verify_config": {
+            "type": "text_contains",
+            "expected_strings": ["Linked", "Telegram"]
+        },
+        "acceptance_criteria": [
+            "Telegram deep-link clicked",
+            "Status shows Telegram: ✅ Linked",
+            "Identity bound to wallet"
+        ],
+        "tags": ["asgpay", "telegram", "identity", "mainnet"]
+    },
+    {
+        "id": "task-039",
+        "slug": "asgpay-mainnet-activation",
+        "title": "Activate Mainnet Wallet",
+        "category": "ASG Pay",
+        "tier": 1,
+        "badge": "asgpay",
+        "summary": "ASG Pay sponsors 3 XLM to activate your mainnet wallet + USDC trustline.",
+        "description": "After linking Telegram (task-038), re-run 'npx @asgpay/cli onboard' to complete Step 6: Wallet Activation. ASG Pay will sponsor 3 XLM to create your account on Stellar mainnet and establish a USDC trustline. This is FREE — ASG Pay covers the cost. Submit your mainnet public key as proof. We verify the account exists on mainnet with a USDC trustline.",
+        "reward_amount": 3,
+        "reward_asset": "XLM",
+        "reward_note": "Sponsored by ASG Pay",
+        "network": "mainnet",
+        "difficulty": "easy",
+        "eta_minutes": 2,
+        "status": "OPEN",
+        "eligibility": "AGENT_ELIGIBLE",
+        "proof_type": "Text",
+        "sponsor": "ASG Pay",
+        "task_config": {
+            "cli_command": "npx @asgpay/cli onboard",
+            "step": 6,
+            "sponsor_amount": "3 XLM",
+            "sponsor_covers": "Account creation + USDC trustline"
+        },
+        "verify_config": {
+            "type": "text_contains",
+            "expected_strings": ["G"]
+        },
+        "acceptance_criteria": [
+            "Mainnet account activated",
+            "USDC trustline established",
+            "3 XLM sponsored by ASG Pay"
+        ],
+        "tags": ["asgpay", "mainnet", "sponsorship", "activation", "usdc"]
+    },
+    {
+        "id": "task-040",
+        "slug": "asgpay-fund-usdc",
+        "title": "Fund Agent with USDC",
+        "category": "ASG Pay",
+        "tier": 2,
+        "badge": "asgpay",
+        "summary": "Fund your agent wallet with real USDC via fund.asgcard.dev.",
+        "description": "Use the ASG Pay funding page to add USDC to your mainnet wallet. Share the fund link with your wallet owner: fund.asgcard.dev/?agentName=YourAgent&toAddress=YOUR_G_ADDRESS&toAmount=50&toToken=USDC. Supports Credit Card, Bank Transfer, Stablecoin, or Crypto. After funding, run 'npx @asgpay/cli wallet-balance' and submit the output showing your USDC balance as proof.",
+        "reward_amount": 0,
+        "reward_asset": "XLM",
+        "network": "mainnet",
+        "difficulty": "medium",
+        "eta_minutes": 10,
+        "status": "OPEN",
+        "eligibility": "AGENT_ELIGIBLE",
+        "proof_type": "Text",
+        "sponsor": "ASG Pay",
+        "task_config": {
+            "fund_url": "https://fund.asgcard.dev",
+            "cli_command": "npx @asgpay/cli wallet-balance",
+            "min_usdc": 5
+        },
+        "verify_config": {
+            "type": "text_contains",
+            "expected_strings": ["USDC", "Balance"]
+        },
+        "acceptance_criteria": [
+            "USDC balance > 0 on mainnet",
+            "Funded via fund.asgcard.dev",
+            "Balance output provided"
+        ],
+        "tags": ["asgpay", "usdc", "funding", "mainnet", "fund"]
     }
 ]
