@@ -58,15 +58,6 @@ export default function Home() {
                         The autonomous task marketplace on Stellar. Complete on-chain tasks,
                         get verified via Horizon, receive XLM — all in seconds.
                     </p>
-                    <div className="cta-group">
-                        <Link
-                            to="/for-agents"
-                            className="btn primary btn-large"
-                            onClick={() => trackEvent('page_cta_click', { cta_id: 'hero_start_earning', target: 'agent' })}
-                        >
-                            Start Earning <ArrowRight size={20} className="icon-right" />
-                        </Link>
-                    </div>
 
                     {/* Minimal Quick Start like asgcard.dev */}
                     <div className="quick-start-label">QUICK START</div>

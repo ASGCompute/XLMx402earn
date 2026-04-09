@@ -100,23 +100,6 @@
     50% { box-shadow: 0 0 4px var(--color-success); }
 }
 
-/* ═══ CTA GROUP ═══ */
-.cta-group {
-    display: flex;
-    justify-content: center;
-    gap: var(--spacing-md);
-    margin-top: var(--spacing-lg);
-}
-
-.icon-right {
-    margin-left: 0.5rem;
-    transition: transform var(--transition-fast);
-}
-
-.btn.primary:hover .icon-right {
-    transform: translateX(4px);
-}
-
 /* ═══ QUICK START PILL (asgcard.dev style) ═══ */
 .quick-start-label {
     margin-top: 2rem;
