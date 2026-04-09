@@ -1,4 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
+import { createHash } from 'crypto';
 import { createClient } from '@supabase/supabase-js';
 import { isRateLimited, getClientIp, isWalletCooldown } from './_lib/rateLimit';
 import { autoVerify } from './_lib/autoVerify';
@@ -144,7 +145,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         agent_wallet: data.agent_wallet || null,
         proof: data.proof,
         proof_type: data.proof_type || 'text',
-        proof_hash: require('crypto').createHash('sha256').update(data.proof.trim().toLowerCase()).digest('hex'),
+        proof_hash: createHash('sha256').update(data.proof.trim().toLowerCase()).digest('hex'),
         status,
         verify_type: verifyResult.type,
         verify_reason: verifyResult.reason || null,

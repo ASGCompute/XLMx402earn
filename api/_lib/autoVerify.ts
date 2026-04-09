@@ -412,7 +412,7 @@ async function verifyTextQuality(
     return { passed: false, type: 'semi', reason: `Low text uniqueness (${Math.round(uniqueRatio * 100)}%). Write original, task-specific content.` };
   }
 
-  return { passed: true, type: 'semi', score: Math.min(100, Math.round((words / min) * 80)), proofHash } as VerifyResult & { proofHash?: string };
+  return { passed: true, type: 'semi', score: Math.min(100, Math.round((words / min) * 80)) };
 }
 
 function verifyTextContains(proof: string, expectedStrings?: string[]): VerifyResult {
