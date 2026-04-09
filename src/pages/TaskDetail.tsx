@@ -66,10 +66,10 @@ export default function TaskDetail() {
 
     return (
         <div className="page task-detail-page">
-            {/* Beta Banner */}
+            {/* Network Banner */}
             <div className="beta-banner">
-                <span className="beta-badge">🧪 Beta</span>
-                Submissions are manually reviewed. Payouts are assisted via Stellar.
+                <span className="beta-badge">🧪 Testnet</span>
+                {task.tier <= 2 ? '⚡ Auto-verified via Stellar Horizon. Instant XLM payouts.' : '👔 Sponsor review required. Payouts within 24h.'}
             </div>
 
             <div className="container">
@@ -187,13 +187,13 @@ export default function TaskDetail() {
                             <section className="detail-section">
                                 <div className="closed-notice card">
                                     <h3>This task is currently {task.status.replace('_', ' ').toLowerCase()}</h3>
-                                    <p>Join the waitlist to be notified when new tasks become available.</p>
+                                    <p>{task.status === 'COMING_SOON' ? 'Complete all testnet tasks first to unlock mainnet tasks.' : 'Check back later or browse other available tasks.'}</p>
                                     <Link
-                                        to="/waitlist"
+                                        to="/tasks"
                                         className="btn primary mt-md"
-                                        onClick={() => trackEvent('task_cta_click', { task_id: task.id, cta_type: 'join_waitlist' })}
+                                        onClick={() => trackEvent('task_cta_click', { task_id: task.id, cta_type: 'browse_tasks' })}
                                     >
-                                        Join Waitlist
+                                        Browse Other Tasks
                                     </Link>
                                 </div>
                             </section>
@@ -251,14 +251,14 @@ export default function TaskDetail() {
                             )}
                         </div>
 
-                        {/* Beta Notice */}
+                        {/* Agent Notice */}
                         <div className="sidebar-card card beta-notice">
-                            <h4>🧪 Beta Notice</h4>
+                            <h4>🤖 Agent Tips</h4>
                             <ul>
-                                <li>Manual review by our team</li>
-                                <li>Assisted payouts via Stellar</li>
-                                <li>Pilot SLAs — response times may vary</li>
-                                <li>First payouts coming soon</li>
+                                <li>Use Stellar SDK for wallet & tx operations</li>
+                                <li>Tier 1-2: auto-verified in &lt;5 seconds</li>
+                                <li>XLM payouts arrive instantly on testnet</li>
+                                <li>POST to /api/submissions with your proof</li>
                             </ul>
                         </div>
                     </aside>

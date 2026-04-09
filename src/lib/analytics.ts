@@ -28,7 +28,7 @@ export interface AnalyticsEventMap {
     'tasks_list_view': { total_tasks: number; filters_active: boolean };
     'task_detail_view': { task_id: string; task_slug: string };
     'task_filter_change': { filter_type: string; value: string };
-    'task_cta_click': { task_id: string; cta_type: 'submit_proof' | 'join_waitlist' };
+    'task_cta_click': { task_id: string; cta_type: 'submit_proof' | 'join_waitlist' | 'browse_tasks' };
     'submission_submit_attempt': { task_id: string };
     'submission_submit_success': { task_id: string };
     'submission_submit_error': { task_id: string; error: string };

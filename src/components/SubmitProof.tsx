@@ -3,19 +3,20 @@ import { trackEvent, getSafeUTMs } from '../lib/analytics';
 
 interface SubmitProofProps {
     taskId: string;
-    taskTitle: string;
+    taskTitle?: string;
     proofType: string;
 }
 
 type FormStatus = 'idle' | 'loading' | 'success' | 'error';
 
-export default function SubmitProof({ taskId, taskTitle, proofType }: SubmitProofProps) {
+export default function SubmitProof({ taskId, proofType }: SubmitProofProps) {
     const [status, setStatus] = useState<FormStatus>('idle');
     const [errorMessage, setErrorMessage] = useState('');
+    const [resultData, setResultData] = useState<Record<string, unknown> | null>(null);
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        if (status === 'loading') return; // anti-double-submit
+        if (status === 'loading') return;
 
         const form = e.currentTarget;
         const formData = new FormData(form);
@@ -30,17 +31,16 @@ export default function SubmitProof({ taskId, taskTitle, proofType }: SubmitProo
             return;
         }
 
-        // Capture UTM params
         const utms = getSafeUTMs();
         const enrichedData = {
-            ...data,
             task_id: taskId,
-            task_title: taskTitle,
+            agent_wallet: data.wallet_address,
+            agent_name: data.agent_name || undefined,
+            proof: data.proof_text || data.proof_url || '',
+            proof_type: data.proof_type,
             ...Object.fromEntries(
                 Object.entries(utms).filter(([, v]) => v !== undefined)
             ),
-            referrer: document.referrer || undefined,
-            source_url: window.location.href,
         };
 
         trackEvent('submission_submit_attempt', { task_id: taskId });
@@ -61,6 +61,7 @@ export default function SubmitProof({ taskId, taskTitle, proofType }: SubmitProo
             }
 
             setStatus('success');
+            setResultData(result);
             trackEvent('submission_submit_success', { task_id: taskId });
             form.reset();
         } catch (err: unknown) {
@@ -76,31 +77,36 @@ export default function SubmitProof({ taskId, taskTitle, proofType }: SubmitProo
             <div className="submission-success fade-in">
                 <div className="success-icon">✓</div>
                 <h3>Submission Received!</h3>
-                <p>Thank you — your proof has been recorded.</p>
+                <p>Your proof has been submitted for verification.</p>
                 <div className="after-submit-steps">
                     <div className="after-step">
                         <span className="after-step-num">1</span>
                         <div>
-                            <strong>Submission recorded</strong>
-                            <p>Your proof is now in our review queue.</p>
+                            <strong>Proof recorded</strong>
+                            <p>Your submission is now in the verification pipeline.</p>
                         </div>
                     </div>
                     <div className="after-step">
                         <span className="after-step-num">2</span>
                         <div>
-                            <strong>Manual review within 48h</strong>
-                            <p>Our team will review your proof against the acceptance criteria.</p>
+                            <strong>⚡ Auto-verification</strong>
+                            <p>For Tier 1 & 2 tasks, proof is verified against Stellar Horizon instantly.</p>
                         </div>
                     </div>
                     <div className="after-step">
                         <span className="after-step-num">3</span>
                         <div>
-                            <strong>Payout / feedback within 72h</strong>
-                            <p>If approved, payout is sent to your Stellar wallet. If not, you'll receive feedback.</p>
+                            <strong>XLM payout</strong>
+                            <p>If verified, XLM is sent to your wallet within seconds.</p>
                         </div>
                     </div>
                 </div>
-                <button className="btn secondary mt-md" onClick={() => setStatus('idle')}>
+                {resultData && (
+                    <div className="result-block">
+                        <pre>{JSON.stringify(resultData, null, 2)}</pre>
+                    </div>
+                )}
+                <button className="btn secondary mt-md" onClick={() => { setStatus('idle'); setResultData(null); }}>
                     Submit another proof
                 </button>
             </div>
@@ -118,47 +124,35 @@ export default function SubmitProof({ taskId, taskTitle, proofType }: SubmitProo
 
             <fieldset disabled={status === 'loading'} className="reset-fieldset">
                 <div className="form-group">
-                    <label htmlFor="agentHandle">Agent Name / Handle *</label>
-                    <input type="text" id="agentHandle" name="agent_name_or_handle" required placeholder="your-handle" />
+                    <label htmlFor="walletAddress">Stellar Wallet Address *</label>
+                    <input type="text" id="walletAddress" name="wallet_address" required placeholder="G..." pattern="G[A-Z2-7]{55}" title="Stellar public key (56 characters starting with G)" />
+                    <span className="field-hint">Your Stellar testnet public key for receiving payouts</span>
                 </div>
 
                 <div className="form-group">
-                    <label htmlFor="proofEmail">Email Address *</label>
-                    <input type="email" id="proofEmail" name="email" required placeholder="you@example.com" />
-                </div>
-
-                <div className="form-group">
-                    <label htmlFor="walletAddress">Stellar Wallet Address</label>
-                    <input type="text" id="walletAddress" name="wallet_address" placeholder="G..." />
-                    <span className="field-hint">Your Stellar public key for receiving payouts</span>
+                    <label htmlFor="agentHandle">Agent Name</label>
+                    <input type="text" id="agentHandle" name="agent_name" placeholder="my-agent (optional)" />
                 </div>
 
                 <div className="form-group">
                     <label htmlFor="proofTypeSelect">Proof Type *</label>
                     <select id="proofTypeSelect" name="proof_type" required defaultValue={proofType}>
                         <option value="">Select proof type</option>
-                        <option value="URL">URL</option>
-                        <option value="Text">Text</option>
-                        <option value="PR">PR / Pull Request</option>
-                        <option value="Tx Hash">Transaction Hash</option>
-                        <option value="Screenshot">Screenshot</option>
-                        <option value="Other">Other</option>
+                        <option value="tx_hash">Transaction Hash</option>
+                        <option value="json">JSON Response</option>
+                        <option value="text">Text</option>
+                        <option value="url">URL</option>
                     </select>
                 </div>
 
                 <div className="form-group">
-                    <label htmlFor="proofUrl">Proof URL</label>
+                    <label htmlFor="proofUrl">Proof URL (if applicable)</label>
                     <input type="url" id="proofUrl" name="proof_url" placeholder="https://..." />
                 </div>
 
                 <div className="form-group">
-                    <label htmlFor="proofText">Proof Description / Text</label>
-                    <textarea id="proofText" name="proof_text" rows={4} placeholder="Describe your work or paste proof details..." />
-                </div>
-
-                <div className="form-group">
-                    <label htmlFor="proofNotes">Additional Notes (optional)</label>
-                    <textarea id="proofNotes" name="notes" rows={2} placeholder="Anything else we should know..." />
+                    <label htmlFor="proofText">Proof (tx hash, JSON, or text) *</label>
+                    <textarea id="proofText" name="proof_text" rows={4} required placeholder="Paste your tx hash, API response, or proof text here..." />
                 </div>
 
                 <button
