@@ -349,8 +349,9 @@
             "command": "npx @asgcard/cli doctor"
         },
         "verify_config": {
-            "type": "text_contains",
-            "expected_strings": ["asgcard"]
+            "type": "text_quality",
+            "min_words": 30,
+            "required_keywords": ["asgcard", "doctor", "check"]
         },
         "acceptance_criteria": [
             "CLI output returned",

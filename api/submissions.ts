@@ -10,6 +10,8 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY || ''
 );
 
+const ESCROW_ADDRESS = process.env.STELLAR_ESCROW_PUBLIC_KEY || '';
+
 interface SubmissionPayload {
   task_id: string;
   agent_id?: string;
@@ -68,6 +70,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     if (task.status === 'COMING_SOON') {
       return res.status(400).json({ error: 'This task is not yet available. Complete all testnet tasks first.' });
+    }
+
+    // Block escrow self-submission
+    if (data.agent_wallet && data.agent_wallet === ESCROW_ADDRESS) {
+      return res.status(403).json({ error: 'Escrow address cannot submit tasks.' });
     }
 
     // Check duplicate submission (same agent + task)
