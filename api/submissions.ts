@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { createClient } from '@supabase/supabase-js';
-import { isRateLimited, getClientIp } from './_lib/rateLimit';
+import { isRateLimited, getClientIp, isWalletCooldown } from './_lib/rateLimit';
 import { autoVerify } from './_lib/autoVerify';
 import { sendPayout } from './_lib/stellar';
 import tasksData from '../src/data/tasks.json';
@@ -11,6 +11,9 @@ const supabase = createClient(
 );
 
 const ESCROW_ADDRESS = process.env.STELLAR_ESCROW_PUBLIC_KEY || '';
+const DAILY_CAP_PER_AGENT = 50;  // max XLM per agent per 24h
+const DAILY_CAP_GLOBAL = 500;     // max XLM total per 24h
+const MAX_REJECTIONS_PER_TASK = 3; // max failed attempts before lockout
 
 interface SubmissionPayload {
   task_id: string;
@@ -37,13 +40,18 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
-    // Rate limiting
+    // Rate limiting (IP-level)
     const clientIp = getClientIp(req.headers);
     if (isRateLimited(clientIp)) {
       return res.status(429).json({ error: 'Too many requests. Please try again shortly.' });
     }
 
     const data = req.body as SubmissionPayload;
+
+    // Rate limiting (wallet-level cooldown: 1 submission per 30s)
+    if (data.agent_wallet && isWalletCooldown(data.agent_wallet)) {
+      return res.status(429).json({ error: 'Please wait 30 seconds between submissions.' });
+    }
 
     // Honeypot anti-spam
     if (data.website_url) {
@@ -90,6 +98,20 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       if (existing) {
         return res.status(409).json({ error: 'You already completed this task' });
       }
+
+      // Per-task attempt cap: max N rejections before lockout
+      const { count: rejectionCount } = await supabase
+        .from('earn_submissions')
+        .select('id', { count: 'exact', head: true })
+        .eq('task_id', data.task_id)
+        .eq('agent_wallet', data.agent_wallet)
+        .eq('status', 'rejected');
+
+      if (rejectionCount !== null && rejectionCount >= MAX_REJECTIONS_PER_TASK) {
+        return res.status(429).json({
+          error: `Maximum ${MAX_REJECTIONS_PER_TASK} attempts reached for this task. Review the task description carefully.`,
+        });
+      }
     }
 
     // ──────────────────────────────────────
@@ -122,6 +144,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         agent_wallet: data.agent_wallet || null,
         proof: data.proof,
         proof_type: data.proof_type || 'text',
+        proof_hash: require('crypto').createHash('sha256').update(data.proof.trim().toLowerCase()).digest('hex'),
         status,
         verify_type: verifyResult.type,
         verify_reason: verifyResult.reason || null,
@@ -142,6 +165,57 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     // ──────────────────────────────────────
     let payout = null;
     if (status === 'approved' && data.agent_wallet && task.reward_amount > 0) {
+      // Daily payout cap check (per-agent)
+      const dayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+      const { data: recentPayouts } = await supabase
+        .from('earn_payouts')
+        .select('amount')
+        .eq('agent_wallet', data.agent_wallet)
+        .gte('created_at', dayAgo);
+
+      const agentDailyTotal = (recentPayouts || []).reduce((sum, p) => sum + (p.amount || 0), 0);
+
+      // Global daily cap check
+      const { data: globalPayouts } = await supabase
+        .from('earn_payouts')
+        .select('amount')
+        .gte('created_at', dayAgo);
+
+      const globalDailyTotal = (globalPayouts || []).reduce((sum, p) => sum + (p.amount || 0), 0);
+
+      if (agentDailyTotal + task.reward_amount > DAILY_CAP_PER_AGENT) {
+        // Submission is approved but payout is queued for tomorrow
+        await supabase
+          .from('earn_submissions')
+          .update({ payout_status: 'queued', payout_error: 'Daily agent cap reached (50 XLM/day). Payout queued.' })
+          .eq('id', submission.id);
+
+        return res.status(200).json({
+          success: true,
+          submission_id: submission.id,
+          task_id: data.task_id,
+          status: 'approved',
+          verify: { type: verifyResult.type, passed: true },
+          message: `✅ Task verified! Payout queued — you've reached the daily limit of ${DAILY_CAP_PER_AGENT} XLM. It will be sent within 24h.`,
+        });
+      }
+
+      if (globalDailyTotal + task.reward_amount > DAILY_CAP_GLOBAL) {
+        await supabase
+          .from('earn_submissions')
+          .update({ payout_status: 'queued', payout_error: 'Global daily cap reached. Payout queued.' })
+          .eq('id', submission.id);
+
+        return res.status(200).json({
+          success: true,
+          submission_id: submission.id,
+          task_id: data.task_id,
+          status: 'approved',
+          verify: { type: verifyResult.type, passed: true },
+          message: '✅ Task verified! Global payout budget reached for today. Your XLM will be sent within 24h.',
+        });
+      }
+
       const payoutResult = await sendPayout(
         data.agent_wallet,
         String(task.reward_amount),
@@ -219,9 +293,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 async function handleGetSubmissions(req: VercelRequest, res: VercelResponse) {
   const wallet = req.query.agent_wallet as string;
 
+  // Different field sets: with wallet param = full data; without = redacted (no proof)
+  const fields = wallet
+    ? 'id, task_id, task_title, agent_wallet, proof, status, verify_type, reward_amount, created_at'
+    : 'id, task_id, task_title, agent_wallet, status, verify_type, reward_amount, created_at';
+
   let query = supabase
     .from('earn_submissions')
-    .select('id, task_id, task_title, agent_wallet, proof, status, verify_type, reward_amount, created_at')
+    .select(fields)
     .order('created_at', { ascending: false })
     .limit(100);
 

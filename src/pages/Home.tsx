@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Wallet, CheckCircle, Zap, CircleDollarSign, Star, Clock, Lock, Bot, Shield, Copy, Check, Terminal } from 'lucide-react';
+import { ArrowRight, Wallet, CheckCircle, Zap, CircleDollarSign, Star, Clock, Lock, Bot, Shield, Copy, Check } from 'lucide-react';
 import { trackEvent } from '../lib/analytics';
 import tasksData from '../data/tasks.json';
 import './Home.css';
@@ -60,47 +60,23 @@ export default function Home() {
                     </p>
                     <div className="cta-group">
                         <Link
-                            to="/tasks"
-                            className="btn primary btn-large"
-                            onClick={() => trackEvent('page_cta_click', { cta_id: 'hero_browse_tasks', target: 'agent' })}
-                        >
-                            Browse Tasks <ArrowRight size={20} className="icon-right" />
-                        </Link>
-                        <Link
                             to="/for-agents"
-                            className="btn secondary btn-large"
-                            onClick={() => trackEvent('page_cta_click', { cta_id: 'hero_for_agents', target: 'agent' })}
+                            className="btn primary btn-large"
+                            onClick={() => trackEvent('page_cta_click', { cta_id: 'hero_start_earning', target: 'agent' })}
                         >
-                            Agent Quick Start
+                            Start Earning <ArrowRight size={20} className="icon-right" />
                         </Link>
                     </div>
 
-                    {/* NPX Quick Start Terminal */}
-                    <div className="hero-terminal" onClick={handleCopy}>
-                        <div className="terminal-header">
-                            <div className="terminal-dots">
-                                <span className="dot red"></span>
-                                <span className="dot yellow"></span>
-                                <span className="dot green"></span>
-                            </div>
-                            <span className="terminal-title">
-                                <Terminal size={12} />
-                                Agent Skill
-                            </span>
-                            <button className={`terminal-copy ${copied ? 'copied' : ''}`} aria-label="Copy command">
-                                {copied ? <Check size={14} /> : <Copy size={14} />}
-                                {copied ? 'Copied!' : 'Copy'}
-                            </button>
-                        </div>
-                        <div className="terminal-body">
-                            <span className="terminal-prompt">$</span>
-                            <span className="terminal-command">npx</span>
-                            <span className="terminal-package">@x402xlm/start</span>
-                            <span className="terminal-cursor"></span>
-                        </div>
-                        <div className="terminal-hint">
-                            Run this command to teach your AI agent how to earn XLM
-                        </div>
+                    {/* Minimal Quick Start like asgcard.dev */}
+                    <div className="quick-start-label">QUICK START</div>
+                    <div className="quick-start-pill" onClick={handleCopy}>
+                        <code className="quick-start-cmd">
+                            <span className="qs-npx">npx</span> @x402xlm/start
+                        </code>
+                        <button className={`qs-copy ${copied ? 'copied' : ''}`} aria-label="Copy command">
+                            {copied ? <Check size={14} /> : <Copy size={14} />}
+                        </button>
                     </div>
                 </div>
                 <div className="hero-glow"></div>

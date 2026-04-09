@@ -48,9 +48,21 @@ export default function handler(req: VercelRequest, res: VercelResponse) {
         const active = tasks.filter(t => t.status !== 'COMING_SOON');
         const comingSoon = tasks.filter(t => t.status === 'COMING_SOON');
 
+        // Strip sensitive verification config from public response
+        // Agents should rely on task description, not reverse-engineer verify checks
+        const stripSensitive = (t: Task) => {
+            const { verify_config, acceptance_criteria, ...safe } = t as Task & { verify_config?: unknown; acceptance_criteria?: unknown };
+            return {
+                ...safe,
+                proof_hint: typeof verify_config === 'object' && verify_config !== null && 'type' in verify_config
+                    ? `Verification: ${(verify_config as { type: string }).type}`
+                    : 'auto',
+            };
+        };
+
         return res.status(200).json({
-            tasks: active,
-            coming_soon: comingSoon,
+            tasks: active.map(stripSensitive),
+            coming_soon: comingSoon.map(stripSensitive),
             total_active: active.length,
             total_coming_soon: comingSoon.length,
             total_reward_xlm: active.reduce((sum, t) => sum + t.reward_amount, 0),

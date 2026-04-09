@@ -1,14 +1,19 @@
 /**
- * In-memory rate limiter for Vercel serverless functions.
- * No external dependencies — each cold start resets the window.
- * This is fine for hackathon scale (< 1000 RPM).
+ * Rate limiter for Vercel serverless functions.
+ * Tracks both IP-level and wallet-level submission rates.
+ * In-memory — resets on cold start, which is acceptable for hackathon scale.
  */
 
-const windowMs = 60_000; // 1 minute
-const maxRequests = 30;
+const IP_WINDOW_MS = 60_000;       // 1 minute
+const IP_MAX_REQUESTS = 20;        // 20 req/min per IP (down from 30)
 
-// In-memory store: ip -> { count, windowStart }
-const store: Map<string, { count: number; windowStart: number }> = new Map();
+const WALLET_COOLDOWN_MS = 30_000; // 1 submission per 30 seconds per wallet
+
+// IP rate limiter
+const ipStore: Map<string, { count: number; windowStart: number }> = new Map();
+
+// Wallet submission cooldown
+const walletStore: Map<string, number> = new Map(); // wallet -> last submission timestamp
 
 /**
  * Extract client IP from request headers (works on Vercel).
@@ -32,18 +37,34 @@ export function getClientIp(headers: Record<string, string | string[] | undefine
  */
 export function isRateLimited(ip: string): boolean {
     const now = Date.now();
-    const entry = store.get(ip);
+    const entry = ipStore.get(ip);
 
-    if (!entry || now - entry.windowStart > windowMs) {
+    if (!entry || now - entry.windowStart > IP_WINDOW_MS) {
         // New window
-        store.set(ip, { count: 1, windowStart: now });
+        ipStore.set(ip, { count: 1, windowStart: now });
         return false;
     }
 
     entry.count++;
-    if (entry.count > maxRequests) {
+    if (entry.count > IP_MAX_REQUESTS) {
         return true;
     }
 
     return false;
+}
+
+/**
+ * Check if a wallet is on cooldown (submitted too recently).
+ * Returns true if the wallet should be blocked.
+ */
+export function isWalletCooldown(wallet: string): boolean {
+    const now = Date.now();
+    const lastSubmit = walletStore.get(wallet);
+
+    if (!lastSubmit || now - lastSubmit > WALLET_COOLDOWN_MS) {
+        walletStore.set(wallet, now);
+        return false;
+    }
+
+    return true;
 }

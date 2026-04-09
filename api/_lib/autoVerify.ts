@@ -1,3 +1,5 @@
+import { createHash } from 'crypto';
+import { createClient } from '@supabase/supabase-js';
 import {
   accountExists,
   getBalance,
@@ -17,6 +19,11 @@ import {
 // Auto-verify engine for task submissions
 // ──────────────────────────────────────
 
+const supabase = createClient(
+  process.env.SUPABASE_URL || '',
+  process.env.SUPABASE_SERVICE_ROLE_KEY || ''
+);
+
 export type VerifyResult = {
   passed: boolean;
   type: 'auto' | 'semi' | 'manual';
@@ -25,6 +32,13 @@ export type VerifyResult = {
 };
 
 const ESCROW_ADDRESS = process.env.STELLAR_ESCROW_PUBLIC_KEY || '';
+
+/**
+ * SHA-256 hash of proof text for dedup
+ */
+function hashProof(proof: string): string {
+  return createHash('sha256').update(proof.trim().toLowerCase()).digest('hex');
+}
 
 /**
  * Main verify dispatcher — routes based on task verify_config.type
@@ -255,49 +269,113 @@ async function verifyApiResponse(
   proof: string,
   verifyConfig: { check?: string }
 ): Promise<VerifyResult> {
-  const proofLower = proof.toLowerCase().trim();
+  // ── SERVER-SIDE FETCH: Compare proof against real API responses ──
 
-  // task-006: x402 weather — check for temperature-like content
+  // task-006: x402 weather — server fetches real weather, compares temperature
   if (taskId === 'task-006') {
-    if (proofLower.includes('temperature') || proofLower.includes('temp') || /\d+\.?\d*\s*[°cfk]?/i.test(proof)) {
+    try {
+      const proofData = typeof proof === 'string' ? JSON.parse(proof) : proof;
+      const proofTemp = parseFloat(proofData.temperature ?? proofData.temp ?? '');
+      if (isNaN(proofTemp)) {
+        return { passed: false, type: 'auto', reason: 'No valid temperature number found in proof JSON' };
+      }
+      // Server-side validation: fetch real weather from a free public API
+      const realRes = await fetch('https://api.open-meteo.com/v1/forecast?latitude=40.7128&longitude=-74.006&current_weather=true');
+      if (realRes.ok) {
+        const realData = await realRes.json();
+        const realTemp = realData?.current_weather?.temperature;
+        if (realTemp !== undefined && Math.abs(proofTemp - realTemp) > 15) {
+          return { passed: false, type: 'auto', reason: `Temperature mismatch: proof=${proofTemp}, reality≈${realTemp}` };
+        }
+      }
       return { passed: true, type: 'auto' };
+    } catch {
+      return { passed: false, type: 'auto', reason: 'Proof must be valid JSON with a temperature field' };
     }
-    return { passed: false, type: 'auto', reason: 'No temperature data found in proof' };
   }
 
-  // task-007: x402 crypto quote
+  // task-007: x402 crypto quote — server checks price is in sane range
   if (taskId === 'task-007') {
-    if (proofLower.includes('price') || proofLower.includes('xlm') || /\d+\.\d+/.test(proof)) {
+    try {
+      const proofData = typeof proof === 'string' ? JSON.parse(proof) : proof;
+      const proofPrice = parseFloat(proofData.price ?? '');
+      if (isNaN(proofPrice) || proofPrice <= 0) {
+        return { passed: false, type: 'auto', reason: 'No valid price number found in proof JSON' };
+      }
+      // Sanity: XLM price should be between $0.01 and $10 (broad range)
+      if (proofPrice < 0.01 || proofPrice > 10) {
+        return { passed: false, type: 'auto', reason: `Price ${proofPrice} is outside realistic XLM range ($0.01-$10)` };
+      }
+      // Must include source exchange
+      if (!proofData.source && !proofData.exchange) {
+        return { passed: false, type: 'auto', reason: 'Missing source/exchange field in price data' };
+      }
       return { passed: true, type: 'auto' };
+    } catch {
+      return { passed: false, type: 'auto', reason: 'Proof must be valid JSON with price and source fields' };
     }
-    return { passed: false, type: 'auto', reason: 'No price data found in proof' };
   }
 
-  // task-008: ASG Card health
+  // task-008: ASG Card health — server-side fetch to verify
   if (taskId === 'task-008') {
-    if (proofLower.includes('"status"') && proofLower.includes('"ok"') && proofLower.includes('"version"')) {
-      return { passed: true, type: 'auto' };
+    try {
+      const realRes = await fetch('https://api.asgcard.dev/health');
+      if (realRes.ok) {
+        const realData = await realRes.json();
+        const proofData = typeof proof === 'string' ? JSON.parse(proof) : proof;
+        // Compare version fields
+        if (realData.version && proofData.version && realData.version !== proofData.version) {
+          return { passed: false, type: 'auto', reason: `Version mismatch: proof=${proofData.version}, actual=${realData.version}` };
+        }
+      }
+      // Still require core fields
+      const proofLower = proof.toLowerCase();
+      if (proofLower.includes('"status"') && proofLower.includes('"ok"') && proofLower.includes('"version"')) {
+        return { passed: true, type: 'auto' };
+      }
+      return { passed: false, type: 'auto', reason: 'Missing status=ok or version field' };
+    } catch {
+      return { passed: false, type: 'auto', reason: 'Proof must be valid JSON from api.asgcard.dev/health' };
     }
-    return { passed: false, type: 'auto', reason: 'Missing status=ok or version field' };
   }
 
-  // task-009: ASG Card pricing
+  // task-009: ASG Card pricing — server-side fetch to verify
   if (taskId === 'task-009') {
-    if (proofLower.includes('cardfee') || proofLower.includes('card_fee') || proofLower.includes('"10"') || proofLower.includes('10') && proofLower.includes('3.5')) {
-      return { passed: true, type: 'auto' };
+    try {
+      const realRes = await fetch('https://api.asgcard.dev/pricing');
+      if (realRes.ok) {
+        const realData = await realRes.json();
+        const proofData = typeof proof === 'string' ? JSON.parse(proof) : proof;
+        // Verify actual pricing values match
+        const realFee = realData.cardFee ?? realData.card_fee;
+        const proofFee = proofData.cardFee ?? proofData.card_fee;
+        if (realFee !== undefined && proofFee !== undefined && realFee !== proofFee) {
+          return { passed: false, type: 'auto', reason: `Card fee mismatch: proof=${proofFee}, actual=${realFee}` };
+        }
+        return { passed: true, type: 'auto' };
+      }
+      // Fallback: check for key values
+      const proofLower = proof.toLowerCase();
+      if (proofLower.includes('10') && proofLower.includes('3.5')) {
+        return { passed: true, type: 'auto' };
+      }
+      return { passed: false, type: 'auto', reason: 'Missing pricing data (cardFee, topUpPercent)' };
+    } catch {
+      return { passed: false, type: 'auto', reason: 'Proof must contain valid pricing data from api.asgcard.dev/pricing' };
     }
-    return { passed: false, type: 'auto', reason: 'Missing pricing data (cardFee, topUpPercent)' };
   }
 
   return { passed: false, type: 'semi', reason: `API response verify for ${taskId}: ${verifyConfig.check}` };
 }
 
-function verifyTextQuality(
+async function verifyTextQuality(
   proof: string,
   minWords?: number,
   requiredKeywords?: string[]
-): VerifyResult {
-  const words = proof.trim().split(/\s+/).length;
+): Promise<VerifyResult> {
+  const cleanProof = proof.trim();
+  const wordList = cleanProof.split(/\s+/);
+  const words = wordList.length;
   const min = minWords || 100;
 
   if (words < min) {
@@ -305,14 +383,36 @@ function verifyTextQuality(
   }
 
   if (requiredKeywords) {
-    const lowerProof = proof.toLowerCase();
+    const lowerProof = cleanProof.toLowerCase();
     const missing = requiredKeywords.filter((kw) => !lowerProof.includes(kw.toLowerCase()));
     if (missing.length > 0) {
       return { passed: false, type: 'semi', reason: `Missing keywords: ${missing.join(', ')}` };
     }
   }
 
-  return { passed: true, type: 'semi', score: Math.min(100, Math.round((words / min) * 80)) };
+  // ── ANTI-ABUSE: SHA-256 Proof Dedup ──
+  const proofHash = hashProof(cleanProof);
+  const { data: existingProof } = await supabase
+    .from('earn_submissions')
+    .select('id')
+    .eq('proof_hash', proofHash)
+    .eq('status', 'approved')
+    .limit(1)
+    .maybeSingle();
+
+  if (existingProof) {
+    return { passed: false, type: 'semi', reason: 'Duplicate proof detected — this exact text was already submitted' };
+  }
+
+  // ── ANTI-ABUSE: Unique Word Ratio ──
+  // Prevents generic filler text reused across tasks
+  const uniqueWords = new Set(wordList.map(w => w.toLowerCase().replace(/[^a-z0-9]/g, '')).filter(Boolean));
+  const uniqueRatio = uniqueWords.size / words;
+  if (uniqueRatio < 0.35) {
+    return { passed: false, type: 'semi', reason: `Low text uniqueness (${Math.round(uniqueRatio * 100)}%). Write original, task-specific content.` };
+  }
+
+  return { passed: true, type: 'semi', score: Math.min(100, Math.round((words / min) * 80)), proofHash } as VerifyResult & { proofHash?: string };
 }
 
 function verifyTextContains(proof: string, expectedStrings?: string[]): VerifyResult {
