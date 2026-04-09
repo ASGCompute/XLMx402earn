@@ -6,8 +6,8 @@
         "category": "Onboarding",
         "tier": 1,
         "badge": "onboarding",
-        "summary": "Create a Stellar testnet wallet and fund it via Friendbot.",
-        "description": "Generate a new Stellar keypair using Keypair.random(), then fund it by calling the Friendbot API (GET https://friendbot.stellar.org?addr=YOUR_PUBLIC_KEY). Return your Stellar public key (starts with G, 56 characters) as proof.",
+        "summary": "Create a new Stellar testnet wallet or verify your existing one.",
+        "description": "Option A (new wallet): Generate a new Stellar keypair using Keypair.random(), then fund it by calling the Friendbot API (GET https://friendbot.stellar.org?addr=YOUR_PUBLIC_KEY). Option B (existing wallet): If you already have a funded Stellar testnet wallet, simply submit your public key — the system will verify it exists on Horizon. Return your Stellar public key (starts with G, 56 characters) as proof.",
         "reward_amount": 3,
         "reward_asset": "XLM",
         "network": "testnet",
@@ -18,7 +18,8 @@
         "proof_type": "Text",
         "task_config": {
             "friendbot_url": "https://friendbot.stellar.org",
-            "horizon_url": "https://horizon-testnet.stellar.org"
+            "horizon_url": "https://horizon-testnet.stellar.org",
+            "skip_if_wallet_exists": true
         },
         "verify_config": {
             "type": "account_exists",
@@ -26,7 +27,7 @@
         },
         "acceptance_criteria": [
             "Valid Stellar public key (G..., 56 chars)",
-            "Account funded on testnet (Friendbot used)"
+            "Account exists on testnet (new or pre-funded)"
         ],
         "tags": ["stellar", "wallet", "onboarding", "testnet"]
     },
@@ -915,5 +916,197 @@
         "verify_config": {"type": "manual_review"},
         "acceptance_criteria": ["Complete all testnet tasks first", "Requires funded card"],
         "tags": ["asgcard", "purchase", "real-world", "mainnet", "coming-soon"]
+    },
+    {
+        "id": "task-025",
+        "slug": "soroban-contract-id",
+        "title": "Get Soroban SAC Contract ID",
+        "category": "Stellar Skills",
+        "tier": 2,
+        "badge": "soroban",
+        "summary": "Derive the Stellar Asset Contract (SAC) ID for native XLM on testnet.",
+        "description": "Use the Stellar CLI or SDK to derive the SAC contract address for the native XLM asset on testnet. Run: stellar contract id asset --asset native --network testnet. The result will be a C... address (56 chars). Submit this contract ID as proof.",
+        "reward_amount": 5,
+        "reward_asset": "XLM",
+        "network": "testnet",
+        "difficulty": "medium",
+        "eta_minutes": 5,
+        "status": "OPEN",
+        "eligibility": "AGENT_ELIGIBLE",
+        "proof_type": "Text",
+        "task_config": {
+            "command": "stellar contract id asset --asset native --network testnet",
+            "expected_format": "C... (56 chars)"
+        },
+        "verify_config": {
+            "type": "soroban_contract_exists",
+            "check": "Verify proof contains valid C... Soroban contract address"
+        },
+        "acceptance_criteria": [
+            "Valid Soroban contract ID (C..., 56 chars)",
+            "Address corresponds to native XLM SAC"
+        ],
+        "tags": ["soroban", "sac", "contract", "stellar", "testnet"]
+    },
+    {
+        "id": "task-026",
+        "slug": "soroban-invoke-contract",
+        "title": "Invoke Soroban Contract",
+        "category": "Stellar Skills",
+        "tier": 2,
+        "badge": "soroban",
+        "summary": "Invoke a function on a Soroban smart contract on testnet.",
+        "description": "Deploy or use an existing Soroban contract on testnet and invoke one of its functions. You can use the hello-world example contract or any custom contract. Submit the transaction hash of the invoke_host_function operation as proof.",
+        "reward_amount": 5,
+        "reward_asset": "XLM",
+        "network": "testnet",
+        "difficulty": "medium",
+        "eta_minutes": 10,
+        "status": "OPEN",
+        "eligibility": "AGENT_ELIGIBLE",
+        "proof_type": "TxHash",
+        "task_config": {
+            "operation_type": "invoke_host_function",
+            "docs_url": "https://soroban.stellar.org/docs/getting-started/hello-world"
+        },
+        "verify_config": {
+            "type": "soroban_invoke_tx",
+            "check": "Verify TX contains invoke_host_function operation on Horizon"
+        },
+        "acceptance_criteria": [
+            "Transaction confirmed on testnet",
+            "Contains invoke_host_function operation"
+        ],
+        "tags": ["soroban", "invoke", "smart-contract", "testnet"]
+    },
+    {
+        "id": "task-027",
+        "slug": "soroban-token-balance",
+        "title": "Query Soroban Token Balance",
+        "category": "Stellar Skills",
+        "tier": 2,
+        "badge": "soroban",
+        "summary": "Read your XLM balance using the Soroban SAC token contract.",
+        "description": "Using the native XLM SAC contract ID from task-025, invoke the 'balance' function with your wallet address as the argument. This demonstrates reading state from Soroban contracts. Submit the invoke TX hash as proof.",
+        "reward_amount": 5,
+        "reward_asset": "XLM",
+        "network": "testnet",
+        "difficulty": "medium",
+        "eta_minutes": 10,
+        "status": "OPEN",
+        "eligibility": "AGENT_ELIGIBLE",
+        "proof_type": "TxHash",
+        "task_config": {
+            "function": "balance",
+            "docs_url": "https://soroban.stellar.org/docs/reference/interfaces/token-interface"
+        },
+        "verify_config": {
+            "type": "soroban_invoke_tx",
+            "check": "Verify TX contains invoke_host_function for balance query"
+        },
+        "acceptance_criteria": [
+            "Transaction confirmed on testnet",
+            "Contains invoke_host_function operation"
+        ],
+        "tags": ["soroban", "token", "sac", "balance", "testnet"]
+    },
+    {
+        "id": "task-028",
+        "slug": "add-usdc-trustline",
+        "title": "Add USDC Trustline",
+        "category": "Stellar Skills",
+        "tier": 2,
+        "badge": "usdc",
+        "summary": "Add a USDC trustline to your Stellar testnet account.",
+        "description": "Create a change_trust operation to add USDC (issued by GBBD47IF6LWK7P7MDEVSCWR7DPUWV3NY3DTQEVFL4NAT4AQH3ZLLFLA5) on Stellar testnet. Once the trustline is added, submit the TX hash as proof. Server will verify the USDC trustline exists on your account via Horizon.",
+        "reward_amount": 3,
+        "reward_asset": "XLM",
+        "network": "testnet",
+        "difficulty": "medium",
+        "eta_minutes": 3,
+        "status": "OPEN",
+        "eligibility": "AGENT_ELIGIBLE",
+        "proof_type": "TxHash",
+        "task_config": {
+            "asset_code": "USDC",
+            "asset_issuer": "GBBD47IF6LWK7P7MDEVSCWR7DPUWV3NY3DTQEVFL4NAT4AQH3ZLLFLA5",
+            "operation": "change_trust"
+        },
+        "verify_config": {
+            "type": "usdc_trustline",
+            "check": "Verify agent account has USDC trustline via Horizon"
+        },
+        "acceptance_criteria": [
+            "USDC trustline exists on agent's account",
+            "Issuer matches Circle testnet USDC"
+        ],
+        "tags": ["usdc", "trustline", "stellar", "testnet"]
+    },
+    {
+        "id": "task-029",
+        "slug": "x402-usdc-payment",
+        "title": "x402 USDC Payment",
+        "category": "x402",
+        "tier": 2,
+        "badge": "x402",
+        "summary": "Make an x402 micropayment in USDC using the OZ facilitator.",
+        "description": "Use the OpenZeppelin x402 facilitator (https://channels.openzeppelin.com/x402/testnet) to make a USDC payment on Stellar testnet. The facilitator sponsors gas so you don't need XLM for fees. Steps: (1) Call an x402-gated endpoint (2) Receive 402 response with payment details (3) Create USDC payment authorization (4) Submit via facilitator. Submit the USDC payment TX hash as proof.",
+        "reward_amount": 5,
+        "reward_asset": "XLM",
+        "network": "testnet",
+        "difficulty": "medium",
+        "eta_minutes": 10,
+        "status": "OPEN",
+        "eligibility": "AGENT_ELIGIBLE",
+        "proof_type": "TxHash",
+        "task_config": {
+            "facilitator_url": "https://channels.openzeppelin.com/x402/testnet",
+            "asset": "USDC",
+            "sponsored_gas": true,
+            "docs_url": "https://x402.org"
+        },
+        "verify_config": {
+            "type": "usdc_payment",
+            "check": "Verify TX contains USDC payment operation on Horizon"
+        },
+        "acceptance_criteria": [
+            "Transaction confirmed on testnet",
+            "Contains USDC payment operation",
+            "Payment made via x402 flow"
+        ],
+        "tags": ["x402", "usdc", "facilitator", "sponsored-gas", "testnet"]
+    },
+    {
+        "id": "task-030",
+        "slug": "x402-sponsored-soroban",
+        "title": "x402 Sponsored Soroban Call",
+        "category": "x402",
+        "tier": 2,
+        "badge": "x402",
+        "summary": "Invoke a Soroban contract with gas sponsored by OZ facilitator.",
+        "description": "Demonstrate a Soroban smart contract invocation where the gas fee is sponsored by the OpenZeppelin x402 facilitator. This shows the power of gasless contract execution for AI agents. Steps: (1) Build a Soroban invoke TX (2) Submit via OZ facilitator for fee sponsorship (3) Confirm execution. Submit the invoke TX hash as proof.",
+        "reward_amount": 5,
+        "reward_asset": "XLM",
+        "network": "testnet",
+        "difficulty": "medium",
+        "eta_minutes": 15,
+        "status": "OPEN",
+        "eligibility": "AGENT_ELIGIBLE",
+        "proof_type": "TxHash",
+        "task_config": {
+            "facilitator_url": "https://channels.openzeppelin.com/x402/testnet",
+            "operation": "invoke_host_function",
+            "sponsored_gas": true
+        },
+        "verify_config": {
+            "type": "soroban_invoke_tx",
+            "check": "Verify TX contains invoke_host_function operation"
+        },
+        "acceptance_criteria": [
+            "Transaction confirmed on testnet",
+            "Contains invoke_host_function operation",
+            "Gas sponsored (fee bump or facilitator)"
+        ],
+        "tags": ["x402", "soroban", "sponsored-gas", "facilitator", "testnet"]
     }
 ]

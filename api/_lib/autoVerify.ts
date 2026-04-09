@@ -6,6 +6,11 @@ import {
   verifyMultiOpTx,
   verifyAccountOptions,
   verifyTimeBounds,
+  contractExists,
+  verifySorobanInvoke,
+  verifyUsdcTrustline,
+  verifyUsdcPayment,
+  isValidContractId,
 } from './stellar';
 
 // ──────────────────────────────────────
@@ -63,6 +68,18 @@ export async function autoVerify(
 
     case 'stellar_address':
       return verifyStellarAddress(proof);
+
+    case 'soroban_contract_exists':
+      return verifySorobanContract(proof);
+
+    case 'soroban_invoke_tx':
+      return verifySorobanInvokeTx(proof);
+
+    case 'usdc_trustline':
+      return verifyUsdcTrustlineCheck(proof, agentWallet);
+
+    case 'usdc_payment':
+      return verifyUsdcPaymentTx(proof, agentWallet);
 
     case 'manual_review':
       return { passed: false, type: 'manual', reason: 'Queued for sponsor review' };
@@ -315,4 +332,59 @@ function verifyStellarAddress(proof: string): VerifyResult {
     return { passed: true, type: 'auto' };
   }
   return { passed: false, type: 'auto', reason: 'No valid Stellar address found (G..., 56 chars)' };
+}
+
+// ──────────────────────────────────────
+// Soroban verifiers
+// ──────────────────────────────────────
+
+async function verifySorobanContract(proof: string): Promise<VerifyResult> {
+  const clean = proof.trim();
+
+  // Accept C... contract IDs
+  if (isValidContractId(clean)) {
+    return { passed: true, type: 'auto' };
+  }
+
+  // Try to extract C... address from text
+  const match = clean.match(/C[A-Z2-7]{55}/);
+  if (match) {
+    return { passed: true, type: 'auto' };
+  }
+
+  return { passed: false, type: 'auto', reason: 'No valid Soroban contract ID found (C..., 56 chars)' };
+}
+
+async function verifySorobanInvokeTx(txHash: string): Promise<VerifyResult> {
+  const result = await verifySorobanInvoke(txHash.trim());
+  return result.valid
+    ? { passed: true, type: 'auto' }
+    : { passed: false, type: 'auto', reason: result.reason };
+}
+
+// ──────────────────────────────────────
+// USDC verifiers
+// ──────────────────────────────────────
+
+async function verifyUsdcTrustlineCheck(proof: string, agentWallet?: string): Promise<VerifyResult> {
+  // Proof can be a TX hash or just the agent wallet
+  const walletToCheck = agentWallet || proof.trim();
+
+  if (!/^G[A-Z2-7]{55}$/.test(walletToCheck)) {
+    return { passed: false, type: 'auto', reason: 'No valid wallet address to check trustline' };
+  }
+
+  const result = await verifyUsdcTrustline(walletToCheck);
+  return result.valid
+    ? { passed: true, type: 'auto' }
+    : { passed: false, type: 'auto', reason: result.reason };
+}
+
+async function verifyUsdcPaymentTx(txHash: string, agentWallet?: string): Promise<VerifyResult> {
+  const result = await verifyUsdcPayment(txHash.trim(), {
+    expectedFrom: agentWallet,
+  });
+  return result.valid
+    ? { passed: true, type: 'auto' }
+    : { passed: false, type: 'auto', reason: result.reason };
 }

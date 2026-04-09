@@ -64,9 +64,11 @@ async function handleRegister(req: VercelRequest, res: VercelResponse) {
     });
   }
 
-  // Validate Stellar address format
-  if (!/^G[A-Z2-7]{55}$/.test(wallet)) {
-    return res.status(400).json({ error: 'Invalid Stellar public key format' });
+  // Validate Stellar address format (G... classic OR C... contract)
+  const isClassicWallet = /^G[A-Z2-7]{55}$/.test(wallet);
+  const isContractWallet = /^C[A-Z2-7]{55}$/.test(wallet);
+  if (!isClassicWallet && !isContractWallet) {
+    return res.status(400).json({ error: 'Invalid Stellar address format (must start with G or C, 56 chars)' });
   }
 
   // Check if wallet already registered (1 wallet = 1 agent)
@@ -91,13 +93,30 @@ async function handleRegister(req: VercelRequest, res: VercelResponse) {
     return res.status(409).json({ error: 'Agent name already taken. Choose another.' });
   }
 
-  // Verify the account exists on testnet
-  const exists = await accountExists(wallet);
-  if (!exists) {
-    return res.status(400).json({
-      error: 'Wallet not found on Stellar testnet. Fund via Friendbot first.',
-    });
+  // Detect if wallet already exists and is funded on testnet
+  let walletStatus: 'new' | 'existing' = 'new';
+  let preFunded = false;
+
+  if (isClassicWallet) {
+    const exists = await accountExists(wallet);
+    if (!exists) {
+      return res.status(400).json({
+        error: 'Wallet not found on Stellar testnet. Fund via Friendbot first.',
+      });
+    }
+    // Check if wallet has balance > 10 XLM (more than just Friendbot minimum)
+    try {
+      const balance = await import('./_lib/stellar').then(m => m.getBalance(wallet));
+      const bal = parseFloat(balance);
+      if (bal > 0) {
+        preFunded = true;
+        walletStatus = 'existing';
+      }
+    } catch {
+      // Balance check failed, continue with default
+    }
   }
+  // For C... contract addresses, we skip account existence check (Soroban contracts)
 
   // Optional: Verify registration payment (if reg_tx provided)
   let regVerified = false;
@@ -127,6 +146,8 @@ async function handleRegister(req: VercelRequest, res: VercelResponse) {
       reg_verified: regVerified,
       total_earned: 0,
       tasks_completed: 0,
+      wallet_type: isContractWallet ? 'soroban' : 'classic',
+      pre_funded: preFunded,
     })
     .select()
     .single();
@@ -143,8 +164,18 @@ async function handleRegister(req: VercelRequest, res: VercelResponse) {
       id: agent.id,
       name: agent.name,
       wallet: agent.wallet,
+      wallet_status: walletStatus,
+      wallet_type: isContractWallet ? 'soroban' : 'classic',
+      pre_funded: preFunded,
       total_earned: 0,
       tasks_completed: 0,
     },
+    hints: walletStatus === 'existing'
+      ? {
+          skip_task_001: true,
+          message: 'Your wallet is already funded. You can skip task-001 (Create Stellar Wallet) — submit your public key to auto-verify.',
+        }
+      : undefined,
   });
 }
+

@@ -267,3 +267,135 @@ export async function verifyTimeBounds(
     return { valid: false, reason: `Horizon error: ${(err as Error).message}` };
   }
 }
+
+// ──────────────────────────────────────
+// USDC constants (Stellar testnet)
+// ──────────────────────────────────────
+export const USDC_ISSUER_TESTNET = 'GBBD47IF6LWK7P7MDEVSCWR7DPUWV3NY3DTQEVFL4NAT4AQH3ZLLFLA5';
+export const USDC_CODE = 'USDC';
+
+/**
+ * Check if an account has a USDC trustline on testnet.
+ */
+export async function verifyUsdcTrustline(
+  publicKey: string
+): Promise<{ valid: boolean; balance?: string; reason?: string }> {
+  try {
+    const account = await horizon.loadAccount(publicKey);
+    const balances = account.balances as Array<{
+      asset_type: string;
+      asset_code?: string;
+      asset_issuer?: string;
+      balance: string;
+    }>;
+
+    const usdc = balances.find(
+      (b) =>
+        b.asset_type === 'credit_alphanum4' &&
+        b.asset_code === USDC_CODE &&
+        b.asset_issuer === USDC_ISSUER_TESTNET
+    );
+
+    if (usdc) {
+      return { valid: true, balance: usdc.balance };
+    }
+    return { valid: false, reason: 'No USDC trustline found on this account' };
+  } catch (err) {
+    return { valid: false, reason: `Account load error: ${(err as Error).message}` };
+  }
+}
+
+/**
+ * Verify a transaction contains a USDC payment operation.
+ */
+export async function verifyUsdcPayment(
+  txHash: string,
+  opts?: { expectedFrom?: string; expectedTo?: string; minAmount?: string }
+): Promise<{ valid: boolean; reason?: string }> {
+  try {
+    const tx = await horizon.transactions().transaction(txHash).call();
+    const txData = tx as unknown as { successful: boolean };
+    if (!txData.successful) return { valid: false, reason: 'Transaction failed' };
+
+    const opsResponse = await horizon.operations().forTransaction(txHash).call();
+    const ops = opsResponse.records as unknown as Array<{
+      type: string;
+      to?: string;
+      from?: string;
+      amount?: string;
+      asset_type?: string;
+      asset_code?: string;
+      asset_issuer?: string;
+      source_account?: string;
+    }>;
+
+    const usdcOp = ops.find(
+      (op) =>
+        op.type === 'payment' &&
+        op.asset_code === USDC_CODE &&
+        (!opts?.expectedTo || op.to === opts.expectedTo) &&
+        (!opts?.expectedFrom || (op.source_account || op.from) === opts.expectedFrom)
+    );
+
+    if (!usdcOp) {
+      return { valid: false, reason: 'No USDC payment operation found in transaction' };
+    }
+
+    if (opts?.minAmount && parseFloat(usdcOp.amount || '0') < parseFloat(opts.minAmount)) {
+      return { valid: false, reason: `USDC amount too low: ${usdcOp.amount} (need ${opts.minAmount}+)` };
+    }
+
+    return { valid: true };
+  } catch (err) {
+    return { valid: false, reason: `Horizon error: ${(err as Error).message}` };
+  }
+}
+
+/**
+ * Check if a Soroban contract address (C...) exists via Horizon.
+ */
+export async function contractExists(contractId: string): Promise<boolean> {
+  try {
+    // Soroban contracts can be checked via the /accounts endpoint
+    const resp = await fetch(`${HORIZON_URL}/accounts/${contractId}`);
+    return resp.ok;
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Verify a transaction contains an invoke_host_function operation (Soroban).
+ */
+export async function verifySorobanInvoke(
+  txHash: string
+): Promise<{ valid: boolean; reason?: string }> {
+  try {
+    const tx = await horizon.transactions().transaction(txHash).call();
+    const txData = tx as unknown as { successful: boolean };
+    if (!txData.successful) return { valid: false, reason: 'Transaction failed' };
+
+    const opsResponse = await horizon.operations().forTransaction(txHash).call();
+    const ops = opsResponse.records as unknown as Array<{ type: string }>;
+
+    const sorobanOp = ops.find(
+      (op) => op.type === 'invoke_host_function' || op.type === 'extend_footprint_ttl' || op.type === 'restore_footprint'
+    );
+
+    if (!sorobanOp) {
+      return { valid: false, reason: 'No Soroban operation (invoke_host_function) found in transaction' };
+    }
+
+    return { valid: true };
+  } catch (err) {
+    return { valid: false, reason: `Horizon error: ${(err as Error).message}` };
+  }
+}
+
+/**
+ * Verify a Soroban contract ID format (C... 56 chars).
+ */
+export function isValidContractId(contractId: string): boolean {
+  return /^C[A-Z2-7]{55}$/.test(contractId.trim());
+}
+
