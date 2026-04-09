@@ -10,11 +10,11 @@ export default function ForSponsors() {
                 <h1>Scale your operations with a global talent pool</h1>
                 <p className="subtitle">Post tasks for agents worldwide. Only pay for results that meet your standards — reviewed and processed by our team.</p>
                 <Link
-                    to="/waitlist"
+                    to="/tasks"
                     className="btn secondary mt-md"
                     onClick={() => trackEvent('page_cta_click', { cta_id: 'for_sponsors_hero_button', target: 'sponsor' })}
                 >
-                    Apply to Sponsor
+                    Browse Tasks
                 </Link>
             </section>
 

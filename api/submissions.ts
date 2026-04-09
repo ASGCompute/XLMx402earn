@@ -12,8 +12,7 @@ const supabase = createClient(
 );
 
 const ESCROW_ADDRESS = process.env.STELLAR_ESCROW_PUBLIC_KEY || '';
-const DAILY_CAP_PER_AGENT = 50;  // max XLM per agent per 24h
-const DAILY_CAP_GLOBAL = 500;     // max XLM total per 24h
+// No daily caps on testnet — XLM is free via Friendbot
 const MAX_REJECTIONS_PER_TASK = 3; // max failed attempts before lockout
 
 interface SubmissionPayload {
@@ -90,14 +89,17 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     if (data.agent_wallet) {
       const { data: existing } = await supabase
         .from('earn_submissions')
-        .select('id')
+        .select('id, status')
         .eq('task_id', data.task_id)
         .eq('agent_wallet', data.agent_wallet)
-        .eq('status', 'approved')
+        .in('status', ['approved', 'pending_review'])
         .maybeSingle();
 
       if (existing) {
-        return res.status(409).json({ error: 'You already completed this task' });
+        const msg = existing.status === 'pending_review'
+          ? 'This task is already pending review'
+          : 'You already completed this task';
+        return res.status(409).json({ error: msg });
       }
 
       // Per-task attempt cap: max N rejections before lockout
@@ -170,57 +172,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     // ──────────────────────────────────────
     let payout = null;
     if (status === 'approved' && data.agent_wallet && task.reward_amount > 0) {
-      // Daily payout cap check (per-agent)
-      const dayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
-      const { data: recentPayouts } = await supabase
-        .from('earn_payouts')
-        .select('amount')
-        .eq('agent_wallet', data.agent_wallet)
-        .gte('created_at', dayAgo);
-
-      const agentDailyTotal = (recentPayouts || []).reduce((sum, p) => sum + (p.amount || 0), 0);
-
-      // Global daily cap check
-      const { data: globalPayouts } = await supabase
-        .from('earn_payouts')
-        .select('amount')
-        .gte('created_at', dayAgo);
-
-      const globalDailyTotal = (globalPayouts || []).reduce((sum, p) => sum + (p.amount || 0), 0);
-
-      if (agentDailyTotal + task.reward_amount > DAILY_CAP_PER_AGENT) {
-        // Submission is approved but payout is queued for tomorrow
-        await supabase
-          .from('earn_submissions')
-          .update({ payout_status: 'queued', payout_error: 'Daily agent cap reached (50 XLM/day). Payout queued.' })
-          .eq('id', submission.id);
-
-        return res.status(200).json({
-          success: true,
-          submission_id: submission.id,
-          task_id: data.task_id,
-          status: 'approved',
-          verify: { type: verifyResult.type, passed: true },
-          message: `✅ Task verified! Payout queued — you've reached the daily limit of ${DAILY_CAP_PER_AGENT} XLM. It will be sent within 24h.`,
-        });
-      }
-
-      if (globalDailyTotal + task.reward_amount > DAILY_CAP_GLOBAL) {
-        await supabase
-          .from('earn_submissions')
-          .update({ payout_status: 'queued', payout_error: 'Global daily cap reached. Payout queued.' })
-          .eq('id', submission.id);
-
-        return res.status(200).json({
-          success: true,
-          submission_id: submission.id,
-          task_id: data.task_id,
-          status: 'approved',
-          verify: { type: verifyResult.type, passed: true },
-          message: '✅ Task verified! Global payout budget reached for today. Your XLM will be sent within 24h.',
-        });
-      }
-
+      // Testnet: no daily caps — XLM is free
       const payoutResult = await sendPayout(
         data.agent_wallet,
         String(task.reward_amount),

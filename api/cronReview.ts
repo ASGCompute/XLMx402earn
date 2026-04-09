@@ -15,7 +15,7 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY || ''
 );
 
-const DAILY_CAP_PER_AGENT = 50;
+// Testnet: no daily caps — XLM is free via Friendbot
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   // Verify cron secret (Vercel sends Authorization header for cron jobs)
@@ -25,8 +25,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
-    // Find all pending_review submissions older than 1 minute
-    const cutoff = new Date(Date.now() - 60 * 1000).toISOString(); // 1 minute ago
+    // Find all pending_review submissions older than 5 minutes
+    const cutoff = new Date(Date.now() - 5 * 60 * 1000).toISOString(); // 5 minutes ago
 
     const { data: pending, error } = await supabase
       .from('earn_submissions')
@@ -58,21 +58,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
       // Attempt payout if wallet is present
       if (sub.agent_wallet && sub.reward_amount > 0) {
-        // Check daily cap
-        const dayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
-        const { data: recentPayouts } = await supabase
-          .from('earn_payouts')
-          .select('amount')
-          .eq('agent_wallet', sub.agent_wallet)
-          .gte('created_at', dayAgo);
-
-        const dailyTotal = (recentPayouts || []).reduce((sum, p) => sum + (p.amount || 0), 0);
-
-        if (dailyTotal + sub.reward_amount > DAILY_CAP_PER_AGENT) {
-          results.push({ id: sub.id, task_id: sub.task_id, action: 'approved (payout queued — daily cap)' });
-          continue;
-        }
-
         const payoutResult = await sendPayout(
           sub.agent_wallet,
           String(sub.reward_amount),

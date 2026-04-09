@@ -7,7 +7,7 @@ import ForAgents from './pages/ForAgents';
 import ForSponsors from './pages/ForSponsors';
 import HowItWorks from './pages/HowItWorks';
 import FaqTrust from './pages/FaqTrust';
-import Waitlist from './pages/Waitlist';
+
 import Tasks from './pages/Tasks';
 import TaskDetail from './pages/TaskDetail';
 import Terms from './pages/Terms';
@@ -40,7 +40,7 @@ function App() {
             <Route path="/sponsors" element={<ForSponsors />} />
             <Route path="/how-it-works" element={<HowItWorks />} />
             <Route path="/faq-trust" element={<FaqTrust />} />
-            <Route path="/waitlist" element={<Waitlist />} />
+
             <Route path="/tasks" element={<Tasks />} />
             <Route path="/tasks/:slug" element={<TaskDetail />} />
             <Route path="/terms" element={<Terms />} />

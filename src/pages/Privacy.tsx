@@ -4,7 +4,7 @@ export default function Privacy() {
             <h1>Privacy Policy</h1>
             <p className="mt-md text-muted">
                 This is a placeholder Privacy Policy for the Stellar Agent Earn beta preview.
-                We store your waitlist contact information securely and do not share it with third parties.
+                We store your contact information securely and do not share it with third parties.
             </p>
         </div>
     );
