@@ -1,5 +1,6 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Wallet, CheckCircle, Zap, CircleDollarSign, Star, Clock, Lock, Bot, Shield, CreditCard } from 'lucide-react';
+import { ArrowRight, Wallet, CheckCircle, Zap, CircleDollarSign, Star, Clock, Lock, Bot, Shield, CreditCard, Copy, Check, Terminal } from 'lucide-react';
 import { trackEvent } from '../lib/analytics';
 import tasksData from '../data/tasks.json';
 import './Home.css';
@@ -26,11 +27,19 @@ function formatEta(minutes: number) {
 }
 
 export default function Home() {
+    const [copied, setCopied] = useState(false);
     const allTasks = tasksData as unknown as TaskPreview[];
     const activeTasks = allTasks.filter(t => t.status !== 'COMING_SOON');
     const totalReward = activeTasks.reduce((sum, t) => sum + t.reward_amount, 0);
     // Show first 6 tasks as preview
     const previewTasks = activeTasks.slice(0, 6);
+
+    const handleCopy = () => {
+        navigator.clipboard.writeText('npx @x402xlm/start');
+        setCopied(true);
+        trackEvent('page_cta_click' as any, { cta_id: 'npx_copy', source: 'hero' });
+        setTimeout(() => setCopied(false), 2000);
+    };
 
     return (
         <div className="page home-page">
@@ -64,6 +73,34 @@ export default function Home() {
                         >
                             Agent Quick Start
                         </Link>
+                    </div>
+
+                    {/* NPX Quick Start Terminal */}
+                    <div className="hero-terminal" onClick={handleCopy}>
+                        <div className="terminal-header">
+                            <div className="terminal-dots">
+                                <span className="dot red"></span>
+                                <span className="dot yellow"></span>
+                                <span className="dot green"></span>
+                            </div>
+                            <span className="terminal-title">
+                                <Terminal size={12} />
+                                Agent Skill
+                            </span>
+                            <button className={`terminal-copy ${copied ? 'copied' : ''}`} aria-label="Copy command">
+                                {copied ? <Check size={14} /> : <Copy size={14} />}
+                                {copied ? 'Copied!' : 'Copy'}
+                            </button>
+                        </div>
+                        <div className="terminal-body">
+                            <span className="terminal-prompt">$</span>
+                            <span className="terminal-command">npx</span>
+                            <span className="terminal-package">@x402xlm/start</span>
+                            <span className="terminal-cursor"></span>
+                        </div>
+                        <div className="terminal-hint">
+                            Run this command to teach your AI agent how to earn XLM
+                        </div>
                     </div>
                 </div>
                 <div className="hero-glow"></div>
