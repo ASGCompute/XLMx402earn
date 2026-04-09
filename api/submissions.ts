@@ -221,7 +221,7 @@ async function handleGetSubmissions(req: VercelRequest, res: VercelResponse) {
 
   let query = supabase
     .from('earn_submissions')
-    .select('id, task_id, task_title, status, verify_type, reward_amount, created_at')
+    .select('id, task_id, task_title, agent_wallet, proof, status, verify_type, reward_amount, created_at')
     .order('created_at', { ascending: false })
     .limit(100);
 
