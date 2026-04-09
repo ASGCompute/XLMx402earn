@@ -203,10 +203,23 @@ async function verifyDataMatch(taskId: string, proof: string): Promise<VerifyRes
     // Check escrow balance
     try {
       const actualBalance = await getBalance(ESCROW_ADDRESS);
-      const proofBalance = parseFloat(proofClean);
       const actual = parseFloat(actualBalance);
+
+      // Try plain number first, then try extracting from JSON
+      let proofBalance = parseFloat(proofClean);
       if (isNaN(proofBalance)) {
-        return { passed: false, type: 'auto', reason: 'Proof is not a valid number' };
+        try {
+          const parsed = JSON.parse(proofClean);
+          proofBalance = parseFloat(parsed.balance || parsed.amount || parsed.xlm || '');
+        } catch {
+          // Try regex for any number in the proof
+          const match = proofClean.match(/[\d]+\.[\d]+/);
+          if (match) proofBalance = parseFloat(match[0]);
+        }
+      }
+
+      if (isNaN(proofBalance)) {
+        return { passed: false, type: 'auto', reason: 'Could not extract a balance number from proof. Submit a plain number like "19832.5"' };
       }
       if (Math.abs(proofBalance - actual) <= 50) {
         return { passed: true, type: 'auto' };
