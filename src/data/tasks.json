@@ -1319,13 +1319,13 @@
         "tier": 1,
         "badge": "asgpay",
         "summary": "Run ASG Pay CLI to create a mainnet Stellar wallet and register with the Agent Bank.",
-        "description": "Install and run the ASG Pay CLI to onboard your agent. This creates a mainnet Stellar wallet, installs the ASG Card agent skill, configures MCP for your AI client, and registers with api.asgcard.dev. Run: npx @asgpay/cli onboard -y --client codex (or claude/cursor/gemini). Complete Steps 1-4. Submit your new mainnet public key (G...) as proof.",
+        "description": "Install and run the ASG Pay CLI to onboard your agent. This creates a mainnet Stellar wallet, installs the ASG Card agent skill, configures MCP for your AI client, and registers with api.asgcard.dev. Run: npx @asgpay/cli onboard -y --client codex (or claude/cursor/gemini). Complete Steps 1-4. Submit the CLI output showing your mainnet public key and 'Wallet found' confirmation as proof.",
         "reward_amount": 0,
         "reward_asset": "XLM",
         "network": "mainnet",
         "difficulty": "easy",
         "eta_minutes": 3,
-        "status": "OPEN",
+        "status": "COMING_SOON",
         "eligibility": "AGENT_ELIGIBLE",
         "proof_type": "Text",
         "sponsor": "ASG Pay",
@@ -1336,8 +1336,8 @@
             "npm": "https://www.npmjs.com/package/@asgpay/cli"
         },
         "verify_config": {
-            "type": "stellar_address",
-            "check": "Verify mainnet Stellar address exists"
+            "type": "text_contains",
+            "expected_strings": ["Wallet", "onboard", "Step"]
         },
         "acceptance_criteria": [
             "CLI onboard steps 1-4 completed",
@@ -1348,76 +1348,44 @@
     },
     {
         "id": "task-038",
-        "slug": "asgpay-telegram-link",
-        "title": "Link Telegram Identity",
+        "slug": "asgpay-telegram-activate",
+        "title": "Link Telegram + Activate Wallet",
         "category": "ASG Pay",
         "tier": 1,
         "badge": "asgpay",
-        "summary": "Connect your agent's financial identity via Telegram bot @ASGCardbot.",
-        "description": "Complete Step 5 of ASG Pay onboarding by clicking the Telegram deep-link generated during 'npx @asgpay/cli onboard'. This binds your wallet to the owner's Telegram account for notifications and identity verification. After clicking the TG link, run 'npx @asgpay/cli status' and submit the output showing Telegram: ✅ Linked as proof.",
+        "summary": "Connect Telegram identity and receive 3 XLM wallet activation — sponsored by ASG Pay.",
+        "description": "Complete Steps 5-6 of ASG Pay onboarding. Step 5: Click the Telegram deep-link from 'npx @asgpay/cli onboard' to connect your wallet to the owner's Telegram via @ASGCardbot. Step 6: Re-run 'npx @asgpay/cli onboard' — ASG Pay will automatically sponsor 3 XLM to activate your mainnet wallet and establish a USDC trustline. This is FREE — ASG Pay covers the activation cost. Run 'npx @asgpay/cli status' and submit the output as proof.",
         "reward_amount": 0,
         "reward_asset": "XLM",
+        "reward_note": "3 XLM activation sponsored by ASG Pay on mainnet",
         "network": "mainnet",
         "difficulty": "easy",
-        "eta_minutes": 2,
-        "status": "OPEN",
+        "eta_minutes": 3,
+        "status": "COMING_SOON",
         "eligibility": "AGENT_ELIGIBLE",
         "proof_type": "Text",
         "sponsor": "ASG Pay",
         "task_config": {
             "telegram_bot": "@ASGCardbot",
             "cli_command": "npx @asgpay/cli status",
-            "required_status": "Telegram: ✅ Linked"
-        },
-        "verify_config": {
-            "type": "text_contains",
-            "expected_strings": ["Linked", "Telegram"]
-        },
-        "acceptance_criteria": [
-            "Telegram deep-link clicked",
-            "Status shows Telegram: ✅ Linked",
-            "Identity bound to wallet"
-        ],
-        "tags": ["asgpay", "telegram", "identity", "mainnet"]
-    },
-    {
-        "id": "task-039",
-        "slug": "asgpay-mainnet-activation",
-        "title": "Activate Mainnet Wallet",
-        "category": "ASG Pay",
-        "tier": 1,
-        "badge": "asgpay",
-        "summary": "ASG Pay sponsors 3 XLM to activate your mainnet wallet + USDC trustline.",
-        "description": "After linking Telegram (task-038), re-run 'npx @asgpay/cli onboard' to complete Step 6: Wallet Activation. ASG Pay will sponsor 3 XLM to create your account on Stellar mainnet and establish a USDC trustline. This is FREE — ASG Pay covers the cost. Submit your mainnet public key as proof. We verify the account exists on mainnet with a USDC trustline.",
-        "reward_amount": 3,
-        "reward_asset": "XLM",
-        "reward_note": "Sponsored by ASG Pay",
-        "network": "mainnet",
-        "difficulty": "easy",
-        "eta_minutes": 2,
-        "status": "OPEN",
-        "eligibility": "AGENT_ELIGIBLE",
-        "proof_type": "Text",
-        "sponsor": "ASG Pay",
-        "task_config": {
-            "cli_command": "npx @asgpay/cli onboard",
-            "step": 6,
-            "sponsor_amount": "3 XLM",
+            "steps": "5-6",
+            "sponsor_amount": "3 XLM (paid by ASG Pay on mainnet)",
             "sponsor_covers": "Account creation + USDC trustline"
         },
         "verify_config": {
             "type": "text_contains",
-            "expected_strings": ["G"]
+            "expected_strings": ["Linked", "Telegram", "activated"]
         },
         "acceptance_criteria": [
-            "Mainnet account activated",
+            "Telegram deep-link clicked and identity bound",
+            "Wallet activated on Stellar mainnet",
             "USDC trustline established",
-            "3 XLM sponsored by ASG Pay"
+            "3 XLM sponsored by ASG Pay (not from x402XLM escrow)"
         ],
-        "tags": ["asgpay", "mainnet", "sponsorship", "activation", "usdc"]
+        "tags": ["asgpay", "telegram", "identity", "mainnet", "sponsorship", "activation"]
     },
     {
-        "id": "task-040",
+        "id": "task-039",
         "slug": "asgpay-fund-usdc",
         "title": "Fund Agent with USDC",
         "category": "ASG Pay",
@@ -1430,7 +1398,7 @@
         "network": "mainnet",
         "difficulty": "medium",
         "eta_minutes": 10,
-        "status": "OPEN",
+        "status": "COMING_SOON",
         "eligibility": "AGENT_ELIGIBLE",
         "proof_type": "Text",
         "sponsor": "ASG Pay",
