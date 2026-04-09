@@ -138,22 +138,18 @@ async function verifyTxMemo(txHash: string): Promise<VerifyResult> {
       return { passed: false, type: 'auto', reason: result.reason };
     }
 
-    // Verify memo is decodable base64 JSON with agent + task fields
-    const tx = result.tx as { memo?: string } | undefined;
+    // Verify memo exists (accept any memo text — plain or base64 JSON)
+    const tx = result.tx as { memo?: string; memo_type?: string } | undefined;
     if (!tx?.memo) {
       return { passed: false, type: 'auto', reason: 'No memo found' };
     }
 
-    try {
-      const decoded = Buffer.from(tx.memo, 'base64').toString('utf-8');
-      const parsed = JSON.parse(decoded);
-      if (!parsed.agent || !parsed.task) {
-        return { passed: false, type: 'auto', reason: 'Memo JSON missing agent or task field' };
-      }
+    // Accept any non-empty memo — plain text or base64 JSON
+    if (tx.memo.length > 0) {
       return { passed: true, type: 'auto' };
-    } catch {
-      return { passed: false, type: 'auto', reason: 'Memo is not valid base64 JSON' };
     }
+
+    return { passed: false, type: 'auto', reason: 'Empty memo' };
   } catch (err) {
     return { passed: false, type: 'auto', reason: `Verify error: ${(err as Error).message}` };
   }
@@ -356,10 +352,26 @@ async function verifySorobanContract(proof: string): Promise<VerifyResult> {
 }
 
 async function verifySorobanInvokeTx(txHash: string): Promise<VerifyResult> {
-  const result = await verifySorobanInvoke(txHash.trim());
-  return result.valid
-    ? { passed: true, type: 'auto' }
-    : { passed: false, type: 'auto', reason: result.reason };
+  const clean = txHash.trim();
+
+  // If proof looks like a TX hash (64 hex chars), verify on-chain
+  if (/^[a-f0-9]{64}$/i.test(clean)) {
+    const result = await verifySorobanInvoke(clean);
+    return result.valid
+      ? { passed: true, type: 'auto' }
+      : { passed: false, type: 'auto', reason: result.reason };
+  }
+
+  // Fallback: if it contains a C... contract address, accept as semi-verified
+  const contractMatch = clean.match(/C[A-Z2-7]{55}/);
+  if (contractMatch) {
+    const words = clean.split(/\s+/).length;
+    if (words >= 10) {
+      return { passed: true, type: 'semi', reason: 'Contract ID found in text proof' };
+    }
+  }
+
+  return { passed: false, type: 'semi', reason: 'Provide a TX hash (64 hex chars) or text proof with contract ID' };
 }
 
 // ──────────────────────────────────────

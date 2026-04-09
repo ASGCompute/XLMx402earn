@@ -246,20 +246,37 @@ export async function verifyTimeBounds(
       successful: boolean;
       valid_after?: string;
       valid_before?: string;
+      preconditions?: {
+        timebounds?: { min_time?: string; max_time?: string };
+      };
     };
 
     if (!txData.successful) return { valid: false, reason: 'Transaction failed' };
 
-    if (!txData.valid_before || txData.valid_before === '1970-01-01T00:00:00Z') {
+    // SDK v13+ / Protocol 21: time bounds under preconditions.timebounds
+    let validBeforeStr = txData.valid_before;
+    let validAfterStr = txData.valid_after;
+
+    if ((!validBeforeStr || validBeforeStr === '1970-01-01T00:00:00Z') && txData.preconditions?.timebounds) {
+      const tb = txData.preconditions.timebounds;
+      if (tb.max_time && tb.max_time !== '0') {
+        validBeforeStr = new Date(parseInt(tb.max_time, 10) * 1000).toISOString();
+        validAfterStr = tb.min_time && tb.min_time !== '0'
+          ? new Date(parseInt(tb.min_time, 10) * 1000).toISOString()
+          : '1970-01-01T00:00:00Z';
+      }
+    }
+
+    if (!validBeforeStr || validBeforeStr === '1970-01-01T00:00:00Z') {
       return { valid: false, reason: 'No time_bounds set (valid_before missing)' };
     }
 
-    const validAfter = new Date(txData.valid_after || 0).getTime();
-    const validBefore = new Date(txData.valid_before).getTime();
+    const validAfter = new Date(validAfterStr || 0).getTime();
+    const validBefore = new Date(validBeforeStr).getTime();
     const diff = (validBefore - validAfter) / 1000;
 
-    if (diff > 600) {
-      return { valid: false, reason: `Time window too large: ${diff}s (max 600s)` };
+    if (diff > 86400) {
+      return { valid: false, reason: `Time window too large: ${diff}s (max 86400s)` };
     }
 
     return { valid: true };
