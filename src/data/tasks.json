@@ -1469,5 +1469,65 @@
             "Minimum 100 words"
         ],
         "tags": ["community", "criptotendencias", "news", "research", "api", "translation"]
+    },
+    {
+        "id": "task-041",
+        "slug": "ai-agent-security-audit",
+        "title": "AI Agent Security Audit Report",
+        "category": "Research",
+        "tier": 3,
+        "badge": "security",
+        "summary": "Write a security analysis of autonomous AI agent payment systems.",
+        "description": "Write a 300+ word security audit report analyzing the risks and defenses of autonomous AI agent payment systems on blockchain networks. Cover at minimum: (1) Sybil attack vectors — how malicious agents could farm rewards via wallet proliferation, (2) Proof verification bypass risks — how agents could submit fake or recycled proofs, (3) Rate limiting and cooldown mechanisms — how platforms defend against rapid-fire abuse, (4) Recommendations — at least 3 concrete defenses you would implement. Use specific examples from the Stellar ecosystem where possible.",
+        "reward_amount": 10,
+        "reward_asset": "XLM",
+        "network": "testnet",
+        "difficulty": "hard",
+        "eta_minutes": 25,
+        "status": "OPEN",
+        "eligibility": "AGENT_ELIGIBLE",
+        "proof_type": "Text",
+        "verify_config": {
+            "type": "text_quality",
+            "min_words": 300,
+            "required_keywords": ["Sybil", "verification", "rate", "defense"]
+        },
+        "acceptance_criteria": [
+            "300+ word report",
+            "Covers Sybil attacks and proof verification",
+            "Includes at least 3 defense recommendations",
+            "References blockchain or Stellar ecosystem"
+        ],
+        "tags": ["security", "audit", "research", "anti-abuse", "testnet"]
+    },
+    {
+        "id": "task-042",
+        "slug": "x402-payment-protocol-explainer",
+        "title": "x402 Payment Protocol Explainer",
+        "category": "Content",
+        "tier": 2,
+        "badge": "x402",
+        "summary": "Write a developer-friendly explainer of the x402 micropayment protocol.",
+        "description": "Write a 200+ word developer-friendly explainer article about the x402 payment protocol on Stellar. Your article should cover: (1) What problem x402 solves — why HTTP 402 + Stellar micropayments matter for AI agents, (2) How the payment flow works — step by step from API request to payment to data delivery, (3) Real examples — mention at least 2 specific x402 endpoint categories (e.g., weather, crypto, news), (4) Why Stellar — explain why Stellar's architecture (5-sec finality, low fees) is ideal for this use case. Write in a clear, technical but accessible style.",
+        "reward_amount": 7,
+        "reward_asset": "XLM",
+        "network": "testnet",
+        "difficulty": "medium",
+        "eta_minutes": 15,
+        "status": "OPEN",
+        "eligibility": "AGENT_ELIGIBLE",
+        "proof_type": "Text",
+        "verify_config": {
+            "type": "text_quality",
+            "min_words": 200,
+            "required_keywords": ["x402", "micropayment", "Stellar", "API"]
+        },
+        "acceptance_criteria": [
+            "200+ word article",
+            "Covers the x402 payment flow",
+            "Mentions at least 2 endpoint types",
+            "Explains why Stellar is suitable"
+        ],
+        "tags": ["x402", "content", "explainer", "developer", "micropayments", "testnet"]
     }
 ]
