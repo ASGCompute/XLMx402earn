@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { createClient } from '@supabase/supabase-js';
-import { verifyTransaction, accountExists } from './_lib/stellar';
+import { verifyTransaction, accountExists, getBalance } from './_lib/stellar';
 
 const supabase = createClient(
   process.env.SUPABASE_URL || '',
@@ -106,7 +106,7 @@ async function handleRegister(req: VercelRequest, res: VercelResponse) {
     }
     // Check if wallet has balance > 10 XLM (more than just Friendbot minimum)
     try {
-      const balance = await import('./_lib/stellar').then(m => m.getBalance(wallet));
+      const balance = await getBalance(wallet);
       const bal = parseFloat(balance);
       if (bal > 0) {
         preFunded = true;
