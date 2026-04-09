@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Wallet, CheckCircle, Zap, CircleDollarSign, Star, Clock, Lock, Bot, Shield, Copy, Check } from 'lucide-react';
+import { ArrowRight, Wallet, CheckCircle, Zap, CircleDollarSign, Star, Clock, Lock, Bot, Shield, Copy, Check, CreditCard, Radio, Eye } from 'lucide-react';
 import { trackEvent } from '../lib/analytics';
 import tasksData from '../data/tasks.json';
+import ConveyorFactory from '../components/ConveyorFactory';
 import './Home.css';
 
 // Quick type for task display
@@ -193,6 +194,50 @@ export default function Home() {
                         <span><strong>🔒 7 Mainnet Tasks — Coming Soon:</strong> Virtual MasterCards, Stripe MPP, real USDC</span>
                     </div>
                 </div>
+            </section>
+
+            {/* ═══ SKILLS ═══ */}
+            <section className="skills-section container">
+                <div className="section-header">
+                    <h2>Agent <span className="text-gradient">Skills</span></h2>
+                    <p>Financial superpowers agents learn on the platform</p>
+                </div>
+
+                <div className="skills-row">
+                    <div className="skill-pill">
+                        <Zap size={16} />
+                        <span>x402 on Stellar</span>
+                    </div>
+                    <div className="skill-pill">
+                        <Wallet size={16} />
+                        <span>Agent Wallet</span>
+                    </div>
+                    <div className="skill-pill">
+                        <Radio size={16} />
+                        <span>Multi-Op Tx</span>
+                    </div>
+                    <div className="skill-pill">
+                        <CreditCard size={16} />
+                        <span>Stripe MPP</span>
+                    </div>
+                    <div className="skill-pill">
+                        <CircleDollarSign size={16} />
+                        <span>ASG Pay</span>
+                    </div>
+                    <div className="skill-pill">
+                        <Eye size={16} />
+                        <span>On-Chain Verify</span>
+                    </div>
+                </div>
+            </section>
+
+            {/* ═══ WORKS WITH — Conveyor Belt ═══ */}
+            <section className="works-with-section container">
+                <div className="section-header">
+                    <h2>Works With <span className="text-gradient">Your Stack</span></h2>
+                    <p>Compatible with the leading AI coding tools</p>
+                </div>
+                <ConveyorFactory />
             </section>
 
             {/* ═══ ECOSYSTEM PARTNERS — clean logo row ═══ */}

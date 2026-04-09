@@ -25,8 +25,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
-    // Find all pending_review submissions older than 1 hour (using 1h for faster testing; 24h in production)
-    const cutoff = new Date(Date.now() - 60 * 60 * 1000).toISOString(); // 1 hour ago
+    // Find all pending_review submissions older than 1 minute
+    const cutoff = new Date(Date.now() - 60 * 1000).toISOString(); // 1 minute ago
 
     const { data: pending, error } = await supabase
       .from('earn_submissions')

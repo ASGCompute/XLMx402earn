@@ -419,6 +419,52 @@
 .sla-item svg { color: var(--color-brand-primary-hover); flex-shrink: 0; }
 .sla-item strong { color: var(--color-text-primary); }
 
+/* ═══ SKILLS SECTION (compact pills) ═══ */
+.skills-section {
+    padding: var(--spacing-2xl) 0 var(--spacing-lg);
+}
+
+.skills-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+}
+
+.skill-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.4rem 0.9rem;
+    background: var(--color-bg-surface);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: var(--radius-full);
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    backdrop-filter: blur(8px);
+    transition: all var(--transition-normal);
+    white-space: nowrap;
+}
+
+.skill-pill svg {
+    color: var(--color-brand-secondary);
+    flex-shrink: 0;
+}
+
+.skill-pill:hover {
+    border-color: rgba(99, 102, 241, 0.25);
+    color: var(--color-text-primary);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3), 0 0 10px rgba(99, 102, 241, 0.06);
+}
+
+/* ═══ WORKS WITH (Conveyor Belt) ═══ */
+.works-with-section {
+    padding: var(--spacing-2xl) 0 var(--spacing-xl);
+}
+
 /* ═══ ECOSYSTEM PARTNERS ═══ */
 .ecosystem-section {
     padding: var(--spacing-3xl) 0;
@@ -525,4 +571,6 @@
     .partner-row { gap: 2rem; }
     .partner-logo img { height: 22px; }
     .sponsor-steps { grid-template-columns: 1fr; }
+    .works-with-section { padding: var(--spacing-xl) 0; }
+    .conveyor-factory-root { height: 300px !important; }
 }
