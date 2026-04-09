@@ -4,7 +4,7 @@ import { sendPayout } from './_lib/stellar';
 
 const supabase = createClient(
   process.env.SUPABASE_URL || '',
-  process.env.SUPABASE_SERVICE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY || ''
+  process.env.SUPABASE_SERVICE_ROLE_KEY || ''
 );
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
@@ -31,7 +31,7 @@ async function handleGetPayouts(req: VercelRequest, res: VercelResponse) {
   const wallet = req.query.agent_wallet as string;
 
   let query = supabase
-    .from('payouts')
+    .from('earn_payouts')
     .select('id, submission_id, task_id, agent_wallet, amount, asset, tx_hash, status, created_at')
     .order('created_at', { ascending: false })
     .limit(100);
@@ -68,7 +68,7 @@ async function handleRetryPayout(req: VercelRequest, res: VercelResponse) {
 
   // Fetch submission
   const { data: submission, error: fetchError } = await supabase
-    .from('submissions')
+    .from('earn_submissions')
     .select('*')
     .eq('id', submission_id)
     .single();
@@ -87,7 +87,7 @@ async function handleRetryPayout(req: VercelRequest, res: VercelResponse) {
 
   // Check if already paid
   const { data: existingPayout } = await supabase
-    .from('payouts')
+    .from('earn_payouts')
     .select('id')
     .eq('submission_id', submission_id)
     .eq('status', 'completed')
@@ -105,7 +105,7 @@ async function handleRetryPayout(req: VercelRequest, res: VercelResponse) {
   );
 
   if (result.success) {
-    await supabase.from('payouts').insert({
+    await supabase.from('earn_payouts').insert({
       submission_id,
       task_id: submission.task_id,
       agent_wallet: submission.agent_wallet,

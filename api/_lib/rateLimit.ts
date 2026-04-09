@@ -1,56 +1,49 @@
-import { createClient } from '@supabase/supabase-js';
+/**
+ * In-memory rate limiter for Vercel serverless functions.
+ * No external dependencies — each cold start resets the window.
+ * This is fine for hackathon scale (< 1000 RPM).
+ */
 
-const supabase = createClient(
-    process.env.SUPABASE_URL || '',
-    process.env.SUPABASE_SERVICE_ROLE_KEY || ''
-);
+const windowMs = 60_000; // 1 minute
+const maxRequests = 30;
 
-interface RateLimitResult {
-    allowed: boolean;
-    remaining: number;
-    resetAt: Date;
+// In-memory store: ip -> { count, windowStart }
+const store: Map<string, { count: number; windowStart: number }> = new Map();
+
+/**
+ * Extract client IP from request headers (works on Vercel).
+ */
+export function getClientIp(headers: Record<string, string | string[] | undefined>): string {
+    const forwarded = headers['x-forwarded-for'];
+    if (typeof forwarded === 'string') {
+        return forwarded.split(',')[0].trim();
+    }
+    if (Array.isArray(forwarded) && forwarded.length > 0) {
+        return forwarded[0].split(',')[0].trim();
+    }
+    const real = headers['x-real-ip'];
+    if (typeof real === 'string') return real;
+    return '127.0.0.1';
 }
 
 /**
- * Simple rate limiter backed by Supabase.
- * Window: 60 seconds, default max: 30 requests per IP per endpoint.
+ * Check if an IP is rate limited.
+ * Returns true if the IP should be blocked.
  */
-export async function checkRateLimit(
-    ip: string,
-    endpoint: string,
-    maxRequests: number = 30,
-    windowMs: number = 60_000
-): Promise<RateLimitResult> {
-    const windowStart = new Date(Date.now() - windowMs);
+export function isRateLimited(ip: string): boolean {
+    const now = Date.now();
+    const entry = store.get(ip);
 
-    // Clean old entries
-    await supabase
-        .from('rate_limits')
-        .delete()
-        .lt('window_start', windowStart.toISOString());
-
-    // Count recent requests
-    const { count } = await supabase
-        .from('rate_limits')
-        .select('*', { count: 'exact', head: true })
-        .eq('ip', ip)
-        .eq('endpoint', endpoint)
-        .gte('window_start', windowStart.toISOString());
-
-    const currentCount = count || 0;
-    const allowed = currentCount < maxRequests;
-
-    if (allowed) {
-        await supabase.from('rate_limits').insert({
-            ip,
-            endpoint,
-            window_start: new Date().toISOString()
-        });
+    if (!entry || now - entry.windowStart > windowMs) {
+        // New window
+        store.set(ip, { count: 1, windowStart: now });
+        return false;
     }
 
-    return {
-        allowed,
-        remaining: Math.max(0, maxRequests - currentCount - (allowed ? 1 : 0)),
-        resetAt: new Date(Date.now() + windowMs)
-    };
+    entry.count++;
+    if (entry.count > maxRequests) {
+        return true;
+    }
+
+    return false;
 }

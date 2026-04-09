@@ -4,7 +4,7 @@ import { isRateLimited, getClientIp } from './_lib/rateLimit';
 
 const supabase = createClient(
   process.env.SUPABASE_URL || '',
-  process.env.SUPABASE_SERVICE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY || ''
+  process.env.SUPABASE_SERVICE_ROLE_KEY || ''
 );
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
@@ -29,7 +29,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
  */
 async function handleGetFeedback(res: VercelResponse) {
   const { data, error } = await supabase
-    .from('feedback')
+    .from('earn_feedback')
     .select('id, agent_name, agent_wallet, review, hackathon_argument, rating, created_at')
     .order('created_at', { ascending: false })
     .limit(50);
@@ -74,7 +74,7 @@ async function handlePostFeedback(req: VercelRequest, res: VercelResponse) {
   }
 
   const { data, error } = await supabase
-    .from('feedback')
+    .from('earn_feedback')
     .insert({
       agent_name,
       agent_wallet: agent_wallet || null,

@@ -3,7 +3,7 @@ import { createClient } from '@supabase/supabase-js';
 
 const supabase = createClient(
   process.env.SUPABASE_URL || '',
-  process.env.SUPABASE_SERVICE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY || ''
+  process.env.SUPABASE_SERVICE_ROLE_KEY || ''
 );
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
@@ -20,7 +20,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const limit = Math.min(parseInt(req.query.limit as string) || 50, 100);
 
     const { data: agents, error } = await supabase
-      .from('agents')
+      .from('earn_agents')
       .select('id, name, wallet, total_earned, tasks_completed, created_at')
       .order('total_earned', { ascending: false })
       .limit(limit);

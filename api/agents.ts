@@ -4,7 +4,7 @@ import { verifyTransaction, accountExists } from './_lib/stellar';
 
 const supabase = createClient(
   process.env.SUPABASE_URL || '',
-  process.env.SUPABASE_SERVICE_KEY || ''
+  process.env.SUPABASE_SERVICE_ROLE_KEY || ''
 );
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
@@ -30,7 +30,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
  */
 async function handleGetAgents(_req: VercelRequest, res: VercelResponse) {
   const { data, error } = await supabase
-    .from('agents')
+    .from('earn_agents')
     .select('id, name, wallet, total_earned, tasks_completed, created_at')
     .order('total_earned', { ascending: false })
     .limit(50);
@@ -71,7 +71,7 @@ async function handleRegister(req: VercelRequest, res: VercelResponse) {
 
   // Check if wallet already registered (1 wallet = 1 agent)
   const { data: existingByWallet } = await supabase
-    .from('agents')
+    .from('earn_agents')
     .select('id')
     .eq('wallet', wallet)
     .maybeSingle();
@@ -82,7 +82,7 @@ async function handleRegister(req: VercelRequest, res: VercelResponse) {
 
   // Check if name is taken
   const { data: existingByName } = await supabase
-    .from('agents')
+    .from('earn_agents')
     .select('id')
     .eq('name', name)
     .maybeSingle();
@@ -119,7 +119,7 @@ async function handleRegister(req: VercelRequest, res: VercelResponse) {
 
   // Insert agent
   const { data: agent, error } = await supabase
-    .from('agents')
+    .from('earn_agents')
     .insert({
       name,
       wallet,

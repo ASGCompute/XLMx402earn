@@ -7,7 +7,7 @@ import tasksData from '../src/data/tasks.json';
 
 const supabase = createClient(
   process.env.SUPABASE_URL || '',
-  process.env.SUPABASE_SERVICE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY || ''
+  process.env.SUPABASE_SERVICE_ROLE_KEY || ''
 );
 
 interface SubmissionPayload {
@@ -73,7 +73,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     // Check duplicate submission (same agent + task)
     if (data.agent_wallet) {
       const { data: existing } = await supabase
-        .from('submissions')
+        .from('earn_submissions')
         .select('id')
         .eq('task_id', data.task_id)
         .eq('agent_wallet', data.agent_wallet)
@@ -107,7 +107,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     // Insert submission
     const { data: submission, error: insertError } = await supabase
-      .from('submissions')
+      .from('earn_submissions')
       .insert({
         task_id: data.task_id,
         task_title: task.title,
@@ -143,7 +143,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
       if (payoutResult.success) {
         // Record payout
-        await supabase.from('payouts').insert({
+        await supabase.from('earn_payouts').insert({
           submission_id: submission.id,
           task_id: data.task_id,
           agent_wallet: data.agent_wallet,
@@ -168,7 +168,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         console.error('Payout failed:', payoutResult.error);
         // Mark submission as approved but payout pending
         await supabase
-          .from('submissions')
+          .from('earn_submissions')
           .update({ payout_status: 'failed', payout_error: payoutResult.error })
           .eq('id', submission.id);
       }
@@ -213,7 +213,7 @@ async function handleGetSubmissions(req: VercelRequest, res: VercelResponse) {
   const wallet = req.query.agent_wallet as string;
 
   let query = supabase
-    .from('submissions')
+    .from('earn_submissions')
     .select('id, task_id, task_title, status, verify_type, reward_amount, created_at')
     .order('created_at', { ascending: false })
     .limit(100);
