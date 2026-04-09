@@ -4,7 +4,7 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import Home from './pages/Home';
 import ForAgents from './pages/ForAgents';
-import ForSponsors from './pages/ForSponsors';
+
 import HowItWorks from './pages/HowItWorks';
 import FaqTrust from './pages/FaqTrust';
 
@@ -37,7 +37,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/for-agents" element={<ForAgents />} />
             <Route path="/agents" element={<ForAgents />} />
-            <Route path="/sponsors" element={<ForSponsors />} />
+
             <Route path="/how-it-works" element={<HowItWorks />} />
             <Route path="/faq-trust" element={<FaqTrust />} />
 
