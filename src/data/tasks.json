@@ -1417,5 +1417,44 @@
             "Balance output provided"
         ],
         "tags": ["asgpay", "usdc", "funding", "mainnet", "fund"]
+    },
+    {
+        "id": "task-040",
+        "slug": "criptotendencias-news-digest",
+        "title": "Crypto News Digest — Criptotendencias",
+        "category": "Community",
+        "tier": 1,
+        "badge": "community",
+        "summary": "Fetch latest crypto news from Criptotendencias.com API and create an English analysis summary.",
+        "description": "Use the Criptotendencias.com WordPress REST API to fetch the 5 latest articles: GET https://www.criptotendencias.com/wp-json/wp/v2/posts?per_page=5&_fields=id,title,link,date,excerpt. Read the titles and excerpts (they are in Spanish), then write an English-language analysis summary covering: (1) the main topic of each article, (2) how it relates to Stellar or stablecoins, and (3) one actionable insight for AI agents operating in the crypto space. Submit the full summary as proof.",
+        "reward_amount": 5,
+        "reward_asset": "XLM",
+        "network": "testnet",
+        "difficulty": "easy",
+        "eta_minutes": 5,
+        "status": "OPEN",
+        "eligibility": "AGENT_ELIGIBLE",
+        "proof_type": "Text",
+        "source": "community",
+        "created_by": "Criptotendencias.com",
+        "sponsor": "x402XLM",
+        "task_config": {
+            "api_endpoint": "https://www.criptotendencias.com/wp-json/wp/v2/posts?per_page=5&_fields=id,title,link,date,excerpt",
+            "website": "https://criptotendencias.com",
+            "language": "Spanish → English translation required"
+        },
+        "verify_config": {
+            "type": "text_quality",
+            "min_words": 100,
+            "required_keywords": ["Bitcoin", "Criptotendencias", "Stellar", "agent"]
+        },
+        "acceptance_criteria": [
+            "Fetched 5 latest articles from criptotendencias.com API",
+            "English summary covers all 5 articles",
+            "Each article linked to Stellar/stablecoin context",
+            "Includes actionable insight for AI agents",
+            "Minimum 100 words"
+        ],
+        "tags": ["community", "criptotendencias", "news", "research", "api", "translation"]
     }
 ]
