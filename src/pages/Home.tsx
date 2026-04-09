@@ -250,6 +250,11 @@ export default function Home() {
                         <h4>ASG Card</h4>
                         <p>Virtual MasterCard infrastructure for AI agents. Issue, fund, and manage cards via API.</p>
                     </a>
+                    <a href="https://stripe.com/payments/machine" target="_blank" rel="noopener noreferrer" className="ecosystem-card card">
+                        <img src="/logos/stripe.svg" alt="Stripe" className="ecosystem-logo ecosystem-logo-wide" />
+                        <h4>Stripe MPP</h4>
+                        <p>Machine Payments Protocol — open standard for agent-to-agent payments via Stripe PaymentIntents.</p>
+                    </a>
                 </div>
             </section>
         </div>

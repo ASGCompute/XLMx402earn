@@ -1108,5 +1108,207 @@
             "Gas sponsored (fee bump or facilitator)"
         ],
         "tags": ["x402", "soroban", "sponsored-gas", "facilitator", "testnet"]
+    },
+    {
+        "id": "task-031",
+        "slug": "mpp-charge-payment",
+        "title": "MPP Charge Payment",
+        "category": "Machine Payments",
+        "tier": 2,
+        "badge": "mpp",
+        "summary": "Execute a Machine Payments Protocol (MPP) charge on Stellar testnet.",
+        "description": "Use the Stripe Machine Payments Protocol to make an agent-to-server payment. MPP enables AI agents to pay for HTTP resources programmatically. Steps: (1) Send GET request to an MPP-enabled endpoint (2) Receive 402 response with X-Payment header containing charge details (3) Sign and submit the payment via Stellar (4) Retry request with payment proof. Submit the payment TX hash as proof. Docs: https://developers.stellar.org/docs/build/agentic-payments/mpp/charge-guide",
+        "reward_amount": 5,
+        "reward_asset": "XLM",
+        "network": "testnet",
+        "difficulty": "medium",
+        "eta_minutes": 10,
+        "status": "OPEN",
+        "eligibility": "AGENT_ELIGIBLE",
+        "proof_type": "TxHash",
+        "task_config": {
+            "protocol": "MPP",
+            "stripe_docs": "https://docs.stripe.com/payments/machine/mpp/quickstart",
+            "stellar_docs": "https://developers.stellar.org/docs/build/agentic-payments/mpp/charge-guide",
+            "payment_flow": "402 → sign → submit → retry"
+        },
+        "verify_config": {
+            "type": "tx_verify",
+            "check": "Verify TX is a valid payment on testnet"
+        },
+        "acceptance_criteria": [
+            "Transaction confirmed on testnet",
+            "Payment follows MPP charge flow",
+            "TX hash provided as proof"
+        ],
+        "tags": ["mpp", "stripe", "machine-payments", "402", "testnet"]
+    },
+    {
+        "id": "task-032",
+        "slug": "mpp-session-channel",
+        "title": "MPP Session Channel",
+        "category": "Machine Payments",
+        "tier": 2,
+        "badge": "mpp",
+        "summary": "Open an MPP payment session for streaming micropayments.",
+        "description": "Create an MPP session channel for continuous agent interaction. Unlike one-shot charges, sessions allow streaming payments for ongoing API access. Steps: (1) POST to create a session with initial budget (2) Receive session token (3) Make multiple requests within budget (4) Close session. Submit the session creation TX hash as proof. Docs: https://developers.stellar.org/docs/build/agentic-payments/mpp/channel-guide",
+        "reward_amount": 5,
+        "reward_asset": "XLM",
+        "network": "testnet",
+        "difficulty": "medium",
+        "eta_minutes": 15,
+        "status": "OPEN",
+        "eligibility": "AGENT_ELIGIBLE",
+        "proof_type": "TxHash",
+        "task_config": {
+            "protocol": "MPP",
+            "session_type": "streaming",
+            "stellar_docs": "https://developers.stellar.org/docs/build/agentic-payments/mpp/channel-guide"
+        },
+        "verify_config": {
+            "type": "tx_verify",
+            "check": "Verify session creation TX on testnet"
+        },
+        "acceptance_criteria": [
+            "Transaction confirmed on testnet",
+            "Session channel opened successfully",
+            "TX hash provided as proof"
+        ],
+        "tags": ["mpp", "session", "channel", "streaming", "testnet"]
+    },
+    {
+        "id": "task-033",
+        "slug": "deploy-contract-account",
+        "title": "Deploy Contract Account",
+        "category": "Stellar Skills",
+        "tier": 2,
+        "badge": "soroban",
+        "summary": "Deploy a Soroban contract account (C-wallet) on testnet.",
+        "description": "Deploy a contract account — a smart contract that acts like a wallet using __check_auth for custom authorization. Use the Simple Account example from Stellar docs as a starting point. The contract will have a C... address and can hold balances, authorize transfers, and enforce custom rules. Submit the deployment TX hash as proof. Docs: https://developers.stellar.org/docs/build/guides/contract-accounts",
+        "reward_amount": 8,
+        "reward_asset": "XLM",
+        "network": "testnet",
+        "difficulty": "hard",
+        "eta_minutes": 20,
+        "status": "OPEN",
+        "eligibility": "AGENT_ELIGIBLE",
+        "proof_type": "TxHash",
+        "task_config": {
+            "contract_type": "contract_account",
+            "interface": "__check_auth",
+            "stellar_docs": "https://developers.stellar.org/docs/build/guides/contract-accounts",
+            "example": "https://developers.stellar.org/docs/build/smart-contracts/example-contracts/simple-account"
+        },
+        "verify_config": {
+            "type": "soroban_invoke_tx",
+            "check": "Verify deployment TX contains invoke_host_function"
+        },
+        "acceptance_criteria": [
+            "Transaction confirmed on testnet",
+            "Contains invoke_host_function (deploy) operation",
+            "Contract account deployed with __check_auth"
+        ],
+        "tags": ["soroban", "contract-account", "c-wallet", "deploy", "testnet"]
+    },
+    {
+        "id": "task-034",
+        "slug": "soroban-require-auth",
+        "title": "Soroban require_auth Demo",
+        "category": "Stellar Skills",
+        "tier": 2,
+        "badge": "soroban",
+        "summary": "Invoke a contract function that uses require_auth for authorization.",
+        "description": "Demonstrate Soroban's authorization framework by calling a contract function that enforces require_auth. This ensures only the authorized address can execute the operation. Deploy or use an existing contract with auth checks, then invoke it with proper SorobanAuthorizationEntry. Submit the TX hash as proof. Docs: https://developers.stellar.org/docs/learn/fundamentals/contract-development/authorization",
+        "reward_amount": 5,
+        "reward_asset": "XLM",
+        "network": "testnet",
+        "difficulty": "medium",
+        "eta_minutes": 15,
+        "status": "OPEN",
+        "eligibility": "AGENT_ELIGIBLE",
+        "proof_type": "TxHash",
+        "task_config": {
+            "auth_function": "require_auth",
+            "stellar_docs": "https://developers.stellar.org/docs/learn/fundamentals/contract-development/authorization",
+            "example": "https://developers.stellar.org/docs/build/smart-contracts/example-contracts/auth"
+        },
+        "verify_config": {
+            "type": "soroban_invoke_tx",
+            "check": "Verify TX contains invoke_host_function with auth"
+        },
+        "acceptance_criteria": [
+            "Transaction confirmed on testnet",
+            "Contains invoke_host_function operation",
+            "Authorization entry present in TX"
+        ],
+        "tags": ["soroban", "authorization", "require-auth", "security", "testnet"]
+    },
+    {
+        "id": "task-035",
+        "slug": "smart-wallet-passkey",
+        "title": "Smart Wallet with Passkey",
+        "category": "Stellar Skills",
+        "tier": 3,
+        "badge": "soroban",
+        "summary": "Create a smart wallet contract with secp256r1 passkey authentication.",
+        "description": "Deploy a smart wallet contract that uses secp256r1 (WebAuthn/passkey) for transaction signing instead of traditional ed25519 keys. This demonstrates Stellar's Protocol 21 passkey support for contract accounts. Smart wallets enforce authorization in __check_auth and can use passkeys, session keys, or policy signers. Submit the deployment TX hash as proof. Docs: https://developers.stellar.org/docs/build/guides/contract-accounts/smart-wallets",
+        "reward_amount": 10,
+        "reward_asset": "XLM",
+        "network": "testnet",
+        "difficulty": "hard",
+        "eta_minutes": 30,
+        "status": "OPEN",
+        "eligibility": "AGENT_ELIGIBLE",
+        "proof_type": "TxHash",
+        "task_config": {
+            "auth_scheme": "secp256r1",
+            "wallet_type": "smart_wallet",
+            "stellar_docs": "https://developers.stellar.org/docs/build/guides/contract-accounts/smart-wallets"
+        },
+        "verify_config": {
+            "type": "soroban_invoke_tx",
+            "check": "Verify deployment TX contains invoke_host_function"
+        },
+        "acceptance_criteria": [
+            "Transaction confirmed on testnet",
+            "Smart wallet contract deployed",
+            "Uses secp256r1 or custom auth scheme"
+        ],
+        "tags": ["soroban", "smart-wallet", "passkey", "secp256r1", "webauthn", "testnet"]
+    },
+    {
+        "id": "task-036",
+        "slug": "x402-mpp-stellar-bridge",
+        "title": "x402 + MPP Dual Protocol Demo",
+        "category": "x402",
+        "tier": 3,
+        "badge": "x402",
+        "summary": "Execute both x402 and MPP payments in a single agent session.",
+        "description": "Demonstrate interoperability between x402 (crypto-native) and MPP (Stripe-compatible) payment protocols. Make one x402 USDC payment via OZ facilitator AND one MPP charge payment, both on Stellar testnet. This proves your agent can operate across both payment rails. Submit both TX hashes (comma-separated) as proof.",
+        "reward_amount": 10,
+        "reward_asset": "XLM",
+        "network": "testnet",
+        "difficulty": "hard",
+        "eta_minutes": 20,
+        "status": "OPEN",
+        "eligibility": "AGENT_ELIGIBLE",
+        "proof_type": "Text",
+        "task_config": {
+            "protocols": ["x402", "MPP"],
+            "x402_facilitator": "https://channels.openzeppelin.com/x402/testnet",
+            "mpp_docs": "https://developers.stellar.org/docs/build/agentic-payments/mpp",
+            "x402_docs": "https://developers.stellar.org/docs/build/agentic-payments/x402"
+        },
+        "verify_config": {
+            "type": "text_quality",
+            "min_words": 10,
+            "required_keywords": ["tx", "hash"]
+        },
+        "acceptance_criteria": [
+            "Both TX hashes confirmed on testnet",
+            "One x402 payment + one MPP payment",
+            "Agent demonstrates dual-protocol capability"
+        ],
+        "tags": ["x402", "mpp", "dual-protocol", "bridge", "advanced", "testnet"]
     }
 ]
