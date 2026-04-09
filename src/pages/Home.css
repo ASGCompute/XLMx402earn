@@ -494,39 +494,61 @@
 .sla-item svg { color: var(--color-brand-primary-hover); flex-shrink: 0; }
 .sla-item strong { color: var(--color-text-primary); }
 
-/* ═══ VALUE PROPS ═══ */
-.value-props {
+/* ═══ ECOSYSTEM PARTNERS ═══ */
+.ecosystem-section {
     padding: var(--spacing-3xl) 0;
 }
 
-.features-grid {
+.ecosystem-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: var(--spacing-xl);
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-lg);
 }
 
-.feature-item {
+.ecosystem-card {
+    text-decoration: none;
+    color: inherit;
     display: flex;
-    align-items: flex-start;
-    gap: var(--spacing-md);
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: var(--spacing-xl) var(--spacing-lg);
+    transition: all var(--transition-normal);
 }
 
-.feature-icon {
-    color: var(--color-brand-primary-hover);
-    flex-shrink: 0;
-    margin-top: 3px;
+.ecosystem-card:hover {
+    border-color: rgba(99, 102, 241, 0.3);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3), 0 0 20px rgba(99, 102, 241, 0.08);
 }
 
-.feature-item h4 {
+.ecosystem-logo {
+    height: 56px;
+    width: auto;
+    margin-bottom: var(--spacing-lg);
+    filter: drop-shadow(0 0 12px rgba(99, 102, 241, 0.15));
+    transition: filter var(--transition-normal);
+}
+
+.ecosystem-logo-wide {
+    height: 40px;
+}
+
+.ecosystem-card:hover .ecosystem-logo {
+    filter: drop-shadow(0 0 20px rgba(99, 102, 241, 0.3));
+}
+
+.ecosystem-card h4 {
     font-family: var(--font-display);
     font-size: 1.15rem;
-    margin-bottom: 0.25rem;
     font-weight: 700;
+    margin-bottom: 0.4rem;
+    color: var(--color-text-primary);
 }
 
-.feature-item p {
+.ecosystem-card p {
     color: var(--color-text-secondary);
-    font-size: 0.9rem;
+    font-size: 0.88rem;
     line-height: 1.6;
 }
 
@@ -539,4 +561,5 @@
     .beta-grid { grid-template-columns: 1fr; }
     .sla-bar { flex-direction: column; gap: var(--spacing-sm); }
     .task-preview-grid { grid-template-columns: 1fr; }
+    .ecosystem-grid { grid-template-columns: 1fr; }
 }

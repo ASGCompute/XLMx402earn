@@ -1,7 +1,9 @@
+/* ═══ Tasks Page — x402XLM Space Theme ═══ */
+
 /* ===== BETA BANNER ===== */
 .beta-banner {
-    background: rgba(110, 86, 207, 0.08);
-    border-bottom: 1px solid rgba(110, 86, 207, 0.15);
+    background: rgba(99, 102, 241, 0.06);
+    border-bottom: 1px solid rgba(99, 102, 241, 0.1);
     padding: var(--spacing-sm) var(--spacing-lg);
     text-align: center;
     font-size: 0.875rem;
@@ -15,7 +17,7 @@
 
 .beta-badge {
     display: inline-block;
-    background: rgba(110, 86, 207, 0.2);
+    background: rgba(99, 102, 241, 0.15);
     color: var(--color-brand-primary-hover);
     padding: 2px 10px;
     border-radius: var(--radius-full);
@@ -28,17 +30,22 @@
 /* ===== HEADER ===== */
 .tasks-header {
     text-align: center;
-    padding: var(--spacing-2xl) 0 var(--spacing-lg);
+    padding: var(--spacing-3xl) 0 var(--spacing-xl);
 }
 
 .tasks-header h1 {
-    font-size: clamp(2rem, 5vw, 3rem);
+    font-family: var(--font-display);
+    font-size: clamp(2.2rem, 5vw, 3.2rem);
+    font-weight: 800;
     margin-bottom: var(--spacing-sm);
+    letter-spacing: -0.03em;
 }
 
 .tasks-header .subtitle {
     color: var(--color-text-secondary);
-    font-size: 1.125rem;
+    font-size: 1.1rem;
+    max-width: 500px;
+    margin: 0 auto;
 }
 
 /* ===== SEARCH & FILTERS ===== */
@@ -65,20 +72,22 @@
 
 .search-input {
     width: 100%;
-    padding: var(--spacing-md) var(--spacing-md) var(--spacing-md) 2.75rem;
-    background: rgba(0, 0, 0, 0.3);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 0.85rem 1rem 0.85rem 2.75rem;
+    background: rgba(12, 12, 30, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: var(--radius-full);
     color: var(--color-text-primary);
     font-family: var(--font-sans);
-    font-size: 1rem;
-    transition: border-color var(--transition-fast);
+    font-size: 0.95rem;
+    transition: all var(--transition-fast);
+    backdrop-filter: blur(8px);
 }
 
 .search-input:focus {
     outline: none;
-    border-color: var(--color-brand-primary);
-    box-shadow: 0 0 0 2px rgba(110, 86, 207, 0.2);
+    border-color: rgba(99, 102, 241, 0.4);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12);
+    background: rgba(12, 12, 30, 0.8);
 }
 
 .search-input::placeholder {
@@ -96,17 +105,18 @@
     align-items: center;
     gap: var(--spacing-sm);
     flex-wrap: wrap;
+    justify-content: center;
 }
 
 .filter-label {
     display: inline-flex;
     align-items: center;
     gap: 4px;
-    font-size: 0.8rem;
+    font-size: 0.78rem;
     font-weight: 600;
     color: var(--color-text-muted);
     text-transform: uppercase;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.06em;
     min-width: 80px;
 }
 
@@ -117,28 +127,31 @@
 }
 
 .chip {
-    padding: 4px 12px;
+    padding: 5px 14px;
     border-radius: var(--radius-full);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.03);
     color: var(--color-text-secondary);
     font-size: 0.8rem;
     font-weight: 500;
     cursor: pointer;
     transition: all var(--transition-fast);
     font-family: var(--font-sans);
+    backdrop-filter: blur(4px);
 }
 
 .chip:hover {
-    border-color: var(--color-brand-primary);
+    border-color: rgba(99, 102, 241, 0.3);
     color: var(--color-text-primary);
+    background: rgba(99, 102, 241, 0.06);
 }
 
 .chip.active {
-    background: var(--color-brand-primary);
-    border-color: var(--color-brand-primary);
-    color: var(--color-bg-base);
+    background: linear-gradient(135deg, var(--color-brand-primary), #8b5cf6);
+    border-color: transparent;
+    color: #fff;
     font-weight: 600;
+    box-shadow: 0 2px 12px rgba(99, 102, 241, 0.3);
 }
 
 /* ===== TASK CARDS GRID ===== */
@@ -157,10 +170,18 @@
     color: inherit;
     cursor: pointer;
     overflow: hidden;
+    padding: var(--spacing-lg);
+    background: var(--color-bg-surface);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: var(--radius-lg);
+    backdrop-filter: blur(12px);
+    transition: all var(--transition-normal);
 }
 
 .task-card:hover {
-    border-color: var(--color-brand-primary);
+    border-color: rgba(99, 102, 241, 0.25);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3), 0 0 15px rgba(99, 102, 241, 0.06);
 }
 
 .task-card:hover .task-arrow {
@@ -176,10 +197,10 @@
 }
 
 .task-category {
-    font-size: 0.75rem;
-    font-weight: 600;
+    font-size: 0.72rem;
+    font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.06em;
     color: var(--color-brand-secondary);
 }
 
@@ -187,27 +208,27 @@
 .task-tier {
     font-size: 0.7rem;
     font-weight: 700;
-    padding: 2px 8px;
+    padding: 3px 10px;
     border-radius: var(--radius-full);
 }
 
 .tier-1 {
-    background: rgba(48, 164, 108, 0.15);
+    background: rgba(52, 211, 153, 0.12);
     color: var(--color-success);
 }
 
 .tier-2 {
-    background: rgba(255, 178, 36, 0.15);
+    background: rgba(251, 191, 36, 0.12);
     color: var(--color-warning);
 }
 
 .tier-3 {
-    background: rgba(239, 68, 68, 0.15);
-    color: #ef4444;
+    background: rgba(248, 113, 113, 0.12);
+    color: var(--color-error);
 }
 
 .tier-locked {
-    background: rgba(143, 143, 143, 0.15);
+    background: rgba(106, 106, 142, 0.12);
     color: var(--color-text-muted);
 }
 
@@ -219,16 +240,18 @@
 }
 
 .task-title {
+    font-family: var(--font-display);
     font-size: 1.15rem;
+    font-weight: 700;
     margin-bottom: var(--spacing-sm);
     line-height: 1.3;
     color: var(--color-text-primary);
 }
 
 .task-summary {
-    font-size: 0.9rem;
+    font-size: 0.88rem;
     color: var(--color-text-secondary);
-    line-height: 1.5;
+    line-height: 1.55;
     flex: 1;
     margin-bottom: var(--spacing-md);
     display: -webkit-box;
@@ -260,17 +283,9 @@
     color: var(--color-text-muted) !important;
 }
 
-.difficulty-easy {
-    color: var(--color-success);
-}
-
-.difficulty-medium {
-    color: var(--color-warning);
-}
-
-.difficulty-hard {
-    color: #ef4444;
-}
+.difficulty-easy { color: var(--color-success); }
+.difficulty-medium { color: var(--color-warning); }
+.difficulty-hard { color: var(--color-error); }
 
 .task-eta {
     color: var(--color-text-muted);
@@ -289,29 +304,31 @@
 }
 
 .task-tag {
-    font-size: 0.7rem;
-    padding: 2px 8px;
+    font-size: 0.68rem;
+    padding: 3px 8px;
     border-radius: var(--radius-full);
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(99, 102, 241, 0.06);
     color: var(--color-text-muted);
     font-family: var(--font-mono);
+    border: 1px solid rgba(255, 255, 255, 0.04);
 }
 
 .task-arrow {
-    color: var(--color-text-muted);
+    color: var(--color-brand-primary-hover);
     opacity: 0;
     transform: translateX(-4px);
     transition: all var(--transition-fast);
 }
 
-/* ===== COMING SOON SECTION ===== */
+/* ===== COMING SOON ===== */
 .coming-soon-section {
     padding-top: var(--spacing-xl);
-    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    border-top: 1px solid rgba(255, 255, 255, 0.04);
     margin-top: var(--spacing-lg);
 }
 
 .coming-soon-section h2 {
+    font-family: var(--font-display);
     font-size: 1.5rem;
     margin-bottom: var(--spacing-sm);
 }
@@ -322,9 +339,9 @@
 }
 
 .coming-soon-card {
-    opacity: 0.5;
+    opacity: 0.4;
     pointer-events: none;
-    border: 1px dashed rgba(255, 255, 255, 0.1) !important;
+    border: 1px dashed rgba(255, 255, 255, 0.08) !important;
 }
 
 /* ===== EMPTY STATE ===== */
@@ -337,6 +354,8 @@
 
 /* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
+    .tasks-header { padding: var(--spacing-2xl) 0 var(--spacing-lg); }
+
     .tasks-grid {
         grid-template-columns: 1fr;
     }

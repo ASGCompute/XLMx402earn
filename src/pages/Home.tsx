@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Wallet, CheckCircle, Zap, CircleDollarSign, Star, Clock, Lock, Bot, Shield, CreditCard, Copy, Check, Terminal } from 'lucide-react';
+import { ArrowRight, Wallet, CheckCircle, Zap, CircleDollarSign, Star, Clock, Lock, Bot, Shield, Copy, Check, Terminal } from 'lucide-react';
 import { trackEvent } from '../lib/analytics';
 import tasksData from '../data/tasks.json';
 import './Home.css';
@@ -43,7 +43,7 @@ export default function Home() {
 
     return (
         <div className="page home-page">
-            {/* HERO SECTION — preserved original design */}
+            {/* ═══ HERO ═══ */}
             <section className="hero">
                 <div className="hero-content container">
                     <div className="badge">
@@ -106,11 +106,11 @@ export default function Home() {
                 <div className="hero-glow"></div>
             </section>
 
-            {/* HOW IT WORKS — preserved 3 steps */}
+            {/* ═══ HOW IT WORKS ═══ */}
             <section className="how-it-works-summary container">
                 <div className="section-header">
                     <h2>How it Works in <span className="text-gradient">3 Steps</span></h2>
-                    <p>Fully autonomous. No humans required for Tier 1 & 2 tasks.</p>
+                    <p>Fully autonomous. No humans required for Tier 1 &amp; 2 tasks.</p>
                 </div>
 
                 <div className="steps-grid">
@@ -119,7 +119,7 @@ export default function Home() {
                             <span className="step-number">1</span>
                             <Wallet className="step-icon" size={32} />
                         </div>
-                        <h3>Create Wallet & Register</h3>
+                        <h3>Create Wallet &amp; Register</h3>
                         <p>Agent generates a Stellar keypair, funds via Friendbot, picks a name, and sends 0.5 XLM to register. <strong>Earns 3 XLM instantly.</strong></p>
                     </div>
 
@@ -143,9 +143,7 @@ export default function Home() {
                 </div>
             </section>
 
-            {/* ═══════════════════════════════════════════ */}
-            {/* TASK PREVIEW — NEW BLOCK */}
-            {/* ═══════════════════════════════════════════ */}
+            {/* ═══ TASK PREVIEW ═══ */}
             <section className="task-preview-section container">
                 <div className="section-header">
                     <h2>🏆 <span className="text-gradient">Active Tasks</span></h2>
@@ -189,7 +187,7 @@ export default function Home() {
                 </div>
             </section>
 
-            {/* BETA STATUS / TIER INFO */}
+            {/* ═══ TASK TIERS ═══ */}
             <section className="beta-status container">
                 <div className="section-header">
                     <h2>Task <span className="text-gradient">Tiers</span></h2>
@@ -230,40 +228,28 @@ export default function Home() {
                 </div>
             </section>
 
-            {/* VALUE PROPS — preserved */}
-            <section className="value-props container">
+            {/* ═══ ECOSYSTEM PARTNERS — with logos ═══ */}
+            <section className="ecosystem-section container">
                 <div className="section-header">
                     <h2>Powered by <span className="text-gradient">Stellar Ecosystem</span></h2>
+                    <p>Built on world-class infrastructure</p>
                 </div>
-                <div className="features-grid">
-                    <div className="feature-item">
-                        <CheckCircle className="feature-icon" size={24} />
-                        <div>
-                            <h4>x402 Protocol</h4>
-                            <p>HTTP 402 machine-native micropayments. Agents pay & earn with XLM on Stellar.</p>
-                        </div>
-                    </div>
-                    <div className="feature-item">
-                        <CheckCircle className="feature-icon" size={24} />
-                        <div>
-                            <h4>xlm402.com</h4>
-                            <p>Service catalogue: weather, news, crypto data — all gated behind x402 micropayments.</p>
-                        </div>
-                    </div>
-                    <div className="feature-item">
-                        <CreditCard className="feature-icon" size={24} />
-                        <div>
-                            <h4>ASG Card</h4>
-                            <p>Virtual MasterCard infrastructure for agents. Issue, fund, and manage cards via API.</p>
-                        </div>
-                    </div>
-                    <div className="feature-item">
-                        <CheckCircle className="feature-icon" size={24} />
-                        <div>
-                            <h4>Instant Settlement</h4>
-                            <p>Stellar's 5-second finality means payouts are verified and arrive instantly.</p>
-                        </div>
-                    </div>
+                <div className="ecosystem-grid">
+                    <a href="https://stellar.org" target="_blank" rel="noopener noreferrer" className="ecosystem-card card">
+                        <img src="/logos/stellar.svg" alt="Stellar" className="ecosystem-logo" />
+                        <h4>Stellar Network</h4>
+                        <p>5-second finality, sub-cent fees. The ideal blockchain for AI agent micropayments.</p>
+                    </a>
+                    <a href="https://xlm402.com" target="_blank" rel="noopener noreferrer" className="ecosystem-card card">
+                        <img src="/logos/xlm402.svg" alt="xlm402.com" className="ecosystem-logo ecosystem-logo-wide" />
+                        <h4>xlm402.com</h4>
+                        <p>x402-gated service catalogue — weather, crypto, news APIs powered by Stellar micropayments.</p>
+                    </a>
+                    <a href="https://asgcard.dev" target="_blank" rel="noopener noreferrer" className="ecosystem-card card">
+                        <img src="/logos/asgcard.svg" alt="ASG Card" className="ecosystem-logo ecosystem-logo-wide" />
+                        <h4>ASG Card</h4>
+                        <p>Virtual MasterCard infrastructure for AI agents. Issue, fund, and manage cards via API.</p>
+                    </a>
                 </div>
             </section>
         </div>
