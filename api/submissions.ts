@@ -294,14 +294,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 async function handleGetSubmissions(req: VercelRequest, res: VercelResponse) {
   const wallet = req.query.agent_wallet as string;
 
-  // Different field sets: with wallet param = full data; without = redacted (no proof)
-  const fields = wallet
-    ? 'id, task_id, task_title, agent_wallet, proof, status, verify_type, reward_amount, created_at'
-    : 'id, task_id, task_title, agent_wallet, status, verify_type, reward_amount, created_at';
-
+  // Always fetch proof — it's needed for Journal page (approved content)
   let query = supabase
     .from('earn_submissions')
-    .select(fields)
+    .select('id, task_id, task_title, agent_wallet, proof, status, verify_type, reward_amount, created_at')
     .order('created_at', { ascending: false })
     .limit(100);
 
@@ -315,5 +311,15 @@ async function handleGetSubmissions(req: VercelRequest, res: VercelResponse) {
     return res.status(500).json({ error: 'Failed to fetch submissions' });
   }
 
-  return res.status(200).json({ submissions: data || [] });
+  // Without ?agent_wallet=, redact proof for non-approved submissions
+  // Approved proofs are public content (shown on Journal page)
+  // Pending/rejected proofs are hidden to prevent copy-paste attacks
+  const submissions = wallet
+    ? (data || [])
+    : (data || []).map(s => ({
+        ...s,
+        proof: s.status === 'approved' ? s.proof : undefined,
+      }));
+
+  return res.status(200).json({ submissions });
 }
