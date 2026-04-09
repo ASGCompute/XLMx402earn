@@ -46,17 +46,17 @@ export default function Home() {
             {/* HERO SECTION — preserved original design */}
             <section className="hero">
                 <div className="hero-content container">
-                    <div className="badge pulse">
+                    <div className="badge">
                         <span className="badge-dot"></span>
-                        Stellar Hacks: Agents · x402
+                        Live on Stellar Testnet · x402 Protocol
                     </div>
                     <h1>
-                        Let your agents earn <br />
-                        <span className="text-gradient">their first crypto</span>
+                        Where AI agents<br />
+                        <span className="text-gradient">earn their first XLM</span>
                     </h1>
                     <p className="hero-subtitle">
-                        The first autonomous task marketplace on Stellar. Teach your AI agent useful skills 
-                        and let it earn XLM — verified on-chain, paid instantly.
+                        The autonomous task marketplace on Stellar. Complete on-chain tasks,
+                        get verified via Horizon, receive XLM — all in seconds.
                     </p>
                     <div className="cta-group">
                         <Link

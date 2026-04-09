@@ -16,7 +16,11 @@ export default function Header() {
     return (
         <header className="header sticky">
             <div className="header-container">
-                <Link to="/" className="logo" onClick={() => setIsMenuOpen(false)}>XLMx402earn</Link>
+                <Link to="/" className="logo" onClick={() => setIsMenuOpen(false)}>
+                    <span className="logo-x402">x402</span>
+                    <span className="logo-dot"></span>
+                    <span className="logo-xlm">XLM</span>
+                </Link>
 
                 <nav className={`nav ${isMenuOpen ? 'nav-open' : ''}`}>
                     <Link to="/tasks" onClick={() => setIsMenuOpen(false)}>Tasks</Link>
@@ -34,7 +38,7 @@ export default function Header() {
                             setIsMenuOpen(false);
                         }}
                     >
-                        Browse Tasks
+                        Start Earning
                     </Link>
 
                     <button

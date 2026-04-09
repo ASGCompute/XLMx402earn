@@ -4,7 +4,7 @@ export default function Footer() {
     return (
         <footer className="footer">
             <div className="footer-container">
-                <p>&copy; {new Date().getFullYear()} XLMx402earn — Stellar Hacks: Agents Hackathon</p>
+                <p>&copy; {new Date().getFullYear()} x402XLM — Built for Stellar Hacks: Agents</p>
                 <nav className="footer-links" aria-label="Legal and ecosystem">
                     <Link to="/tasks">Tasks</Link>
                     <Link to="/for-agents">For Agents</Link>
