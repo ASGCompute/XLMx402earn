@@ -499,57 +499,33 @@
     padding: var(--spacing-3xl) 0;
 }
 
-.ecosystem-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: var(--spacing-lg);
-}
-
-.ecosystem-card {
-    text-decoration: none;
-    color: inherit;
+.partner-row {
     display: flex;
-    flex-direction: column;
     align-items: center;
-    text-align: center;
-    padding: var(--spacing-xl) var(--spacing-lg);
-    transition: all var(--transition-normal);
+    justify-content: center;
+    gap: 3rem;
+    flex-wrap: wrap;
+    padding: 2rem 0;
 }
 
-.ecosystem-card:hover {
-    border-color: rgba(99, 102, 241, 0.3);
-    transform: translateY(-4px);
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3), 0 0 20px rgba(99, 102, 241, 0.08);
+.partner-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.5;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    text-decoration: none;
 }
 
-.ecosystem-logo {
-    height: 56px;
+.partner-logo:hover {
+    opacity: 1;
+    transform: scale(1.08);
+}
+
+.partner-logo img {
+    height: 28px;
     width: auto;
-    margin-bottom: var(--spacing-lg);
-    filter: drop-shadow(0 0 12px rgba(99, 102, 241, 0.15));
-    transition: filter var(--transition-normal);
-}
-
-.ecosystem-logo-wide {
-    height: 40px;
-}
-
-.ecosystem-card:hover .ecosystem-logo {
-    filter: drop-shadow(0 0 20px rgba(99, 102, 241, 0.3));
-}
-
-.ecosystem-card h4 {
-    font-family: var(--font-display);
-    font-size: 1.15rem;
-    font-weight: 700;
-    margin-bottom: 0.4rem;
-    color: var(--color-text-primary);
-}
-
-.ecosystem-card p {
-    color: var(--color-text-secondary);
-    font-size: 0.88rem;
-    line-height: 1.6;
+    object-fit: contain;
 }
 
 /* ═══ RESPONSIVE ═══ */
@@ -561,5 +537,6 @@
     .beta-grid { grid-template-columns: 1fr; }
     .sla-bar { flex-direction: column; gap: var(--spacing-sm); }
     .task-preview-grid { grid-template-columns: 1fr; }
-    .ecosystem-grid { grid-template-columns: 1fr; }
+    .partner-row { gap: 2rem; }
+    .partner-logo img { height: 22px; }
 }

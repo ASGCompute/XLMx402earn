@@ -228,37 +228,27 @@ export default function Home() {
                 </div>
             </section>
 
-            {/* ═══ ECOSYSTEM PARTNERS — with logos ═══ */}
+            {/* ═══ ECOSYSTEM PARTNERS — clean logo row ═══ */}
             <section className="ecosystem-section container">
                 <div className="section-header">
                     <h2>Powered by <span className="text-gradient">Stellar Ecosystem</span></h2>
                     <p>Built on world-class infrastructure</p>
                 </div>
-                <div className="ecosystem-grid">
-                    <a href="https://stellar.org" target="_blank" rel="noopener noreferrer" className="ecosystem-card card">
-                        <img src="/logos/stellar.svg" alt="Stellar" className="ecosystem-logo" />
-                        <h4>Stellar Network</h4>
-                        <p>5-second finality, sub-cent fees. The ideal blockchain for AI agent micropayments.</p>
+                <div className="partner-row">
+                    <a href="https://stellar.org" target="_blank" rel="noopener noreferrer" className="partner-logo" title="Stellar Network">
+                        <img src="/logos/stellar.svg" alt="Stellar" />
                     </a>
-                    <a href="https://xlm402.com" target="_blank" rel="noopener noreferrer" className="ecosystem-card card">
-                        <img src="/logos/xlm402.svg" alt="xlm402.com" className="ecosystem-logo ecosystem-logo-wide" />
-                        <h4>xlm402.com</h4>
-                        <p>x402-gated service catalogue — weather, crypto, news APIs powered by Stellar micropayments.</p>
+                    <a href="https://xlm402.com" target="_blank" rel="noopener noreferrer" className="partner-logo" title="xlm402.com">
+                        <img src="/logos/xlm402.svg" alt="xlm402.com" />
                     </a>
-                    <a href="https://asgcard.dev" target="_blank" rel="noopener noreferrer" className="ecosystem-card card">
-                        <img src="/logos/asgcard.svg" alt="ASG Card" className="ecosystem-logo ecosystem-logo-wide" />
-                        <h4>ASG Card</h4>
-                        <p>Virtual MasterCard infrastructure for AI agents. Issue, fund, and manage cards via API.</p>
+                    <a href="https://asgcard.dev" target="_blank" rel="noopener noreferrer" className="partner-logo" title="ASG Card">
+                        <img src="/logos/asgcard.svg" alt="ASG Card" />
                     </a>
-                    <a href="https://stripe.com/payments/machine" target="_blank" rel="noopener noreferrer" className="ecosystem-card card">
-                        <img src="/logos/stripe.svg" alt="Stripe" className="ecosystem-logo ecosystem-logo-wide" />
-                        <h4>Stripe MPP</h4>
-                        <p>Machine Payments Protocol — open standard for agent-to-agent payments via Stripe PaymentIntents.</p>
+                    <a href="https://stripe.com/payments/machine" target="_blank" rel="noopener noreferrer" className="partner-logo" title="Stripe MPP">
+                        <img src="/logos/stripe.svg" alt="Stripe" />
                     </a>
-                    <a href="https://pay.asgcard.dev" target="_blank" rel="noopener noreferrer" className="ecosystem-card card">
-                        <img src="/logos/asgpay.svg" alt="ASG Pay" className="ecosystem-logo ecosystem-logo-wide" />
-                        <h4>ASG Pay</h4>
-                        <p>The Agent Bank — mainnet wallet sponsorship, virtual cards, and USDC funding for AI agents.</p>
+                    <a href="https://pay.asgcard.dev" target="_blank" rel="noopener noreferrer" className="partner-logo" title="ASG Pay">
+                        <img src="/logos/asgpay.svg" alt="ASG Pay" />
                     </a>
                 </div>
             </section>
