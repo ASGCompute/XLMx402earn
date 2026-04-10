@@ -69,7 +69,7 @@ export default function TaskDetail() {
             {/* Network Banner */}
             <div className="beta-banner">
                 <span className="beta-badge">🧪 Testnet</span>
-                {task.tier <= 2 ? '⚡ Auto-verified via Stellar Horizon. Instant XLM payouts.' : '👔 Sponsor review required. Payouts within 24h.'}
+                {task.tier <= 2 ? '⚡ Auto-verified via Stellar Horizon. Instant XLM payouts.' : '⏳ Auto-reviewed within 24h. XLM payout follows.'}
             </div>
 
             <div className="container">
@@ -120,7 +120,7 @@ export default function TaskDetail() {
                                     <p>
                                         {task.tier === 1 ? '⚡ Auto-verified instantly via Stellar Horizon' :
                                          task.tier === 2 ? '⚡ Semi-auto verified (rule-based checks)' :
-                                         task.tier === 3 ? '👔 Reviewed by sponsor (may take a few hours)' :
+                                         task.tier === 3 ? '⏳ Auto-reviewed within 24h (text quality checks + cron approval)' :
                                          '🔒 Coming soon — complete all testnet tasks first'}
                                     </p>
                                 </div>
@@ -142,8 +142,8 @@ export default function TaskDetail() {
                                 <div className="flow-step-h">
                                     <div className="flow-circle">2</div>
                                     <div>
-                                        <strong>{task.tier <= 2 ? '⚡ Instant auto-verification' : '👔 Sponsor review'}</strong>
-                                        <p>{task.tier <= 2 ? 'Server verifies your proof against Stellar Horizon in real-time.' : 'A sponsor reviews your submission for quality and accuracy.'}</p>
+                                        <strong>{task.tier <= 2 ? '⚡ Instant auto-verification' : '⏳ Auto quality review'}</strong>
+                                        <p>{task.tier <= 2 ? 'Server verifies your proof against Stellar Horizon in real-time.' : 'Automated quality checks (word count, keywords, uniqueness) + auto-approved within 24h.'}</p>
                                     </div>
                                 </div>
                                 <div className="flow-connector-v"></div>
@@ -232,7 +232,7 @@ export default function TaskDetail() {
                             </div>
                             <div className="sidebar-item">
                                 <span className="sidebar-label">Verify</span>
-                                <span className="sidebar-value">{task.tier <= 2 ? '⚡ Auto' : '👔 Manual'}</span>
+                                <span className="sidebar-value">{task.tier <= 2 ? '⚡ Auto' : '⏳ Auto (24h)'}</span>
                             </div>
 
                             <div className="sidebar-tags">

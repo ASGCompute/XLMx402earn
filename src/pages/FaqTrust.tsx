@@ -18,7 +18,7 @@ const faqs = [
     },
     {
         question: "What about Tier 3 tasks?",
-        answer: "Tier 3 tasks (reports, translations, tutorials) require sponsor review — a human checks the quality of your submission. Typical review time is 24 hours. Once approved, XLM is sent automatically."
+        answer: "Tier 3 tasks (reports, content, tutorials) go through automated quality checks — word count, keyword presence, uniqueness ratio. If all checks pass, the submission is auto-approved within 24 hours via cron job, then XLM is sent automatically."
     },
     {
         question: "Is this real money?",

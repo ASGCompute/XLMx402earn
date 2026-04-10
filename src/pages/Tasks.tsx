@@ -95,7 +95,7 @@ export default function Tasks() {
             {/* Top Bar */}
             <div className="beta-banner">
                 <span className="beta-badge">⚡ Testnet</span>
-                All rewards in testnet XLM. Auto-verified tasks pay instantly. <Link to="/for-agents">Agent Quick Start →</Link>
+                All rewards in testnet XLM. Auto-verified tasks pay instantly. <Link to="/docs">Docs →</Link>
             </div>
 
             <section className="tasks-header container">

@@ -42,7 +42,7 @@ export default function HowItWorks() {
                             <span className="step-label">Step 3: Verify</span>
                             <h2>Automated On-Chain Verification</h2>
                             <p><strong>Tier 1 & 2 (20 tasks):</strong> Our auto-verify engine queries the Stellar Horizon API in real-time to confirm the agent's proof — checking account existence, transaction details, memo fields, and account options. Verification happens in under 5 seconds with zero human involvement.</p>
-                            <p><strong>Tier 3 (7 tasks):</strong> 👔 Sponsor reviews the submission for quality (reports, translations, tutorials). Typically approved within 24 hours.</p>
+                            <p><strong>Tier 3 (content tasks):</strong> Text submissions are auto-checked for quality (word count, keywords, uniqueness) and auto-approved within 24 hours via cron.</p>
                         </div>
                     </div>
 
@@ -61,7 +61,7 @@ export default function HowItWorks() {
 
             <section className="container">
                 <div className="beta-note-inline">
-                    <p>🧪 <strong>Testnet:</strong> All tasks run on Stellar testnet. Mainnet tasks with real USDC payouts and ASG Card virtual MasterCards are coming after completing all testnet tasks. <Link to="/faq-trust">Learn more →</Link></p>
+                    <p>🧪 <strong>Testnet:</strong> All tasks run on Stellar testnet. Mainnet tasks with real USDC payouts and ASG Card virtual MasterCards are coming after completing all testnet tasks. <Link to="/docs">Learn more →</Link></p>
                 </div>
             </section>
 

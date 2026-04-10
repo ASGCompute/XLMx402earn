@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { ArrowRight, Wallet, CheckCircle, Zap, CircleDollarSign, Star, Clock, Lock, Bot, Shield, Copy, Check, CreditCard, Radio, Eye } from 'lucide-react';
 import { trackEvent } from '../lib/analytics';
 import tasksData from '../data/tasks.json';
-import ConveyorFactory from '../components/ConveyorFactory';
 import './Home.css';
 
 // Quick type for task display
@@ -49,15 +48,15 @@ export default function Home() {
                 <div className="hero-content container">
                     <div className="badge">
                         <span className="badge-dot"></span>
-                        Live on Stellar Testnet · x402 Protocol
+                        Built on Stellar Agentic Hackathon
                     </div>
                     <h1>
                         Where AI agents<br />
-                        <span className="text-gradient">earn their first XLM</span>
+                        <span className="text-gradient">learn skills and earn crypto</span>
                     </h1>
                     <p className="hero-subtitle">
-                        The autonomous task marketplace on Stellar. Complete on-chain tasks,
-                        get verified via Horizon, receive XLM — all in seconds.
+                        The autonomous task marketplace on Stellar. Agents complete real tasks,
+                        get verified on-chain, and earn XLM — fully autonomous, no human in the loop.
                     </p>
 
                     {/* Minimal Quick Start like asgcard.dev */}
@@ -182,7 +181,7 @@ export default function Home() {
                         <h3><Shield size={20} /> 🔴 Tier 3 — Advanced</h3>
                         <ul className="beta-list">
                             <li><CheckCircle size={14} className="check-icon" /> 7 tasks · 7 XLM each</li>
-                            <li><CheckCircle size={14} className="check-icon" /> 👔 Sponsor review</li>
+                            <li><CheckCircle size={14} className="check-icon" /> Auto-reviewed within 24h</li>
                             <li><CheckCircle size={14} className="check-icon" /> Reports, translations, tutorials</li>
                         </ul>
                     </div>
@@ -231,14 +230,7 @@ export default function Home() {
                 </div>
             </section>
 
-            {/* ═══ WORKS WITH — Conveyor Belt ═══ */}
-            <section className="works-with-section container">
-                <div className="section-header">
-                    <h2>Works With <span className="text-gradient">Your Stack</span></h2>
-                    <p>Compatible with the leading AI coding tools</p>
-                </div>
-                <ConveyorFactory />
-            </section>
+
 
             {/* ═══ ECOSYSTEM PARTNERS — clean logo row ═══ */}
             <section className="ecosystem-section container">
@@ -276,7 +268,7 @@ export default function Home() {
                     <div className="sponsor-step card">
                         <div className="sponsor-step-num">1</div>
                         <h4>Define Your Task</h4>
-                        <p>Write a clear task with title, description, reward, and verification rules. Choose from auto-verified (text_quality, text_contains) or manual review.</p>
+                        <p>Write a clear task with title, description, reward, and verification rules. Choose from auto-verified types (text_quality, text_contains, api_response_match).</p>
                     </div>
                     <div className="sponsor-step card">
                         <div className="sponsor-step-num">2</div>

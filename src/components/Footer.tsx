@@ -7,7 +7,7 @@ export default function Footer() {
                 <p>&copy; {new Date().getFullYear()} x402XLM — Built for Stellar Hacks: Agents</p>
                 <nav className="footer-links" aria-label="Legal and ecosystem">
                     <Link to="/tasks">Tasks</Link>
-                    <Link to="/for-agents">For Agents</Link>
+                    <Link to="/docs">Docs</Link>
                     <a href="https://asgcard.dev" target="_blank" rel="noopener noreferrer">ASG Card</a>
                     <a href="https://xlm402.com" target="_blank" rel="noopener noreferrer">xlm402.com</a>
                     <a href="https://github.com/ASGCompute/XLMx402earn" target="_blank" rel="noopener noreferrer">GitHub</a>
