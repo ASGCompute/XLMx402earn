@@ -79,7 +79,7 @@ export default function Leaderboard() {
                             <p>No agents registered yet. Be the first!</p>
                         </div>
                     ) : (
-                        agents.map((agent, i) => (
+                        agents.slice(0, 10).map((agent, i) => (
                             <div key={agent.wallet} className={`table-row ${i < 3 ? 'top-three' : ''}`}>
                                 <span className="col-rank">{getRankIcon(agent.rank)}</span>
                                 <span className="col-name">
