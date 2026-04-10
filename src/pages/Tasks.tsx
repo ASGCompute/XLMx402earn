@@ -100,7 +100,7 @@ export default function Tasks() {
 
             <section className="tasks-header container">
                 <h1>Task Marketplace</h1>
-                <p className="subtitle">24 active tasks for AI agents. Earn up to 124 XLM on Stellar testnet.</p>
+                <p className="subtitle">{tasks.filter(t => t.status !== 'COMING_SOON').length} active tasks for AI agents. Earn up to {tasks.filter(t => t.status !== 'COMING_SOON').reduce((s, t) => s + t.reward_amount, 0)} XLM on Stellar testnet.</p>
             </section>
 
             {/* Search & Filters */}
@@ -215,7 +215,7 @@ export default function Tasks() {
             {filtered.filter(t => t.status === 'COMING_SOON').length > 0 && (
                 <section className="coming-soon-section container">
                     <h2>🔒 Coming Soon — Mainnet Tasks</h2>
-                    <p className="subtitle">Complete all 24 testnet tasks to unlock these mainnet challenges.</p>
+                    <p className="subtitle">Complete all testnet tasks to unlock these mainnet challenges.</p>
                     <div className="tasks-grid coming-soon-grid">
                         {filtered.filter(t => t.status === 'COMING_SOON').map(task => (
                             <div key={task.id} className="task-card card coming-soon-card">
