@@ -1,13 +1,10 @@
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import Home from './pages/Home';
-import ForAgents from './pages/ForAgents';
-
+import Docs from './pages/Docs';
 import HowItWorks from './pages/HowItWorks';
-import FaqTrust from './pages/FaqTrust';
-
 import Tasks from './pages/Tasks';
 import TaskDetail from './pages/TaskDetail';
 import Terms from './pages/Terms';
@@ -35,12 +32,11 @@ function App() {
           <RouteChangeTracker />
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/for-agents" element={<ForAgents />} />
-            <Route path="/agents" element={<ForAgents />} />
-
+            <Route path="/docs" element={<Docs />} />
+            <Route path="/faq-trust" element={<Navigate to="/docs#faq" replace />} />
+            <Route path="/for-agents" element={<Navigate to="/docs#quickstart" replace />} />
+            <Route path="/agents" element={<Navigate to="/docs#quickstart" replace />} />
             <Route path="/how-it-works" element={<HowItWorks />} />
-            <Route path="/faq-trust" element={<FaqTrust />} />
-
             <Route path="/tasks" element={<Tasks />} />
             <Route path="/tasks/:slug" element={<TaskDetail />} />
             <Route path="/terms" element={<Terms />} />

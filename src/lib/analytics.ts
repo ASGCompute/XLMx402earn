@@ -18,17 +18,14 @@ if (MIXPANEL_TOKEN) {
 export interface AnalyticsEventMap {
     'page_view': { path: string; title: string };
     'header_cta_click': { from_path: string };
-    'page_cta_click': { cta_id: string; target: 'agent' | 'sponsor' };
-    'waitlist_tab_switch': { to: 'agent' | 'sponsor' };
-    'waitlist_submit_attempt': { type: 'agent' | 'sponsor' };
-    'waitlist_submit_success': { type: 'agent' | 'sponsor' };
-    'waitlist_submit_error': { type: 'agent' | 'sponsor'; error: string };
+    'page_cta_click': { cta_id: string; target?: string };
+    'docs_nav_click': { section: string };
     'mobile_menu_toggle': { action: 'open' | 'close' };
-    // Phase 8A: Tasks & Submissions
+    // Tasks & Submissions
     'tasks_list_view': { total_tasks: number; filters_active: boolean };
     'task_detail_view': { task_id: string; task_slug: string };
     'task_filter_change': { filter_type: string; value: string };
-    'task_cta_click': { task_id: string; cta_type: 'submit_proof' | 'join_waitlist' | 'browse_tasks' };
+    'task_cta_click': { task_id: string; cta_type: 'submit_proof' | 'browse_tasks' };
     'submission_submit_attempt': { task_id: string };
     'submission_submit_success': { task_id: string };
     'submission_submit_error': { task_id: string; error: string };

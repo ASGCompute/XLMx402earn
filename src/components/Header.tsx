@@ -26,8 +26,7 @@ export default function Header() {
                     <Link to="/tasks" onClick={() => setIsMenuOpen(false)}>Tasks</Link>
                     <Link to="/leaderboard" onClick={() => setIsMenuOpen(false)}>Leaderboard</Link>
                     <Link to="/journal" onClick={() => setIsMenuOpen(false)}>Journal</Link>
-                    <Link to="/for-agents" onClick={() => setIsMenuOpen(false)}>For Agents</Link>
-                    <Link to="/faq-trust" onClick={() => setIsMenuOpen(false)}>FAQ</Link>
+                    <Link to="/docs" onClick={() => setIsMenuOpen(false)}>Docs</Link>
                 </nav>
 
                 <div className="header-actions">
