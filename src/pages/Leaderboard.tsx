@@ -75,7 +75,16 @@ export default function Leaderboard() {
                     </div>
 
                     {loading ? (
-                        <div className="loading-state">Loading agents...</div>
+                        <div className="skeleton-loader">
+                            {[...Array(8)].map((_, i) => (
+                                <div key={i} className="skeleton-row" style={{ animationDelay: `${i * 0.08}s` }}>
+                                    <span className="skeleton-cell skeleton-rank"><span className="shimmer" /></span>
+                                    <span className="skeleton-cell skeleton-name"><span className="shimmer" /><span className="shimmer shimmer-sm" /></span>
+                                    <span className="skeleton-cell skeleton-tasks"><span className="shimmer" /></span>
+                                    <span className="skeleton-cell skeleton-earned"><span className="shimmer" /></span>
+                                </div>
+                            ))}
+                        </div>
                     ) : agents.length === 0 ? (
                         <div className="empty-state">
                             <p>No agents registered yet. Be the first!</p>
