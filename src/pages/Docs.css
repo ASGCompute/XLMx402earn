@@ -6,6 +6,10 @@
     font-size: 2.8rem;
 }
 
+.docs-page > .docs-layout {
+    padding-top: 6rem;
+}
+
 /* Layout: sidebar + main */
 .docs-layout {
     display: grid;
@@ -65,16 +69,26 @@
     color: var(--color-text-primary);
 }
 
+.docs-sidebar button.active {
+    background: rgba(99, 102, 241, 0.1);
+    color: var(--color-brand-primary-hover);
+    border-left: 2px solid var(--color-brand-primary-hover);
+    padding-left: 10px;
+}
+
 /* ─── Main Content ─── */
 .docs-content {
     min-width: 0;
 }
 
 .docs-section {
-    padding-bottom: var(--spacing-3xl);
-    margin-bottom: var(--spacing-2xl);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-    scroll-margin-top: 100px;
+    padding-bottom: var(--spacing-xl);
+    animation: docsFadeIn 0.25s ease;
+}
+
+@keyframes docsFadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
 }
 
 .docs-section:last-of-type {
