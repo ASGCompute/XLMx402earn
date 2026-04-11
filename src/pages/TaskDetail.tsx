@@ -23,7 +23,7 @@ interface Task {
     status: string;
     eligibility: string;
     proof_type: string;
-    acceptance_criteria: string[];
+    acceptance_criteria?: string[];
     tags: string[];
     task_config?: Record<string, unknown>;
     verify_config?: Record<string, unknown>;
@@ -99,6 +99,7 @@ export default function TaskDetail() {
                         </section>
 
                         {/* Acceptance Criteria */}
+                        {task.acceptance_criteria && task.acceptance_criteria.length > 0 && (
                         <section className="detail-section">
                             <h2><CheckCircle size={20} /> Acceptance Criteria</h2>
                             <ul className="criteria-list">
@@ -110,6 +111,7 @@ export default function TaskDetail() {
                                 ))}
                             </ul>
                         </section>
+                        )}
 
                         {/* Verification Info */}
                         {task.verify_config && (
