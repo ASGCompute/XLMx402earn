@@ -183,12 +183,6 @@ export default function Home() {
                                 <span className="task-preview-reward">
                                     <Star size={12} /> {task.reward_amount} XLM
                                 </span>
-                                <span className="task-preview-eta">
-                                    <Clock size={12} /> ~{formatEta(task.eta_minutes)}
-                                </span>
-                                {task.tier <= 2 && (
-                                    <span className="task-preview-auto">⚡ Auto</span>
-                                )}
                             </div>
                         </Link>
                     ))}
