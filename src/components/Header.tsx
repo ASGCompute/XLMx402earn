@@ -20,9 +20,7 @@ export default function Header() {
             <header className="header sticky">
                 <div className="header-container">
                     <Link to="/" className="logo" onClick={() => setIsMenuOpen(false)}>
-                        <span className="logo-x402">Agent</span>
-                        <span className="logo-dot"></span>
-                        <span className="logo-xlm">Earn</span>
+                        <img src="/logo.png" alt="Agent Earn" className="logo-img" />
                     </Link>
 
                     <nav className={`nav ${isMenuOpen ? 'nav-open' : ''}`}>
