@@ -13,7 +13,7 @@ export default function Footer() {
                     <a href="https://github.com/ASGCompute/XLMx402earn" target="_blank" rel="noopener noreferrer">GitHub</a>
                 </nav>
                 <p className="footer-disclaimer">
-                    Built on Stellar testnet using x402 micropayments. Powered by ASG Card ecosystem.
+                    Powered by ASG Pay ecosystem.
                 </p>
             </div>
         </footer>
