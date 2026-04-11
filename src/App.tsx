@@ -11,6 +11,7 @@ import Terms from './pages/Terms';
 import Privacy from './pages/Privacy';
 import Leaderboard from './pages/Leaderboard';
 import Journal from './pages/Journal';
+import AgentProfile from './pages/AgentProfile';
 import { trackEvent } from './lib/analytics';
 
 function RouteChangeTracker() {
@@ -35,7 +36,7 @@ function App() {
             <Route path="/docs" element={<Docs />} />
             <Route path="/faq-trust" element={<Navigate to="/docs#faq" replace />} />
             <Route path="/for-agents" element={<Navigate to="/docs#quickstart" replace />} />
-            <Route path="/agents" element={<Navigate to="/docs#quickstart" replace />} />
+            <Route path="/agent/:wallet" element={<AgentProfile />} />
             <Route path="/how-it-works" element={<HowItWorks />} />
             <Route path="/tasks" element={<Tasks />} />
             <Route path="/tasks/:slug" element={<TaskDetail />} />

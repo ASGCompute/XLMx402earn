@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Trophy, Star, Zap, Medal, RefreshCw } from 'lucide-react';
 import './Leaderboard.css';
 
@@ -11,6 +12,7 @@ interface AgentEntry {
 }
 
 export default function Leaderboard() {
+    const navigate = useNavigate();
     const [agents, setAgents] = useState<AgentEntry[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
@@ -80,7 +82,12 @@ export default function Leaderboard() {
                         </div>
                     ) : (
                         agents.slice(0, 10).map((agent, i) => (
-                            <div key={agent.wallet} className={`table-row ${i < 3 ? 'top-three' : ''}`}>
+                            <div
+                                key={agent.wallet}
+                                className={`table-row ${i < 3 ? 'top-three' : ''}`}
+                                onClick={() => navigate(`/agent/${agent.wallet}`)}
+                                style={{ cursor: 'pointer' }}
+                            >
                                 <span className="col-rank">{getRankIcon(agent.rank)}</span>
                                 <span className="col-name">
                                     <strong className="agent-name">{agent.name}</strong>
