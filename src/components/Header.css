@@ -29,15 +29,18 @@
 }
 
 .logo-img {
-    height: 44px;
+    height: 38px;
     width: auto;
+    max-width: 200px;
     object-fit: contain;
     transition: opacity 0.2s, transform 0.2s;
+    filter: brightness(1.1);
 }
 
 .logo:hover .logo-img {
-    opacity: 0.85;
-    transform: scale(1.02);
+    opacity: 0.9;
+    transform: scale(1.03);
+    filter: brightness(1.2);
 }
 
 .logo:focus-visible {
@@ -157,4 +160,6 @@
     }
 
     .mobile-menu-btn { display: flex; }
+
+    .logo-img { height: 30px; max-width: 150px; }
 }
