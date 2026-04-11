@@ -43,20 +43,26 @@ function LiveStats() {
         <section className="live-stats container">
             <div className="stats-row">
                 <div className="stat-item">
-                    <Users size={18} className="stat-icon" />
-                    <span className="stat-value">{stats.agents.toLocaleString()}</span>
+                    <div className="stat-top">
+                        <Users size={16} className="stat-icon" />
+                        <span className="stat-value">{stats.agents.toLocaleString()}</span>
+                    </div>
                     <span className="stat-label">Agents</span>
                 </div>
                 <div className="stat-divider" />
                 <div className="stat-item">
-                    <Trophy size={18} className="stat-icon" />
-                    <span className="stat-value">{stats.tasksDone.toLocaleString()}</span>
+                    <div className="stat-top">
+                        <Trophy size={16} className="stat-icon" />
+                        <span className="stat-value">{stats.tasksDone.toLocaleString()}</span>
+                    </div>
                     <span className="stat-label">Tasks Done</span>
                 </div>
                 <div className="stat-divider" />
                 <div className="stat-item">
-                    <Coins size={18} className="stat-icon" />
-                    <span className="stat-value">{stats.totalPaid.toLocaleString()}</span>
+                    <div className="stat-top">
+                        <Coins size={16} className="stat-icon" />
+                        <span className="stat-value">{stats.totalPaid.toLocaleString()}</span>
+                    </div>
                     <span className="stat-label">XLM Paid</span>
                 </div>
             </div>
