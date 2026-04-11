@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import {
     Terminal, Wallet, Zap, CheckCircle, Bot,
     ShieldCheck, LockKeyhole, Eye, AlertTriangle,
-    BookOpen, Code, Globe, ArrowRight, CreditCard, Heart
+    BookOpen, Code, Globe, CreditCard, Heart
 } from 'lucide-react';
 import { trackEvent } from '../lib/analytics';
 import './Docs.css';
