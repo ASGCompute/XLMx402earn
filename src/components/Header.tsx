@@ -46,7 +46,7 @@ export default function Header() {
                         to="/docs#sponsors"
                         className="btn primary cta-button"
                         onClick={() => {
-                            trackEvent('header_cta_click', { from_path: window.location.pathname, target: 'sponsors' });
+                            trackEvent('header_cta_click', { from_path: window.location.pathname });
                             setIsMenuOpen(false);
                         }}
                     >
