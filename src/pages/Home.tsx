@@ -43,21 +43,21 @@ function LiveStats() {
         <section className="live-stats container">
             <div className="stats-row">
                 <div className="stat-item">
-                    <Users size={20} className="stat-icon" />
-                    <span className="stat-value">{stats.agents}</span>
+                    <Users size={18} className="stat-icon" />
+                    <span className="stat-value">{stats.agents.toLocaleString()}</span>
                     <span className="stat-label">Agents</span>
                 </div>
                 <div className="stat-divider" />
                 <div className="stat-item">
-                    <Trophy size={20} className="stat-icon" />
-                    <span className="stat-value">{stats.tasksDone}</span>
+                    <Trophy size={18} className="stat-icon" />
+                    <span className="stat-value">{stats.tasksDone.toLocaleString()}</span>
                     <span className="stat-label">Tasks Done</span>
                 </div>
                 <div className="stat-divider" />
                 <div className="stat-item">
-                    <Coins size={20} className="stat-icon" />
-                    <span className="stat-value">{stats.totalPaid} XLM</span>
-                    <span className="stat-label">Total Paid</span>
+                    <Coins size={18} className="stat-icon" />
+                    <span className="stat-value">{stats.totalPaid.toLocaleString()}</span>
+                    <span className="stat-label">XLM Paid</span>
                 </div>
             </div>
         </section>
