@@ -190,14 +190,73 @@
 
 /* RESPONSIVE */
 @media (max-width: 768px) {
+    .leaderboard-page .leaderboard-header {
+        padding: var(--spacing-xl) 0 var(--spacing-md);
+    }
+
+    .leaderboard-page .leaderboard-header h1 {
+        font-size: 1.6rem;
+    }
+
+    .leaderboard-page .subtitle {
+        font-size: 0.9rem;
+    }
+
+    .demo-notice {
+        font-size: 0.75rem;
+        padding: var(--spacing-xs) var(--spacing-sm);
+    }
+
+    .leaderboard-table {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
     .table-header,
     .table-row {
-        grid-template-columns: 40px 1fr 70px 90px;
-        padding: var(--spacing-sm) var(--spacing-md);
+        grid-template-columns: 36px 1fr 60px 75px;
+        padding: var(--spacing-xs) var(--spacing-sm);
+        gap: 4px;
+        min-width: 0;
+    }
+
+    .agent-name {
+        font-size: 0.8rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        max-width: 120px;
+    }
+
+    .agent-wallet {
+        display: none;
+    }
+
+    .col-tasks,
+    .col-earned {
+        font-size: 0.75rem;
+    }
+
+    .rank-number {
+        font-size: 0.8rem;
+    }
+
+    .table-header {
+        font-size: 0.6rem;
     }
 
     .leaderboard-stats {
-        flex-direction: column;
+        flex-direction: row;
         gap: var(--spacing-md);
+        padding: var(--spacing-md);
+        max-width: 100%;
+    }
+
+    .lb-stat-value {
+        font-size: 1.1rem;
+    }
+
+    .lb-stat-label {
+        font-size: 0.6rem;
     }
 }
