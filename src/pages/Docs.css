@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════
-   Docs Page — Full Documentation Layout
+   Docs Page — Premium Documentation Layout
    ═══════════════════════════════════════════════ */
 
 .docs-page .page-header h1 {
@@ -7,14 +7,16 @@
 }
 
 .docs-page > .docs-layout {
-    padding-top: 6rem;
+    padding-top: 5rem;
+    padding-bottom: 4rem;
+    min-height: 100vh;
 }
 
 /* Layout: sidebar + main */
 .docs-layout {
     display: grid;
-    grid-template-columns: 220px 1fr;
-    gap: var(--spacing-2xl);
+    grid-template-columns: 240px 1fr;
+    gap: 3rem;
     margin-top: var(--spacing-xl);
     align-items: flex-start;
 }
@@ -26,16 +28,23 @@
 
 .sidebar-sticky {
     position: sticky;
-    top: 90px;
+    top: 80px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 14px;
+    padding: 1.25rem 0.75rem;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
 }
 
 .docs-sidebar h4 {
-    font-size: 0.75rem;
+    font-size: 0.65rem;
     text-transform: uppercase;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.14em;
     color: var(--color-text-muted);
-    margin-bottom: var(--spacing-sm);
-    padding-left: var(--spacing-sm);
+    margin-bottom: 0.75rem;
+    padding-left: 0.75rem;
+    font-weight: 600;
 }
 
 .docs-sidebar ul {
@@ -51,29 +60,40 @@
     width: 100%;
     display: flex;
     align-items: center;
-    gap: var(--spacing-xs);
-    padding: 10px 12px;
+    gap: 0.5rem;
+    padding: 0.55rem 0.75rem;
     border: none;
     background: transparent;
-    color: var(--color-text-secondary);
+    color: var(--color-text-muted);
     font-family: inherit;
-    font-size: 0.9rem;
-    border-radius: var(--radius-md);
+    font-size: 0.82rem;
+    border-radius: 8px;
     cursor: pointer;
-    transition: all var(--transition-fast);
+    transition: all 0.15s ease;
     text-align: left;
+    border-left: 2px solid transparent;
 }
 
 .docs-sidebar button:hover {
-    background: rgba(255, 255, 255, 0.06);
+    background: rgba(255, 255, 255, 0.04);
     color: var(--color-text-primary);
 }
 
 .docs-sidebar button.active {
-    background: rgba(99, 102, 241, 0.1);
-    color: var(--color-brand-primary-hover);
-    border-left: 2px solid var(--color-brand-primary-hover);
-    padding-left: 10px;
+    background: rgba(99, 102, 241, 0.08);
+    color: #a5b4fc;
+    border-left-color: #818cf8;
+    font-weight: 600;
+}
+
+.docs-sidebar button svg {
+    opacity: 0.6;
+    flex-shrink: 0;
+}
+
+.docs-sidebar button.active svg {
+    opacity: 1;
+    color: #818cf8;
 }
 
 /* ─── Main Content ─── */
@@ -83,11 +103,11 @@
 
 .docs-section {
     padding-bottom: var(--spacing-xl);
-    animation: docsFadeIn 0.25s ease;
+    animation: docsFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @keyframes docsFadeIn {
-    from { opacity: 0; transform: translateY(8px); }
+    from { opacity: 0; transform: translateY(12px); }
     to   { opacity: 1; transform: translateY(0); }
 }
 
@@ -96,19 +116,26 @@
 }
 
 .docs-section h2 {
-    font-size: 1.8rem;
+    font-size: 1.6rem;
     display: flex;
     align-items: center;
-    gap: var(--spacing-sm);
-    margin-bottom: var(--spacing-md);
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.docs-section h2 svg {
+    color: #818cf8;
+    opacity: 0.8;
 }
 
 .docs-intro {
     color: var(--color-text-secondary);
-    font-size: 1.05rem;
+    font-size: 0.95rem;
     line-height: 1.7;
     margin-bottom: var(--spacing-xl);
-    max-width: 700px;
+    max-width: 640px;
 }
 
 /* ─── Code Block ─── */
@@ -130,13 +157,14 @@
 
 .code-block pre,
 .code-inline pre {
-    padding: var(--spacing-md) var(--spacing-lg);
+    padding: 1rem 1.25rem;
     margin: 0;
-    font-size: 0.85rem;
-    line-height: 1.7;
+    font-size: 0.82rem;
+    line-height: 1.75;
     overflow-x: auto;
-    color: var(--color-text-secondary);
+    color: #c4b5fd;
     white-space: pre;
+    background: rgba(0, 0, 0, 0.2);
 }
 
 /* ─── Agent Cards ─── */
@@ -257,8 +285,14 @@
 
 /* ─── API Endpoints ─── */
 .api-endpoint {
-    padding: var(--spacing-lg);
-    margin-bottom: var(--spacing-md);
+    padding: 1.25rem;
+    margin-bottom: 0.75rem;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    transition: border-color 0.2s;
+}
+
+.api-endpoint:hover {
+    border-color: rgba(255, 255, 255, 0.1);
 }
 
 .endpoint-header {
@@ -269,12 +303,13 @@
 }
 
 .method {
-    padding: 4px 10px;
-    border-radius: var(--radius-sm);
-    font-size: 0.75rem;
+    padding: 3px 8px;
+    border-radius: 5px;
+    font-size: 0.7rem;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.06em;
+    font-family: var(--font-mono);
 }
 
 .method.get {

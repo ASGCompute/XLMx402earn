@@ -45,7 +45,9 @@ export default function Home() {
             <section className="hero">
                 <div className="hero-content container">
                     <div className="badge">
-                        <span className="badge-dot"></span>
+                        <svg className="badge-stellar-logo" viewBox="0 0 256 256" width="16" height="16" fill="currentColor">
+                            <path d="M192.3 63.7l-56.1 28.1-8.2 4.1-8.2 4.1-56.1 28.1L40 140.2l23.7-11.9 56.1-28.1 8.2-4.1 8.2-4.1 56.1-28.1L216 51.8l-23.7 11.9zM216 76.5l-23.7 11.9-56.1 28.1-8.2 4.1-8.2 4.1-56.1 28.1-23.7 11.8V140l23.7-11.8 56.1-28.1 8.2-4.1 8.2-4.1 56.1-28.1L216 51.9V76.5zM216 179.4l-23.7 11.9-56.1 28.1-8.2 4.1-8.2 4.1L40 192v-24.6l23.7-11.9 56.1-28.1 8.2-4.1 8.2-4.1 56.1-28.1L216 79.2v24.6l-23.7 11.9-56.1 28.1-8.2 4.1-8.2 4.1-56.1 28.1L40 192l23.7-11.9 56.1-28.1 8.2-4.1 8.2-4.1 56.1-28.1 23.7-11.8v75.4z"/>
+                        </svg>
                         Built on Stellar Agentic Hackathon
                     </div>
                     <h1>

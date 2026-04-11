@@ -133,19 +133,12 @@
     backdrop-filter: blur(8px);
 }
 
-.badge-dot {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: var(--color-success);
-    margin-right: 0.6rem;
-    box-shadow: 0 0 10px var(--color-success);
-    animation: dotPulse 2s ease-in-out infinite;
-}
-
-@keyframes dotPulse {
-    0%, 100% { box-shadow: 0 0 10px var(--color-success); }
-    50% { box-shadow: 0 0 4px var(--color-success); }
+.badge-stellar-logo {
+    width: 16px;
+    height: 16px;
+    margin-right: 0.5rem;
+    flex-shrink: 0;
+    opacity: 0.9;
 }
 
 /* ═══ QUICK START PILL (prominent) ═══ */
