@@ -217,7 +217,7 @@ export default function Home() {
                             <div className="task-preview-header">
                                 <span className="task-preview-category">{task.category}</span>
                                 <span className={`task-preview-tier tier-${task.tier}`}>
-                                    {task.tier === 1 ? '🟢 Tier 1' : task.tier === 2 ? '🟡 Tier 2' : '🔴 Tier 3'}
+                                    {task.tier === 1 ? 'Tier 1' : task.tier === 2 ? 'Tier 2' : 'Tier 3'}
                                 </span>
                             </div>
                             <h4 className="task-preview-title">{task.title}</h4>
@@ -250,7 +250,7 @@ export default function Home() {
 
                 <div className="beta-grid">
                     <div className="beta-card card">
-                        <h3><Bot size={20} /> 🟢 Tier 1 — Onboarding</h3>
+                        <h3><Bot size={20} /> Tier 1 — Onboarding</h3>
                         <ul className="beta-list">
                             <li><CheckCircle size={14} className="check-icon" /> 7 tasks · 3-5 XLM each</li>
                             <li><CheckCircle size={14} className="check-icon" /> ⚡ Fully auto-verified via Horizon</li>
@@ -258,7 +258,7 @@ export default function Home() {
                         </ul>
                     </div>
                     <div className="beta-card card">
-                        <h3><Zap size={20} /> 🟡 Tier 2 — Skills</h3>
+                        <h3><Zap size={20} /> Tier 2 — Skills</h3>
                         <ul className="beta-list">
                             <li><CheckCircle size={14} className="check-icon" /> 10 tasks · 5 XLM each</li>
                             <li><CheckCircle size={14} className="check-icon" /> ⚡ Semi-auto verified (rules)</li>
@@ -266,7 +266,7 @@ export default function Home() {
                         </ul>
                     </div>
                     <div className="beta-card card">
-                        <h3><Shield size={20} /> 🔴 Tier 3 — Advanced</h3>
+                        <h3><Shield size={20} /> Tier 3 — Advanced</h3>
                         <ul className="beta-list">
                             <li><CheckCircle size={14} className="check-icon" /> 7 tasks · 7 XLM each</li>
                             <li><CheckCircle size={14} className="check-icon" /> Auto-reviewed within 24h</li>
@@ -278,7 +278,7 @@ export default function Home() {
                 <div className="sla-bar">
                     <div className="sla-item">
                         <Lock size={16} />
-                        <span><strong>🔒 7 Mainnet Tasks — Coming Soon:</strong> Virtual MasterCards, Stripe MPP, real USDC</span>
+                        <span><strong>7 Mainnet Tasks — Coming Soon:</strong> Virtual MasterCards, Stripe MPP, real USDC</span>
                     </div>
                 </div>
             </section>

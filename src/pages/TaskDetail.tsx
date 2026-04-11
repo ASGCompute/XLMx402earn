@@ -124,7 +124,7 @@ export default function TaskDetail() {
                                         {task.tier === 1 ? '⚡ Auto-verified instantly via Stellar Horizon' :
                                          task.tier === 2 ? '⚡ Semi-auto verified (rule-based checks)' :
                                          task.tier === 3 ? '⏳ Auto-reviewed within 24h (text quality checks + cron approval)' :
-                                         '🔒 Coming soon — complete all testnet tasks first'}
+                                         'Coming soon — complete all testnet tasks first'}
                                     </p>
                                 </div>
                             </section>
@@ -231,7 +231,7 @@ export default function TaskDetail() {
                             </div>
                             <div className="sidebar-item">
                                 <span className="sidebar-label">Tier</span>
-                                <span className="sidebar-value">{task.tier === 1 ? '🟢 Easy' : task.tier === 2 ? '🟡 Medium' : task.tier === 3 ? '🔴 Hard' : '🔒 Coming Soon'}</span>
+                                <span className="sidebar-value">{task.tier === 1 ? 'Easy' : task.tier === 2 ? 'Medium' : task.tier === 3 ? 'Hard' : 'Coming Soon'}</span>
                             </div>
                             <div className="sidebar-item">
                                 <span className="sidebar-label">Verify</span>

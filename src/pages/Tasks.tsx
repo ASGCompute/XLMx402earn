@@ -176,7 +176,7 @@ export default function Tasks() {
                             <div className="task-card-header">
                                 <span className="task-category">{task.category}</span>
                                 <span className={`task-tier tier-${task.tier}`}>
-                                    {task.tier === 1 ? '🟢 Tier 1' : task.tier === 2 ? '🟡 Tier 2' : '🔴 Tier 3'}
+                                    {task.tier === 1 ? 'Tier 1' : task.tier === 2 ? 'Tier 2' : 'Tier 3'}
                                 </span>
                             </div>
                             <h3 className="task-title">{task.title}</h3>
@@ -214,14 +214,14 @@ export default function Tasks() {
             {/* Coming Soon */}
             {filtered.filter(t => t.status === 'COMING_SOON').length > 0 && (
                 <section className="coming-soon-section container">
-                    <h2>🔒 Coming Soon — Mainnet Tasks</h2>
+                    <h2>Coming Soon — Mainnet Tasks</h2>
                     <p className="subtitle">Complete all testnet tasks to unlock these mainnet challenges.</p>
                     <div className="tasks-grid coming-soon-grid">
                         {filtered.filter(t => t.status === 'COMING_SOON').map(task => (
                             <div key={task.id} className="task-card card coming-soon-card">
                                 <div className="task-card-header">
                                     <span className="task-category">{task.category}</span>
-                                    <span className="task-tier tier-locked">🔒 Locked</span>
+                                    <span className="task-tier tier-locked">Locked</span>
                                 </div>
                                 <h3 className="task-title">{task.title}</h3>
                                 <p className="task-summary">{task.summary}</p>
