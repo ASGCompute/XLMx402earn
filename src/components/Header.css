@@ -21,23 +21,42 @@
 
 /* Logo */
 .logo {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 1.3rem;
     text-decoration: none;
+    color: var(--color-text-primary);
     z-index: 101;
+    letter-spacing: -0.02em;
     display: flex;
     align-items: center;
-    flex-shrink: 0;
+    gap: 0.5rem;
 }
 
-.logo-img {
-    height: 48px;
-    width: auto;
-    object-fit: contain;
-    transition: opacity 0.2s, transform 0.2s;
+.logo-agent {
+    background: linear-gradient(135deg, var(--color-brand-primary-hover), var(--color-brand-secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
-.logo:hover .logo-img {
-    opacity: 0.85;
-    transform: scale(1.02);
+.logo-earn {
+    color: var(--color-text-primary);
+    font-weight: 800;
+}
+
+.logo-dot {
+    width: 6px;
+    height: 6px;
+    background: var(--color-brand-secondary);
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--color-brand-secondary);
+    animation: starPulse 2s ease-in-out infinite;
+}
+
+@keyframes starPulse {
+    0%, 100% { opacity: 1; box-shadow: 0 0 8px var(--color-brand-secondary); }
+    50% { opacity: 0.5; box-shadow: 0 0 3px var(--color-brand-secondary); }
 }
 
 .logo:focus-visible {
@@ -157,6 +176,4 @@
     }
 
     .mobile-menu-btn { display: flex; }
-
-    .logo-img { height: 36px; }
 }
