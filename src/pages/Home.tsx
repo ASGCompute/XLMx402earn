@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Wallet, CheckCircle, Zap, CircleDollarSign, Star, Clock, Lock, Bot, Shield, Copy, Check, CreditCard, Radio, Eye } from 'lucide-react';
+import { ArrowRight, Wallet, CheckCircle, Zap, CircleDollarSign, Star, Lock, Bot, Shield, Copy, Check, CreditCard, Radio, Eye } from 'lucide-react';
 import { trackEvent } from '../lib/analytics';
 import tasksData from '../data/tasks.json';
 import './Home.css';
@@ -19,12 +19,7 @@ interface TaskPreview {
     summary: string;
 }
 
-function formatEta(minutes: number) {
-    if (minutes < 60) return `${minutes}m`;
-    const h = Math.floor(minutes / 60);
-    const m = minutes % 60;
-    return m > 0 ? `${h}h ${m}m` : `${h}h`;
-}
+
 
 export default function Home() {
     const [copied, setCopied] = useState(false);
