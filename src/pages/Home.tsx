@@ -105,11 +105,7 @@ export default function Home() {
                                             <svg viewBox="0 0 120 120" className="ww-icon ww-openclaw"><path d="M60 10 C30 10 15 35 15 55 C15 75 30 95 45 100 L45 110 L55 110 L55 100 C55 100 60 102 65 100 L65 110 L75 110 L75 100 C90 95 105 75 105 55 C105 35 90 10 60 10Z" fill="currentColor"/><path d="M20 45 C5 40 0 50 5 60 C10 70 20 65 25 55 C28 48 25 45 20 45Z" fill="currentColor"/><path d="M100 45 C115 40 120 50 115 60 C110 70 100 65 95 55 C92 48 95 45 100 45Z" fill="currentColor"/><circle cx="45" cy="35" r="6" fill="var(--color-bg-primary, #0a0a1a)"/><circle cx="75" cy="35" r="6" fill="var(--color-bg-primary, #0a0a1a)"/><circle cx="46" cy="34" r="2.5" fill="#00e5cc"/><circle cx="76" cy="34" r="2.5" fill="#00e5cc"/></svg>
                                             <span>OpenClaw</span>
                                         </div>
-                                        {/* Any HTTP Agent */}
-                                        <div className="works-with-pill">
-                                            <Bot size={18} className="ww-icon" />
-                                            <span>Any HTTP Agent</span>
-                                        </div>
+                                        
                                     </div>
                                 ))}
                             </div>

@@ -43,6 +43,7 @@ export default function TaskDetail() {
     const task = (tasksData as unknown as Task[]).find(t => t.slug === slug);
 
     useEffect(() => {
+        window.scrollTo(0, 0);
         if (task) {
             trackEvent('task_detail_view', { task_id: task.id, task_slug: task.slug });
         }
