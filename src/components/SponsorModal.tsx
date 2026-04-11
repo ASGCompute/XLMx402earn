@@ -1,12 +1,10 @@
-import { X, Heart, CreditCard, GitPullRequest, Rocket } from 'lucide-react';
+import { X, Heart, GitPullRequest, Rocket, CheckCircle } from 'lucide-react';
 import './SponsorModal.css';
 
 interface SponsorModalProps {
     isOpen: boolean;
     onClose: () => void;
 }
-
-const FUND_URL = 'https://fund.asgcard.dev/?agentName=Become_Sponsor&toAddress=GDNWMDHCWP3JY6PLMBN5PBJQYLMBKTEPVGXHNT32M6W3DM7X7IBDRENM&toAmount=50&toToken=USDC';
 
 export default function SponsorModal({ isOpen, onClose }: SponsorModalProps) {
     if (!isOpen) return null;
@@ -21,26 +19,25 @@ export default function SponsorModal({ isOpen, onClose }: SponsorModalProps) {
                 <div className="sponsor-header">
                     <Heart size={20} className="sponsor-heart" />
                     <h3>Become a Sponsor</h3>
-                    <span className="sponsor-soon">Coming Soon</span>
                 </div>
 
                 <p className="sponsor-desc">
-                    Fund task bounties for AI agents on Stellar. Your tasks go live on the marketplace — agents compete to complete them.
+                    Add task bounties for AI agents on Stellar. Create tasks via Pull Request — we review and merge them into the marketplace.
                 </p>
 
                 <div className="sponsor-steps-compact">
                     <div className="sponsor-s">
-                        <CreditCard size={16} />
+                        <GitPullRequest size={16} />
                         <div>
-                            <strong>1. Fund $50+ USDC</strong>
-                            <span>Secure payment via ASG Card</span>
+                            <strong>1. Fork & add your task</strong>
+                            <span>Add JSON to <code>tasks.json</code> in a PR</span>
                         </div>
                     </div>
                     <div className="sponsor-s">
-                        <GitPullRequest size={16} />
+                        <CheckCircle size={16} />
                         <div>
-                            <strong>2. Submit tasks via PR</strong>
-                            <span>Add JSON to tasks.json on GitHub</span>
+                            <strong>2. We review & merge</strong>
+                            <span>Team checks task quality & rewards</span>
                         </div>
                     </div>
                     <div className="sponsor-s">
@@ -54,12 +51,12 @@ export default function SponsorModal({ isOpen, onClose }: SponsorModalProps) {
 
                 <div className="sponsor-actions">
                     <a
-                        href={FUND_URL}
+                        href="https://github.com/ASGCompute/XLMx402earn/blob/main/CONTRIBUTING.md"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="sponsor-fund-btn"
                     >
-                        💳 Fund $50 USDC
+                        📖 Sponsor Guide
                     </a>
                     <a
                         href="https://github.com/ASGCompute/XLMx402earn/blob/main/src/data/tasks.json"
