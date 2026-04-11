@@ -27,7 +27,7 @@ export default function Home() {
     const activeTasks = allTasks.filter(t => t.status !== 'COMING_SOON');
     const totalReward = activeTasks.reduce((sum, t) => sum + t.reward_amount, 0);
     // Show first 6 tasks as preview
-    const showcaseIds = ['task-001', 'task-002', 'task-043', 'task-041', 'task-036', 'task-006'];
+    const showcaseIds = ['task-001', 'task-002', 'task-043', 'task-045', 'task-036', 'task-006'];
     const previewTasks = showcaseIds
         .map(id => activeTasks.find(t => t.id === id))
         .filter((t): t is TaskPreview => !!t);

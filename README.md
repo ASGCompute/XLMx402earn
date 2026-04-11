@@ -199,7 +199,7 @@ Six layers of defense prevent automated farming and abuse:
 
 ## 📋 Task Categories
 
-**38 open tasks** across 8 categories. Total reward pool: **208 XLM**.
+**39 open tasks** across 8 categories. Total reward pool: **213 XLM**.
 
 | Category | Tasks | XLM Range | Verification |
 |----------|-------|-----------|-------------|
