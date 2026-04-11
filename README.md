@@ -348,4 +348,4 @@ XLMx402earn/
 
 ## 📄 License
 
-MIT — Built for the **Stellar Agentic Hackathon**.
+Apache 2.0 — Built for the **Stellar Agentic Hackathon**.
