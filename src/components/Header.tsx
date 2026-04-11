@@ -43,14 +43,14 @@ export default function Header() {
                         </svg>
                     </a>
                     <Link
-                        to="/tasks"
+                        to="/docs#sponsors"
                         className="btn primary cta-button"
                         onClick={() => {
-                            trackEvent('header_cta_click', { from_path: window.location.pathname });
+                            trackEvent('header_cta_click', { from_path: window.location.pathname, target: 'sponsors' });
                             setIsMenuOpen(false);
                         }}
                     >
-                        Start Earning
+                        Become a Sponsor
                     </Link>
 
                     <button

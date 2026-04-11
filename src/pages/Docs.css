@@ -623,3 +623,87 @@
         font-size: 2rem;
     }
 }
+
+/* ═══ BECOME A SPONSOR ═══ */
+.sponsor-badge-row {
+    margin-bottom: 1rem;
+}
+
+.coming-soon-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.35rem 0.9rem;
+    background: rgba(251, 191, 36, 0.1);
+    border: 1px solid rgba(251, 191, 36, 0.25);
+    color: #fbbf24;
+    border-radius: var(--radius-full);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.sponsor-steps {
+    margin-bottom: 1.5rem;
+}
+
+.sponsor-flow {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.25rem;
+}
+
+.sponsor-step {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.sponsor-step h5 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+}
+
+.sponsor-step p {
+    font-size: 0.88rem;
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    margin: 0;
+}
+
+.sponsor-fund-btn,
+.sponsor-github-btn {
+    margin-top: 0.75rem;
+    display: inline-flex;
+    align-items: center;
+    font-size: 0.82rem;
+    padding: 0.5rem 1rem;
+    width: fit-content;
+}
+
+.btn.outline {
+    background: transparent;
+    border: 1px solid rgba(99, 102, 241, 0.3);
+    color: var(--color-brand-primary-hover);
+}
+
+.btn.outline:hover {
+    background: rgba(99, 102, 241, 0.08);
+    border-color: rgba(99, 102, 241, 0.5);
+}
+
+.sponsor-task-template {
+    margin-bottom: 1.5rem;
+}
+
+.sponsor-task-template h4 {
+    margin-bottom: 0.5rem;
+}
+
+.sponsor-contact h4 {
+    margin-bottom: 0.5rem;
+}
