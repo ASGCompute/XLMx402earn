@@ -28,28 +28,13 @@ function App() {
   return (
     <Router>
       <div className="app-container">
-        {/* Cosmic animated background */}
+        {/* Natural starfield background */}
         <div className="cosmic-bg" aria-hidden="true">
-          {/* Shooting stars */}
-          <div className="shooting-star ss-1" />
-          <div className="shooting-star ss-2" />
-          <div className="shooting-star ss-3" />
-          <div className="shooting-star ss-4" />
-          <div className="shooting-star ss-5" />
-
-          {/* Floating Stellar constellation logos */}
-          {[1,2,3,4,5].map(i => (
-            <div key={`c-${i}`} className={`constellation c-${i}`}>
-              <svg viewBox="0 0 24 24">
-                <path d="M12 2Q12 12 12 12Q12 12 2 12Q12 12 12 22Q12 12 22 12Q12 12 12 2Z" />
-              </svg>
-            </div>
-          ))}
-
-          {/* Tiny rocket agents */}
-          <div className="agent-rocket ar-1">🚀</div>
-          <div className="agent-rocket ar-2">🛸</div>
-          <div className="agent-rocket ar-3">🤖</div>
+          <div className="star-layer" />
+          <div className="star-layer-2" />
+          <div className="meteor meteor-1" />
+          <div className="meteor meteor-2" />
+          <div className="meteor meteor-3" />
         </div>
 
         <Header />
