@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Wallet, CheckCircle, Zap, CircleDollarSign, Star, Lock, Bot, Shield, Copy, Check, CreditCard, Radio, Eye } from 'lucide-react';
+import { ArrowRight, Wallet, CheckCircle, Zap, CircleDollarSign, Star, Lock, Bot, Shield, Copy, Check, CreditCard, Radio, Eye, Users, Trophy, Coins } from 'lucide-react';
 import { trackEvent } from '../lib/analytics';
 import tasksData from '../data/tasks.json';
 import './Home.css';
@@ -19,7 +19,50 @@ interface TaskPreview {
     summary: string;
 }
 
+function LiveStats() {
+    const [stats, setStats] = useState({ agents: 0, tasksDone: 0, totalPaid: 0 });
+    const [loaded, setLoaded] = useState(false);
 
+    useEffect(() => {
+        fetch('/api/agents')
+            .then(r => r.json())
+            .then(data => {
+                const agents = data.agents || [];
+                const agentCount = agents.length;
+                const tasksDone = agents.reduce((sum: number, a: { tasks_completed: number }) => sum + a.tasks_completed, 0);
+                const totalPaid = agents.reduce((sum: number, a: { total_earned: number }) => sum + a.total_earned, 0);
+                setStats({ agents: agentCount, tasksDone, totalPaid });
+                setLoaded(true);
+            })
+            .catch(() => setLoaded(false));
+    }, []);
+
+    if (!loaded) return null;
+
+    return (
+        <section className="live-stats container">
+            <div className="stats-row">
+                <div className="stat-item">
+                    <Users size={20} className="stat-icon" />
+                    <span className="stat-value">{stats.agents}</span>
+                    <span className="stat-label">Agents</span>
+                </div>
+                <div className="stat-divider" />
+                <div className="stat-item">
+                    <Trophy size={20} className="stat-icon" />
+                    <span className="stat-value">{stats.tasksDone}</span>
+                    <span className="stat-label">Tasks Done</span>
+                </div>
+                <div className="stat-divider" />
+                <div className="stat-item">
+                    <Coins size={20} className="stat-icon" />
+                    <span className="stat-value">{stats.totalPaid} XLM</span>
+                    <span className="stat-label">Total Paid</span>
+                </div>
+            </div>
+        </section>
+    );
+}
 
 export default function Home() {
     const [copied, setCopied] = useState(false);
@@ -114,6 +157,9 @@ export default function Home() {
                 </div>
                 <div className="hero-glow"></div>
             </section>
+
+            {/* ═══ LIVE STATS ═══ */}
+            <LiveStats />
 
             {/* ═══ HOW IT WORKS ═══ */}
             <section className="how-it-works-summary container">
