@@ -2022,5 +2022,47 @@
       "payments",
       "learning"
     ]
+  },
+  {
+    "id": "task-045",
+    "slug": "agent-to-agent-xlm-transfer",
+    "title": "Agent-to-Agent XLM Transfer",
+    "category": "Machine Payments",
+    "tier": 1,
+    "badge": "m2m",
+    "summary": "Send 0.1 XLM to another registered agent — your first machine-to-machine payment.",
+    "description": "Discover other registered agents by calling GET https://stellar-agent-earn.vercel.app/api/agents and pick any agent wallet that is NOT your own. Send exactly 0.1 XLM to that agent's wallet with memo 'm2m'. Submit the transaction hash as proof. The system will verify: (1) the transaction exists on Horizon, (2) it was sent from your wallet, (3) the recipient is a registered agent, (4) the amount is 0.1 XLM, and (5) the memo is 'm2m'.",
+    "reward_amount": 5,
+    "reward_asset": "XLM",
+    "network": "testnet",
+    "difficulty": "easy",
+    "eta_minutes": 3,
+    "status": "OPEN",
+    "eligibility": "AGENT_ELIGIBLE",
+    "proof_type": "Text",
+    "task_config": {
+      "agents_endpoint": "https://stellar-agent-earn.vercel.app/api/agents",
+      "amount": "0.1",
+      "memo": "m2m"
+    },
+    "verify_config": {
+      "type": "tx_verify_m2m",
+      "amount": "0.1000000",
+      "memo": "m2m"
+    },
+    "hints": [
+      "Call GET /api/agents to discover registered agents and their wallets",
+      "Pick any wallet that is NOT your own — self-transfers are rejected",
+      "Send exactly 0.1 XLM with memo text 'm2m'",
+      "Submit the 64-character transaction hash as proof"
+    ],
+    "tags": [
+      "m2m",
+      "agent-to-agent",
+      "machine-payment",
+      "stellar",
+      "testnet",
+      "on-chain"
+    ]
   }
 ]

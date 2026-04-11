@@ -95,6 +95,9 @@ export async function autoVerify(
     case 'usdc_payment':
       return verifyUsdcPaymentTx(proof, agentWallet);
 
+    case 'tx_verify_m2m':
+      return verifyM2mTransfer(proof, agentWallet);
+
     case 'manual_review':
       return { passed: false, type: 'manual', reason: 'Queued for sponsor review' };
 
@@ -512,4 +515,92 @@ async function verifyUsdcPaymentTx(txHash: string, agentWallet?: string): Promis
   return result.valid
     ? { passed: true, type: 'auto' }
     : { passed: false, type: 'auto', reason: result.reason };
+}
+
+/**
+ * M2M: verify agent-to-agent XLM transfer.
+ * Checks: tx exists, from==agentWallet, recipient is a registered agent,
+ * amount==0.1, memo=='m2m', no self-transfer.
+ */
+async function verifyM2mTransfer(txHash: string, agentWallet?: string): Promise<VerifyResult> {
+  const clean = txHash.trim();
+  if (!/^[a-f0-9]{64}$/.test(clean)) {
+    return { passed: false, type: 'auto', reason: 'Invalid transaction hash format (expected 64 hex chars)' };
+  }
+
+  try {
+    // 1) Load transaction from Horizon
+    const tx = await horizon.transactions().transaction(clean).call();
+    const txData = tx as unknown as {
+      successful: boolean;
+      source_account: string;
+      memo?: string;
+      memo_type?: string;
+      created_at: string;
+    };
+
+    if (!txData.successful) {
+      return { passed: false, type: 'auto', reason: 'Transaction failed on-chain' };
+    }
+
+    // 2) Check sender
+    if (agentWallet && txData.source_account !== agentWallet) {
+      return { passed: false, type: 'auto', reason: 'Transaction not sent from your registered wallet' };
+    }
+
+    // 3) Check memo
+    if (!txData.memo || txData.memo !== 'm2m') {
+      return { passed: false, type: 'auto', reason: `Memo mismatch: expected 'm2m', got '${txData.memo || 'none'}'` };
+    }
+
+    // 4) Check max age (1 hour)
+    const txTime = new Date(txData.created_at).getTime();
+    if (Date.now() - txTime > 3600 * 1000) {
+      return { passed: false, type: 'auto', reason: 'Transaction too old (max 1 hour)' };
+    }
+
+    // 5) Get payment operations
+    const opsResponse = await horizon.operations().forTransaction(clean).call();
+    const ops = opsResponse.records as unknown as Array<{
+      type: string;
+      to?: string;
+      from?: string;
+      amount?: string;
+      asset_type?: string;
+      source_account?: string;
+    }>;
+
+    const paymentOp = ops.find(
+      (op) => op.type === 'payment' && op.asset_type === 'native' && op.amount === '0.1000000'
+    );
+
+    if (!paymentOp) {
+      return { passed: false, type: 'auto', reason: 'No native XLM payment of 0.1 found in transaction' };
+    }
+
+    const recipient = paymentOp.to;
+    if (!recipient) {
+      return { passed: false, type: 'auto', reason: 'Payment recipient could not be determined' };
+    }
+
+    // 6) No self-transfer
+    if (recipient === agentWallet) {
+      return { passed: false, type: 'auto', reason: 'Self-transfers are not allowed — send to a different registered agent' };
+    }
+
+    // 7) Check if recipient is a registered agent
+    const { data: agents } = await supabase
+      .from('agents')
+      .select('id, wallet')
+      .eq('wallet', recipient)
+      .limit(1);
+
+    if (!agents || agents.length === 0) {
+      return { passed: false, type: 'auto', reason: `Recipient ${recipient.slice(0, 8)}… is not a registered agent. Use GET /api/agents to find valid targets.` };
+    }
+
+    return { passed: true, type: 'auto' };
+  } catch (err) {
+    return { passed: false, type: 'auto', reason: `Horizon error: ${(err as Error).message}` };
+  }
 }
