@@ -166,6 +166,107 @@ a:hover {
   pointer-events: none;
 }
 
+/* ═══ FLYING COSMIC ELEMENTS ═══ */
+.cosmic-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* Shooting stars */
+.shooting-star {
+  position: absolute;
+  width: 80px;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(255,255,255,0.6), transparent);
+  border-radius: 1px;
+  opacity: 0;
+  animation: shootStar var(--dur) var(--delay) ease-in infinite;
+}
+
+.shooting-star::before {
+  content: '';
+  position: absolute;
+  right: 0;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 0 6px 2px rgba(129, 140, 248, 0.5);
+}
+
+.ss-1 { top: 12%; left: -80px; --dur: 3s; --delay: 1s; transform: rotate(-15deg); }
+.ss-2 { top: 35%; left: -80px; --dur: 2.5s; --delay: 5s; transform: rotate(-20deg); width: 60px; }
+.ss-3 { top: 55%; left: -80px; --dur: 3.5s; --delay: 9s; transform: rotate(-10deg); width: 100px; }
+.ss-4 { top: 78%; left: -80px; --dur: 2.8s; --delay: 14s; transform: rotate(-18deg); width: 50px; }
+.ss-5 { top: 8%;  left: -80px; --dur: 3.2s; --delay: 20s; transform: rotate(-12deg); width: 70px; }
+
+@keyframes shootStar {
+  0%   { opacity: 0; transform: translateX(0) rotate(var(--rot, -15deg)); }
+  5%   { opacity: 1; }
+  60%  { opacity: 0.5; }
+  100% { opacity: 0; transform: translateX(calc(100vw + 200px)) rotate(var(--rot, -15deg)); }
+}
+
+/* Floating constellation nodes (Stellar 4-point star shape) */
+.constellation {
+  position: absolute;
+  opacity: 0;
+  animation: floatConstellation var(--dur) var(--delay) linear infinite;
+}
+
+.constellation svg {
+  width: var(--size, 14px);
+  height: var(--size, 14px);
+  fill: none;
+  stroke: rgba(129, 140, 248, 0.25);
+  stroke-width: 1;
+}
+
+.c-1 { top: 20%; --dur: 30s; --delay: 0s;  --size: 12px; }
+.c-2 { top: 45%; --dur: 35s; --delay: 8s;  --size: 16px; }
+.c-3 { top: 70%; --dur: 28s; --delay: 4s;  --size: 10px; }
+.c-4 { top: 15%; --dur: 40s; --delay: 15s; --size: 18px; }
+.c-5 { top: 85%; --dur: 32s; --delay: 12s; --size: 13px; }
+
+@keyframes floatConstellation {
+  0%   { left: -30px; opacity: 0; transform: rotate(0deg); }
+  5%   { opacity: 0.6; }
+  50%  { opacity: 0.3; }
+  95%  { opacity: 0.5; }
+  100% { left: calc(100vw + 30px); opacity: 0; transform: rotate(180deg); }
+}
+
+/* Tiny rocket agents */
+.agent-rocket {
+  position: absolute;
+  opacity: 0;
+  animation: flyAgent var(--dur) var(--delay) ease-in-out infinite;
+  font-size: var(--size, 10px);
+  filter: drop-shadow(0 0 4px rgba(99, 102, 241, 0.3));
+}
+
+.ar-1 { top: 25%; --dur: 25s; --delay: 3s;  --size: 10px; }
+.ar-2 { top: 60%; --dur: 32s; --delay: 10s; --size: 8px; }
+.ar-3 { top: 40%; --dur: 28s; --delay: 18s; --size: 12px; }
+
+@keyframes flyAgent {
+  0%   { right: -30px; opacity: 0; transform: translateY(0px); }
+  5%   { opacity: 0.5; }
+  25%  { transform: translateY(-8px); }
+  50%  { opacity: 0.35; transform: translateY(4px); }
+  75%  { transform: translateY(-6px); }
+  95%  { opacity: 0.4; }
+  100% { right: calc(100vw + 30px); opacity: 0; transform: translateY(0px); }
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .shooting-star, .constellation, .agent-rocket { animation: none !important; display: none; }
+}
+
 /* ═══ Buttons ═══ */
 .btn {
   display: inline-flex;
