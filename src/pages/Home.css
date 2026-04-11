@@ -138,7 +138,18 @@
     height: 16px;
     margin-right: 0.5rem;
     flex-shrink: 0;
-    opacity: 0.9;
+}
+
+a.badge {
+    text-decoration: none;
+    color: rgba(255, 255, 255, 0.85);
+    transition: all 0.2s ease;
+}
+
+a.badge:hover {
+    color: #fff;
+    border-color: rgba(99, 102, 241, 0.35);
+    background: rgba(99, 102, 241, 0.12);
 }
 
 /* ═══ QUICK START PILL (prominent) ═══ */
