@@ -173,6 +173,95 @@
     color: var(--color-success);
 }
 
+/* ═══ WORKS WITH MARQUEE ═══ */
+.works-with-section {
+    margin-top: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    width: 100%;
+    max-width: 680px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.works-with-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.32em;
+    color: rgba(255, 255, 255, 0.35);
+    margin: 0;
+    text-align: left;
+    padding-left: 0.25rem;
+}
+
+.works-with-marquee {
+    overflow: hidden;
+    padding: 0.5rem 0;
+    mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+    -webkit-mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+}
+
+.marquee-track {
+    display: flex;
+    gap: 0.75rem;
+    width: max-content;
+}
+
+.marquee-group {
+    display: flex;
+    gap: 0.75rem;
+    flex-shrink: 0;
+    animation: marqueeScroll 22s linear infinite;
+}
+
+.marquee-group:hover,
+.works-with-marquee:hover .marquee-group {
+    animation-play-state: paused;
+}
+
+@keyframes marqueeScroll {
+    from { transform: translateX(0); }
+    to   { transform: translateX(calc(-100% - 0.75rem)); }
+}
+
+.works-with-pill {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.45rem 0.85rem;
+    border-radius: 9999px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.04);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    white-space: nowrap;
+    flex-shrink: 0;
+    transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.works-with-pill:hover {
+    border-color: rgba(255, 255, 255, 0.18);
+    background: rgba(255, 255, 255, 0.07);
+}
+
+.works-with-pill span {
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.6);
+    line-height: 1;
+}
+
+.ww-icon {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.ww-claude { color: #c15f3c; }
+.ww-gemini { color: #147ffd; }
+
 /* ═══ SECTIONS ═══ */
 .section-header {
     text-align: center;
