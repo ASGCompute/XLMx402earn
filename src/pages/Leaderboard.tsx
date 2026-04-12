@@ -13,7 +13,7 @@ interface AgentEntry {
 
 export default function Leaderboard() {
     const navigate = useNavigate();
-    const CACHE_KEY = 'ae_leaderboard';
+    const CACHE_KEY = 'ae_leaderboard_v2';
     const cachedAgents = (() => { try { return JSON.parse(localStorage.getItem(CACHE_KEY) || ''); } catch { return null; } })();
     const [agents, setAgents] = useState<AgentEntry[]>(cachedAgents || []);
     const [loading, setLoading] = useState(!cachedAgents);
@@ -22,6 +22,7 @@ export default function Leaderboard() {
     const fetchLeaderboard = async () => {
         setLoading(true);
         setError('');
+        try { localStorage.removeItem('ae_leaderboard'); } catch {}
         try {
             const res = await fetch('/api/leaderboard');
             if (!res.ok) throw new Error('Failed to fetch');

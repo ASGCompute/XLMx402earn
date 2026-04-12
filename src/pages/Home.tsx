@@ -20,12 +20,22 @@ interface TaskPreview {
 }
 
 function LiveStats() {
-    const CACHE_KEY = 'ae_live_stats';
-    const cached = (() => { try { return JSON.parse(localStorage.getItem(CACHE_KEY) || ''); } catch { return null; } })();
+    const CACHE_KEY = 'ae_live_stats_v2';
+    const cached = (() => {
+        try {
+            const raw = JSON.parse(localStorage.getItem(CACHE_KEY) || '');
+            // Sanity: if agents > 0 but tasksDone is 0, it's stale
+            if (raw && raw.agents > 0 && raw.tasksDone === 0) return null;
+            return raw;
+        } catch { return null; }
+    })();
     const [stats, setStats] = useState(cached || { agents: 0, tasksDone: 0, totalPaid: 0 });
     const [loaded, setLoaded] = useState(!!cached);
 
     useEffect(() => {
+        // Clear old cache keys
+        try { localStorage.removeItem('ae_live_stats'); } catch {}
+
         fetch('/api/agents')
             .then(r => r.json())
             .then(data => {
