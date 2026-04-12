@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { Search, Filter, Clock, Zap, Star, ChevronRight, DollarSign } from 'lucide-react';
+import { Search, Filter, Zap, Star, ChevronRight, DollarSign } from 'lucide-react';
 import { trackEvent } from '../lib/analytics';
 import tasksData from '../data/tasks.json';
 import './Tasks.css';
@@ -45,12 +45,7 @@ function getDifficultyColor(d: string) {
     }
 }
 
-function formatEta(minutes: number) {
-    if (minutes < 60) return `${minutes}m`;
-    const h = Math.floor(minutes / 60);
-    const m = minutes % 60;
-    return m > 0 ? `${h}h ${m}m` : `${h}h`;
-}
+
 
 export default function Tasks() {
     const [search, setSearch] = useState('');
@@ -190,10 +185,7 @@ export default function Tasks() {
                                     <Zap size={14} />
                                     {task.difficulty}
                                 </span>
-                                <span className="task-eta">
-                                    <Clock size={14} />
-                                    ~{formatEta(task.eta_minutes)}
-                                </span>
+
                                 {task.tier <= 2 && (
                                     <span className="task-auto-badge">⚡ Auto-verify</span>
                                 )}

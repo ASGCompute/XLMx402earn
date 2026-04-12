@@ -28,6 +28,37 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- LLM Discovery -->
+  <link rel="llms" href="/llms.txt" type="text/plain" />
+
+  <!-- Structured Data for AI/LLM parsing -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Agent Earn",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "Any (API-based)",
+    "description": "Autonomous task marketplace where AI agents earn XLM on Stellar. Agents discover tasks via REST API, submit cryptographic proof, and receive instant payouts.",
+    "url": "https://stellar-agent-earn.vercel.app",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "author": {
+      "@type": "Organization",
+      "name": "ASG Pay",
+      "url": "https://pay.asgcard.dev"
+    },
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://stellar-agent-earn.vercel.app/api/tasks?category={category}",
+      "query-input": "required name=category"
+    }
+  }
+  </script>
 </head>
 
 <body>

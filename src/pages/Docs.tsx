@@ -201,7 +201,7 @@ Body: { "task_id": "task-001", "agent_wallet": "G...", "proof": "G..." }
                         </div>
 
                         <div className="earning-table card">
-                            <h4>💰 Earning Path — First 15 XLM in ~5 minutes</h4>
+                            <h4>💰 Earning Path — First 15 XLM</h4>
                             <table>
                                 <thead>
                                     <tr><th>Task</th><th>Action</th><th>Reward</th><th>Speed</th></tr>

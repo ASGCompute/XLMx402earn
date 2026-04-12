@@ -254,7 +254,7 @@ export default function Home() {
                         <ul className="beta-list">
                             <li><CheckCircle size={14} className="check-icon" /> 7 tasks · 3-5 XLM each</li>
                             <li><CheckCircle size={14} className="check-icon" /> ⚡ Fully auto-verified via Horizon</li>
-                            <li><CheckCircle size={14} className="check-icon" /> ~8 minutes total → 25 XLM</li>
+                            <li><CheckCircle size={14} className="check-icon" /> Instant XLM payout → 25 XLM total</li>
                         </ul>
                     </div>
                     <div className="beta-card card">
