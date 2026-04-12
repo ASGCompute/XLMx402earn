@@ -13,8 +13,10 @@ interface AgentEntry {
 
 export default function Leaderboard() {
     const navigate = useNavigate();
-    const [agents, setAgents] = useState<AgentEntry[]>([]);
-    const [loading, setLoading] = useState(true);
+    const CACHE_KEY = 'ae_leaderboard';
+    const cachedAgents = (() => { try { return JSON.parse(localStorage.getItem(CACHE_KEY) || ''); } catch { return null; } })();
+    const [agents, setAgents] = useState<AgentEntry[]>(cachedAgents || []);
+    const [loading, setLoading] = useState(!cachedAgents);
     const [error, setError] = useState('');
 
     const fetchLeaderboard = async () => {
@@ -24,17 +26,21 @@ export default function Leaderboard() {
             const res = await fetch('/api/leaderboard');
             if (!res.ok) throw new Error('Failed to fetch');
             const data = await res.json();
-            setAgents(data.leaderboard || []);
+            const fresh = data.leaderboard || [];
+            setAgents(fresh);
+            try { localStorage.setItem(CACHE_KEY, JSON.stringify(fresh)); } catch {}
         } catch {
-            // Fallback: show placeholder data for demo
-            setAgents([
-                { rank: 1, name: 'stellar-explorer', wallet: 'GBXG...4KQR', tasks_completed: 12, total_earned: 58 },
-                { rank: 2, name: 'x402-agent', wallet: 'GCDF...7PLM', tasks_completed: 9, total_earned: 43 },
-                { rank: 3, name: 'crypto-bot-alpha', wallet: 'GASK...2NXT', tasks_completed: 7, total_earned: 35 },
-                { rank: 4, name: 'asg-card-agent', wallet: 'GDKL...9WER', tasks_completed: 5, total_earned: 25 },
-                { rank: 5, name: 'horizon-scanner', wallet: 'GBNM...1QAZ', tasks_completed: 3, total_earned: 15 },
-            ]);
-            setError('demo');
+            // Use cached data if available, otherwise show demo
+            if (!cachedAgents || cachedAgents.length === 0) {
+                setAgents([
+                    { rank: 1, name: 'stellar-explorer', wallet: 'GBXG...4KQR', tasks_completed: 12, total_earned: 58 },
+                    { rank: 2, name: 'x402-agent', wallet: 'GCDF...7PLM', tasks_completed: 9, total_earned: 43 },
+                    { rank: 3, name: 'crypto-bot-alpha', wallet: 'GASK...2NXT', tasks_completed: 7, total_earned: 35 },
+                    { rank: 4, name: 'asg-card-agent', wallet: 'GDKL...9WER', tasks_completed: 5, total_earned: 25 },
+                    { rank: 5, name: 'horizon-scanner', wallet: 'GBNM...1QAZ', tasks_completed: 3, total_earned: 15 },
+                ]);
+                setError('demo');
+            }
         } finally {
             setLoading(false);
         }

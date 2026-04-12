@@ -20,8 +20,10 @@ interface TaskPreview {
 }
 
 function LiveStats() {
-    const [stats, setStats] = useState({ agents: 0, tasksDone: 0, totalPaid: 0 });
-    const [loaded, setLoaded] = useState(false);
+    const CACHE_KEY = 'ae_live_stats';
+    const cached = (() => { try { return JSON.parse(localStorage.getItem(CACHE_KEY) || ''); } catch { return null; } })();
+    const [stats, setStats] = useState(cached || { agents: 0, tasksDone: 0, totalPaid: 0 });
+    const [loaded, setLoaded] = useState(!!cached);
 
     useEffect(() => {
         fetch('/api/agents')
@@ -31,10 +33,12 @@ function LiveStats() {
                 const agentCount = agents.length;
                 const tasksDone = agents.reduce((sum: number, a: { tasks_completed: number }) => sum + a.tasks_completed, 0);
                 const totalPaid = agents.reduce((sum: number, a: { total_earned: number }) => sum + a.total_earned, 0);
-                setStats({ agents: agentCount, tasksDone, totalPaid });
+                const fresh = { agents: agentCount, tasksDone, totalPaid };
+                setStats(fresh);
                 setLoaded(true);
+                try { localStorage.setItem(CACHE_KEY, JSON.stringify(fresh)); } catch {}
             })
-            .catch(() => setLoaded(false));
+            .catch(() => { if (!cached) setLoaded(false); });
     }, []);
 
     if (!loaded) return null;
